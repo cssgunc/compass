@@ -4,7 +4,7 @@
 - Next.js
 - TailwindCSS
 - TypeScript
-- PostgreSQL
+- Supabase
 
 ## 📁 File Setup
 ```
