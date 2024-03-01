@@ -15,15 +15,21 @@ function isStrongPassword(password: string): boolean {
 export default function Page() {
  const [newPassword, setNewPassword] = useState('');
  const [confirmPassword, setConfirmPassword] = useState('');
+ const [valid, setValid] = useState(false);
+ const [matching, setMatching] = useState(false);
  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
+ useEffect(() => {
+    setValid(isStrongPassword(newPassword))
+    setMatching(newPassword === confirmPassword)
+ }, [newPassword, confirmPassword])
 
  useEffect(() => {
-    console.log('newPassword',newPassword)
-    console.log('confirmPassword',confirmPassword)
-    setIsButtonDisabled(newPassword === '' || confirmPassword === '' || newPassword !== confirmPassword);
+    setIsButtonDisabled(newPassword === '' || confirmPassword === '' || !matching || !valid);
+    console.log(matching)
+    console.log(valid)
     console.log('newPasswordDisabledTest',isButtonDisabled)
-  }, [newPassword, confirmPassword]);
+  }, [matching, valid]);
 
 
  return (
