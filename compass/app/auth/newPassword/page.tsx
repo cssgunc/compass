@@ -15,20 +15,24 @@ function isStrongPassword(password: string): boolean {
 export default function Page() {
  const [newPassword, setNewPassword] = useState('');
  const [confirmPassword, setConfirmPassword] = useState('');
- const [valid, setValid] = useState(false);
- const [matching, setMatching] = useState(false);
+ const [valid, setValid] = useState(true);
+ const [matching, setMatching] = useState(true);
  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
  useEffect(() => {
-    setValid(isStrongPassword(newPassword))
+    if (newPassword !== ''){
+      setValid(isStrongPassword(newPassword))
+    }
+ }, [newPassword])
+
+ useEffect(() => {
+  if (confirmPassword !== ''){
     setMatching(newPassword === confirmPassword)
- }, [newPassword, confirmPassword])
+  }
+}, [newPassword, confirmPassword])
 
  useEffect(() => {
     setIsButtonDisabled(newPassword === '' || confirmPassword === '' || !matching || !valid);
-    console.log(matching)
-    console.log(valid)
-    console.log('newPasswordDisabledTest',isButtonDisabled)
   }, [matching, valid]);
 
 
@@ -59,6 +63,12 @@ export default function Page() {
                }}
            />
          </div>
+         {valid ? null : <div role="alert" className="rounded border-s-4 border-red-500 bg-red-50 p-4">
+                            <strong className="block font-medium text-red-800"> Password is not strong enough. </strong>
+                              <p className="mt-2 text-sm text-red-700">
+                              Tip: Use a mix of letters, numbers, and symbols for a strong password. Aim for at least 8 characters!
+                              </p>
+                            </div>}
          <div className="mb-6">
            <Input
                type="password"
@@ -69,6 +79,12 @@ export default function Page() {
                }}
            />
          </div>
+         {matching ? null : <div role="alert" className="rounded border-s-4 border-red-500 bg-red-50 p-4">
+                            <strong className="block font-medium text-red-800"> Passwords do not match. </strong>
+                              <p className="mt-2 text-sm text-red-700">
+                              Please make sure both passwords are the exact same!
+                              </p>
+                            </div>}
          <div className="flex flex-col items-left space-y-4">
             <Button type="submit" disabled={isButtonDisabled} >
              Send
