@@ -51,8 +51,8 @@ export default function Page() {
            />
          </div>
          {isStrongPassword(newPassword) || newPassword === '' ? null : <div role="alert" className="rounded border-s-4 border-red-500 bg-red-50 p-4">
-                            <strong className="block font-medium text-red-800"> Password is not strong enough. </strong>
-                              <p className="mt-2 text-sm text-red-700">
+                            <strong className="block text-sm font-semibold text-red-800"> Password is not strong enough. </strong>
+                              <p className="mt-2 text-xs font-thin text-red-700">
                               Tip: Use a mix of letters, numbers, and symbols for a strong password. Aim for at least 8 characters!
                               </p>
                             </div>}
@@ -68,8 +68,8 @@ export default function Page() {
            />
          </div>
          {newPassword === confirmPassword || confirmPassword === '' ? null : <div role="alert" className="rounded border-s-4 border-red-500 bg-red-50 p-4">
-                            <strong className="block font-medium text-red-800"> Passwords do not match. </strong>
-                              <p className="mt-2 text-sm text-red-700">
+                            <strong className="block text-sm font-semibold text-red-800"> Passwords do not match. </strong>
+                              <p className="mt-2 text-xs font-thin text-red-700">
                               Please make sure both passwords are the exact same!
                               </p>
                             </div>}
