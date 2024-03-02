@@ -5,13 +5,8 @@ import Button from '@/components/Button';
 import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
 import Paper from '@/components/auth/Paper';
-// import { Metadata } from 'next'
 import Image from 'next/image';
 import {ChangeEvent, useState} from "react";
-
-// export const metadata: Metadata = {
-//   title: 'Login',
-// }
 import PasswordInput from '@/components/auth/PasswordInput';
 
 export default function Page()  {
@@ -21,32 +16,30 @@ export default function Page()  {
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.currentTarget.value);
-        console.log("email " + email);
     }
 
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(event.currentTarget.value);
-        console.log("password " + password)
     }
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
         // Priority: Incorrect combo > Missing email > Missing password
 
         if (password.trim().length === 0) {
             setError("Please enter your password.")
+            event.preventDefault();
         }
         // This shouldn't happen, <input type="email"> already provides validation, but just in case.
         if (email.trim().length === 0) {
             setError("Please enter your email.")
+            event.preventDefault();
         }
         // Placeholder for incorrect email + password combo.
         if (email === "incorrect@gmail.com" && password) {
             setError("Incorrect password.")
+            event.preventDefault();
         }
     }
-
-
 
     return (
         <>
