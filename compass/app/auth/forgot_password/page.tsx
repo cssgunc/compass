@@ -41,10 +41,9 @@ export default function Page()  {
                         title="Enter your email address"
                         placeholder="janedoe@gmail.com"
                         value={confirmEmail}
-                        iconKey={'EmailInputIcon'}
+                        icon={'EmailInputIcon'}
                         onChange={(e) => {
                             setconfirmEmail(e.target.value);
-                            
                         }}/>
                         {emailError && (
                         <p className={`mt-2 ${emailError.includes('exists in the database') ? 'text-green-500' : 'text-red-500'}`}>
