@@ -44,7 +44,6 @@ export default function Page()  {
                         icon={'EmailInputIcon'}
                         onChange={(e) => {
                             setconfirmEmail(e.target.value);
-                            // setEmailError(''); // Reset the error when the user types
                         }}/>
                         {emailError && (
                         <p className={`mt-2 ${emailError.includes('exists in the database') ? 'text-green-500' : 'text-red-500'}`}>

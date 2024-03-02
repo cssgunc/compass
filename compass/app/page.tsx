@@ -1,8 +1,7 @@
 // pages/index.tsx
 "use client";
 
-// import Button from '@/components/Button49';
-import Button from '@/components/Button1';
+import Button from '@/components/Button';
 import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
 import Paper from '@/components/auth/Paper';
