@@ -7,6 +7,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <StoreProvider>{children}</StoreProvider>
+    <html>
+      <body>
+        <StoreProvider>{children}</StoreProvider>
+      </body>
+    </html>
   )
 }
