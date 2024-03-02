@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "ecmel.vscode-html-css",
+    "ms-vscode.vscode-typescript-next",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "vscode-icons-team.vscode-icons",
+    "tamasfe.even-better-toml",
+    "ckolkman.vscode-postgres",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.autopep8"
+  ]
+}
