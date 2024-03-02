@@ -12,6 +12,7 @@ import {ChangeEvent, useState} from "react";
 // export const metadata: Metadata = {
 //   title: 'Login',
 // }
+import PasswordInput from '@/components/auth/PasswordInput';
 
 export default function Page()  {
     const [email, setEmail] = useState("");
@@ -59,10 +60,10 @@ export default function Page()  {
                     />
                     <h1 className='font-bold text-xl text-purple-800'>Login</h1>
                     <div className="mb-4">
-                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" iconKey={'EmailInputIcon'} onChange={handleEmailChange} />
+                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" iconKey={'EmailInputIcon'} onChange={handleEmailChange} required/>
                     </div>
                     <div className="mb-6">
-                        <Input type='password' title="Password" onChange={handlePasswordChange} />
+                        <PasswordInput title="Password" onChange={handlePasswordChange} required />
                     </div>
                     <div className="flex flex-col items-left space-y-4">
                         <InlineLink href="/forgot_password">
