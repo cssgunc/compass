@@ -44,7 +44,7 @@ export default function Page() {
                type="password"
                title="Enter New Password"
                value={newPassword}
-               valid={isButtonDisabled}
+               valid={!isButtonDisabled || isStrongPassword(newPassword)}
                onChange={(e) => {
                setNewPassword(e.target.value);
                }}
@@ -61,6 +61,7 @@ export default function Page() {
                type="password"
                title="Confirm Password"
                value={confirmPassword}
+               valid={!isButtonDisabled || (newPassword === confirmPassword && confirmPassword !== '')}
                onChange={(e) => {
                setConfirmPassword(e.target.value);
                }}
