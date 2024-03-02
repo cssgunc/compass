@@ -1,5 +1,5 @@
 "use client"
-import Button from '@/components/Button49';
+import Button from '@/components/Button';
 import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
 import Paper from '@/components/auth/Paper';
@@ -44,7 +44,7 @@ export default function Page()  {
                         iconKey={'EmailInputIcon'}
                         onChange={(e) => {
                             setconfirmEmail(e.target.value);
-                            setEmailError(''); // Reset the error when the user types
+                            
                         }}/>
                         {emailError && (
                         <p className={`mt-2 ${emailError.includes('exists in the database') ? 'text-green-500' : 'text-red-500'}`}>
