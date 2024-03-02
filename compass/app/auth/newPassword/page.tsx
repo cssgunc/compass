@@ -2,7 +2,7 @@
 "use client";
 import { useState, useEffect } from 'react'; 
 import Button from '@/components/Button1';
-import Input from '@/components/Input1';
+import Input from '@/components/Input';
 import Paper from '@/components/auth/Paper';
 
 

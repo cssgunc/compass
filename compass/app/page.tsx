@@ -1,7 +1,7 @@
 // pages/index.tsx
 "use client";
 
-import Button from '@/components/Button49';
+// import Button from '@/components/Button49';
 import Button from '@/components/Button1';
 import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
@@ -54,7 +54,7 @@ export default function Page()  {
                     />
                     <h1 className='font-bold text-xl text-purple-800'>Login</h1>
                     <div className="mb-4">
-                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" iconKey={'EmailInputIcon'} onChange={handleEmailChange} required/>
+                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" icon={'EmailInputIcon'} onChange={handleEmailChange} required/>
                     </div>
                     <div className="mb-6">
                         <PasswordInput title="Password" onChange={handlePasswordChange} required />
