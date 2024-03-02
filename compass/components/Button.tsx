@@ -2,7 +2,7 @@ import { FunctionComponent, ReactNode } from 'react';
 
 type ButtonProps = {
     children: ReactNode;
-    onClick?: () => void; // make the onClick handler optional
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     type?: "button" | "submit" | "reset"; // specify possible values for type
     disabled?: boolean;
 };

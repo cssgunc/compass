@@ -1,9 +1,9 @@
 "use client"
-import Button from '@/components/Button';
+import Button from '@/components/Button49';
 import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
 import Paper from '@/components/auth/Paper';
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 
 function isValidEmail(email: string) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,7 +29,7 @@ export default function Page()  {
         setEmailError(error);
         setIsButtonDisabled(error !== null && !error.includes('exists in the database'));
     }, [confirmEmail]);
-    
+
     return (
         <>
             <Paper>
@@ -37,11 +37,11 @@ export default function Page()  {
                 className="mb-0 mt-6 mb-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white">
                     <h1 className="text-2xl font-bold text-purple-700 sm:text-3xl">Forgot password</h1>
                     <div className="mb-4">
-                        <Input type='email' 
-                        title="Enter your email address" 
-                        placeholder="janedoe@gmail.com" 
+                        <Input type='email'
+                        title="Enter your email address"
+                        placeholder="janedoe@gmail.com"
                         value={confirmEmail}
-                        iconKey={'EmailInputIcon'} 
+                        iconKey={'EmailInputIcon'}
                         onChange={(e) => {
                             setconfirmEmail(e.target.value);
                             setEmailError(''); // Reset the error when the user types
