@@ -7,7 +7,7 @@ interface Link {
 
 const InlineLink: React.FC<Link> = ({href = '#', children}) => {
     return (
-        <a href={href} className='text-sm text-purple-600 hover:underline font-semibold italic'>
+        <a href={href} className='text-sm text-purple-600 hover:underline font-semibold'>
             {children}
         </a>
     )

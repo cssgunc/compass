@@ -16,10 +16,10 @@ export default function Page()  {
             <Paper>
                 <form className="mb-0 mt-6 mb-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white">
                     <div className="mb-4">
-                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" />
+                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" iconKey={'EmailInputIcon'} />
                     </div>
                     <div className="mb-6">
-                        <Input type='password' title="Password" />
+                        <Input type='password' title="Password"  />
                     </div>
                     <div className="flex flex-col items-left space-y-4">
                         <InlineLink>
