@@ -1,6 +1,6 @@
 // pages/index.tsx
 
-import Button from '@/components/Button';
+import Button from '@/components/Button1';
 import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
 import Paper from '@/components/auth/Paper';
