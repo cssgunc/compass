@@ -5,15 +5,16 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   title?: ReactNode;
   type?:ReactNode;
   placeholder?:ReactNode
+  valid?:boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void; 
 };
 
-const Input: FunctionComponent<InputProps> = ({ icon, type, title, placeholder, onChange, ...rest }) => {
+const Input: FunctionComponent<InputProps> = ({ icon, type, title, placeholder, onChange, valid, ...rest }) => {
   return (
     <div>
       <label
   htmlFor={title}
-  className="block overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-sm focus-within:border-purple-600 focus-within:ring-1 focus-within:ring-purple-600"
+  className="block overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-sm focus-within:border-red-600 focus-within:ring-1 focus-within:ring-red-600"
 >
   <span className="text-xs font-semibold text-gray-700"> {title} </span>
 
