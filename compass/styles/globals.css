@@ -1,0 +1,47 @@
+/* globals.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+
+:root {
+    /* Colors */
+    --ring-color: 199, 21, 133;
+    /* This is the RGB value for a purple color */
+    --ring-opacity: 0.5;
+
+    /* Shadows */
+    --shadow-default: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-focus: 0 0 0 3px rgba(66, 153, 225, 0.5);
+
+    /* Borders */
+    --border-radius: 0.375rem;
+    /* 6px */
+    --border-width: 1px;
+
+    /* Spacing */
+    --spacing-px: 1px;
+    --spacing-2: 0.5rem;
+    /* 8px */
+    --spacing-3: 0.75rem;
+    /* 12px */
+
+    /* Font */
+    --font-color: #4a5568;
+    /* A shade of gray */
+}
+
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/Inter-Regular.ttf') format('ttf'),
+    url('/fonts/Inter-Bold.ttf') format('ttf'),
+    url('/fonts/Inter-Black.ttf') format('ttf'),
+    url('/fonts/Inter-ExtraBold.ttf') format('ttf'),
+    url('/fonts/Inter-ExtraLight.ttf') format('ttf'),
+    url('/fonts/Inter-Medium.ttf') format('ttf'),
+    url('/fonts/Inter-SemiBold.ttf') format('ttf'),
+    url('/fonts/Inter-Thin.ttf') format('ttf');
+  }
