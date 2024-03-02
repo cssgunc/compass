@@ -2,7 +2,7 @@
 "use client";
 
 import Button from '@/components/Button49';
-import Input from '@/components/Input49'
+import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
 import Paper from '@/components/auth/Paper';
 import Image from 'next/image';
