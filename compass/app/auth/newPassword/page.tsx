@@ -1,8 +1,8 @@
 // pages/index.tsx
 "use client";
 import { useState, useEffect } from 'react'; 
-import Button from '@/components/Button';
-import Input from '@/components/Input';
+import Button from '@/components/Button1';
+import Input from '@/components/Input1';
 import Paper from '@/components/auth/Paper';
 
 
