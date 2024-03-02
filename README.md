@@ -39,7 +39,7 @@ Also add following variables inside of a .env file inside of the backend directo
 ```
 \\ .env file contents
 
-POSTGRES_DB=compass
+POSTGRES_DATABASE=compass
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=admin
 POSTGRES_HOST=db
