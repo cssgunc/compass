@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from .env import getenv
 
 
-def _engine_str(database: str = getenv("POSTGRES_DB")) -> str:
+def _engine_str(database: str = getenv("POSTGRES_DATABASE")) -> str:
     """Helper function for reading settings from environment variables to produce connection string."""
     dialect = "postgresql+psycopg2"
     user = getenv("POSTGRES_USER")
