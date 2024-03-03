@@ -6,10 +6,10 @@ import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
 import Paper from '@/components/auth/Paper';
 import Image from 'next/image';
-import {ChangeEvent, useState} from "react";
+import { ChangeEvent, useState } from "react";
 import PasswordInput from '@/components/auth/PasswordInput';
 
-export default function Page()  {
+export default function Page() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -51,13 +51,17 @@ export default function Page()  {
                         width={100}
                         height={91}
                     />
+
                     <h1 className='font-bold text-xl text-purple-800'>Login</h1>
+
                     <div className="mb-4">
-                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" icon={'EmailInputIcon'} onChange={handleEmailChange} required/>
+                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" icon={'EmailInputIcon'} onChange={handleEmailChange} required />
                     </div>
+
                     <div className="mb-6">
                         <PasswordInput title="Password" onChange={handlePasswordChange} required />
                     </div>
+
                     <div className="flex flex-col items-left space-y-4">
                         <InlineLink href="/auth/forgot_password">
                             Forgot password?
@@ -68,8 +72,8 @@ export default function Page()  {
                         <div className="text-center text-red-600" hidden={!error}>
                             <p>{error}</p>
                         </div>
-
                     </div>
+
                 </form>
                 <p className="text-center mt-6 text-gray-500 text-xs">
                     &copy; 2024 Compass Center
