@@ -55,7 +55,7 @@ export default function Page() {
                     <h1 className='font-bold text-xl text-purple-800'>Login</h1>
 
                     <div className="mb-4">
-                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" icon={'EmailInputIcon'} onChange={handleEmailChange} required />
+                        <Input type='email' title="Email" placeholder="janedoe@gmail.com" onChange={handleEmailChange} required />
                     </div>
 
                     <div className="mb-6">

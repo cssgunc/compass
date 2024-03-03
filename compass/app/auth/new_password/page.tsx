@@ -7,6 +7,7 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 
 import Paper from '@/components/auth/Paper';
+import PasswordInput from '@/components/auth/PasswordInput';
 
 
 function isStrongPassword(password: string): boolean {
@@ -37,13 +38,13 @@ export default function Page() {
                console.log('Passwords do not match. Please try again.');
              }
          }}
-         className="mb-0 mt-6 mb-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white"
+         className="mb-0 m-auto mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white max-w-xl"
        >
          <div className="text-center sm:text-left">
-           <h1 className="text-2xl font-bold text-blue-900 sm:text-3xl">New Password</h1>
+           <h1 className="font-bold text-xl text-purple-800">New Password</h1>
          </div>
          <div className="mb-4">
-           <Input
+           <PasswordInput
                type="password"
                title="Enter New Password"
                value={newPassword}
@@ -60,7 +61,7 @@ export default function Page() {
                               </p>
                             </div>}
          <div className="mb-6">
-           <Input
+           <PasswordInput
                type="password"
                title="Confirm Password"
                value={confirmPassword}

@@ -40,15 +40,14 @@ export default function Page()  {
         <>
             <Paper>
                 <form
-                className="mb-0 mt-6 mb-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white">
-                    <h1 className="text-2xl font-bold text-purple-700 sm:text-3xl">Forgot password</h1>
+                className="mb-0 m-auto mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white max-w-xl">
+                    <h1 className="font-bold text-xl text-purple-800">Forgot password</h1>
                     <div className="mb-4">
                         <Input type='email'
                         title="Enter your email address"
                         placeholder="janedoe@gmail.com"
                         //setting a placeholder in the email input box
                         value={confirmEmail}
-                        icon={'EmailInputIcon'}
                         onChange={(e) => {
                             setconfirmEmail(e.target.value);
                         }}/>
