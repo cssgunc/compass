@@ -59,7 +59,7 @@ export default function Page()  {
                         <PasswordInput title="Password" onChange={handlePasswordChange} required />
                     </div>
                     <div className="flex flex-col items-left space-y-4">
-                        <InlineLink href="/forgot_password">
+                        <InlineLink href="/auth/forgot_password">
                             Forgot password?
                         </InlineLink>
                         <Button onClick={handleClick}>

@@ -52,7 +52,7 @@ export default function Page()  {
                             )}
                     </div>
                     <div className="flex flex-col items-left space-y-4">
-                        <InlineLink href="/login">
+                        <InlineLink href="/auth/login">
                             Back to Sign In
                         </InlineLink>
                         <Button type="submit" disabled={isButtonDisabled}>
