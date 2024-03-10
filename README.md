@@ -47,33 +47,26 @@ POSTGRES_PORT=5432
 HOST=localhost
 ```
 
-Install necessary python packages
-
-```
-\\ Change directory from compass into backend directory
-cd backend
-
-\\ Install python dependencies
-pip3 install -r requirements.txt
-```
-
 ## Backend Starter
 
-Follow these steps to start up Postgres database:
+- Please open the VS Code Command Palette
+- Run the command **Dev Containers: Rebuild and Reopen in Container**
+- This should open the dev container with the same file directory mounted so any changes in the dev container will be seen in the local repo
 
-Make sure you have Docker installed!
+### In Dev Container
 
+Run this to reset the database and populate it with the approprate tables that reflect the entities folder
+```
+python3 -m backend.script.reset_demo
 ```
 
-\\ Spins up local postgres database and pgadmin
-docker-compose up -d
+### Possible Dev Container Errors
 
-\\ Stop and teardown containers
-docker-compose down
-
-\\ Stop and teardown containers + volumes (full reset)
-docker-compose down -v
-```
+- Sometimes the ports allocated to our services will be allocated (5432 for Postgres and 5050 for PgAdmin4)
+- Run **docker stop** to stop all containers
+- If that does not work using **sudo lsof -i :[PORT_NUMBER]** to find the process running on the needed ports and idenitfy the PID
+- Run **sudo kill [PID]**
+- If you are on Windows please consult ChatGPT or set up WSL (will be very useful in the future)
 
 ### Accesing pgAdmin 4
 
@@ -89,11 +82,11 @@ docker-compose down -v
 - Click **Save** at the bottom to add connection
 - Click **Server** dropdown on the left and click through items inside the **Compass** server
 
-## Testing Backend Code
+### Testing Backend Code
 
 - Write tests for any service you create and any function in those services
 - Make sure to add docstrings detailing what the file is doing and what each test is doing
-- Name all test functions with test\_[testContent]()
+- Name all test functions with test\_[testContent] (Must be prefixed with test to be recognized by pytest)
 - Utitlize dependency injection for commonly used services
 
 ```
@@ -101,7 +94,8 @@ docker-compose down -v
 pytest
 
 \\ Run specific tests by passing in file as a parameter
-pytest [fileName]
+\\ Passing the -s allows us to see any print statements or debugging statements in the console
+pytest -s --rootdir=/workspace [testFilePath]::[testFunctionSignature]
 ```
 
 ## 💡 Dev Notes

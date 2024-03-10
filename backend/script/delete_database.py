@@ -2,7 +2,7 @@ from sqlalchemy import text, create_engine
 from ..database import engine, _engine_str
 from ..env import getenv
 
-engine = create_engine(_engine_str(), echo=True)
+engine = create_engine(_engine_str(database=""), echo=True)
 """Application-level SQLAlchemy database engine."""
 
 with engine.connect() as connection:
