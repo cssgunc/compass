@@ -1,12 +1,22 @@
 version: "3"
 
 services:
+  httpd:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    environment:
+      - windir # Defined on Windows but not on other platforms
+
   db:
     image: "postgres:latest"
     ports:
       - "5432:5432"
     env_file:
-      - ./backend/.env
+      - ../backend/.env
     volumes:
       - compass-center-postgres:/var/lib/postgresql/data
       # - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
