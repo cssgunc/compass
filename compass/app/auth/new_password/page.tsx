@@ -1,13 +1,11 @@
 // pages/index.tsx
 "use client";
 import { useState, useEffect } from 'react'; 
-
-import Input from '@/components/Input';
-
 import Button from '@/components/Button';
 
 import Paper from '@/components/auth/Paper';
 import PasswordInput from '@/components/auth/PasswordInput';
+import ErrorBanner from '@/components/auth/ErrorBanner';
 
 
 function isStrongPassword(password: string): boolean {
@@ -45,7 +43,6 @@ export default function Page() {
          </div>
          <div className="mb-4">
            <PasswordInput
-               type="password"
                title="Enter New Password"
                value={newPassword}
                valid={!isButtonDisabled || isStrongPassword(newPassword)}
@@ -54,15 +51,9 @@ export default function Page() {
                }}
            />
          </div>
-         {isStrongPassword(newPassword) || newPassword === '' ? null : <div role="alert" className="rounded border-s-4 border-red-500 bg-red-50 p-4">
-                            <strong className="block text-sm font-semibold text-red-800"> Password is not strong enough. </strong>
-                              <p className="mt-2 text-xs font-thin text-red-700">
-                              Tip: Use a mix of letters, numbers, and symbols for a strong password. Aim for at least 8 characters!
-                              </p>
-                            </div>}
+         {isStrongPassword(newPassword) || newPassword === '' ? null : <ErrorBanner heading="Password is not strong enough." description="Tip: Use a mix of letters, numbers, and symbols for a strong password. Aim for at least 8 characters!" />}
          <div className="mb-6">
            <PasswordInput
-               type="password"
                title="Confirm Password"
                value={confirmPassword}
                valid={!isButtonDisabled || (newPassword === confirmPassword && confirmPassword !== '')}
@@ -71,12 +62,7 @@ export default function Page() {
                }}
            />
          </div>
-         {newPassword === confirmPassword || confirmPassword === '' ? null : <div role="alert" className="rounded border-s-4 border-red-500 bg-red-50 p-4">
-                            <strong className="block text-sm font-semibold text-red-800"> Passwords do not match. </strong>
-                              <p className="mt-2 text-xs font-thin text-red-700">
-                              Please make sure both passwords are the exact same!
-                              </p>
-                            </div>}
+         {newPassword === confirmPassword || confirmPassword === '' ? null : <ErrorBanner heading="Passwords do not match." description="Please make sure both passwords are the exact same!"/>}
          <div className="flex flex-col items-left space-y-4">
             <Button type="submit" disabled={isButtonDisabled} >
              Send
