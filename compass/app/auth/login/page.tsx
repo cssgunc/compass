@@ -59,13 +59,13 @@ export default function Page() {
                     <h1 className='font-bold text-xl text-purple-800'>Login</h1>
 
                     <div className="mb-6">
-                        <Input type='email' valid={emailError !== null} title="Email" placeholder="janedoe@gmail.com" onChange={handleEmailChange} required />
+                        <Input type='email' valid={emailError == ""} title="Email" placeholder="janedoe@gmail.com" onChange={handleEmailChange} required />
                         
                     </div>
                     {emailError && <ErrorBanner heading={emailError} />}
 
                     <div className="mb-6">
-                        <PasswordInput title="Password" valid={passwordError !== null} onChange={handlePasswordChange} required />
+                        <PasswordInput title="Password" valid={passwordError == ""} onChange={handlePasswordChange} required />
                         
                     </div>
                     {passwordError && <ErrorBanner heading={passwordError} />}

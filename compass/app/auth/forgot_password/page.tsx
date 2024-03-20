@@ -8,26 +8,27 @@ import InlineLink from '@/components/InlineLink';
 import Paper from '@/components/auth/Paper';
 import ErrorBanner from '@/components/auth/ErrorBanner';
 
-function isValidEmail(email: string): string | null {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email.trim() === '') {
-        return 'Email cannot be empty';
-    } else if (!emailRegex.test(email)) {
-        return 'Invalid email format';
-    }
-    return null; // No error
-}
 
 export default function ForgotPasswordPage() {
     const [confirmEmail, setConfirmEmail] = useState("");
     const [emailError, setEmailError] = useState<string | null>(null);
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-    useEffect(() => {
-        const error = isValidEmail(confirmEmail);
-        setEmailError(error); // set the error message based on validation
-        setIsButtonDisabled(!!error); // disable button if there is an error
-    }, [confirmEmail]);
+
+    function isValidEmail(email: string): boolean {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email.trim() === '') {
+            setEmailError('Email cannot be empty');
+            return false;
+        } else if (!emailRegex.test(email)) {
+            setEmailError('Invalid email format');
+            return false;
+        }
+        return true; // No error
+    }
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        isValidEmail(confirmEmail);
+        event.preventDefault();
+    }
 
     return (
         <>
@@ -45,7 +46,7 @@ export default function ForgotPasswordPage() {
                     <div className="mb-6">
                         <Input
                             type='email'
-                            valid={emailError !== null}
+                            valid={emailError == null}
                             title="Enter your email address"
                             placeholder="janedoe@gmail.com"
                             value={confirmEmail}
@@ -57,7 +58,7 @@ export default function ForgotPasswordPage() {
                         <InlineLink href="/auth/login">
                             Back to Sign In
                         </InlineLink>
-                        <Button type="submit" disabled={isButtonDisabled}>
+                        <Button type="submit" onClick={handleClick}>
                             Send
                         </Button>
                     </div>
