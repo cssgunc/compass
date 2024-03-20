@@ -45,10 +45,6 @@ export default function Page() {
 
     return (
         <>
-            <Paper>
-                <form onSubmit={(e) => {
-           e.preventDefault();
-         }}  className="mb-0 m-auto mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white max-w-xl">
                     <Image
                         src="/logo.png"
                         alt='Compass Center logo.'
@@ -79,11 +75,7 @@ export default function Page() {
                         </Button>
                     </div>
 
-                </form>
-                <p className="text-center mt-6 text-gray-500 text-xs">
-                    &copy; 2024 Compass Center
-                </p>
-            </Paper>
+
         </>
     );
 };

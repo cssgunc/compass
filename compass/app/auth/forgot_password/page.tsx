@@ -32,16 +32,6 @@ export default function ForgotPasswordPage() {
 
     return (
         <>
-            <Paper>
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        // submit form logic here. since it's a "forgot password" form,
-                        // typically you would send a reset password link to the email provided.
-                        console.log('Form submitted with email:', confirmEmail);
-                    }}
-                    className="mb-0 m-auto mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white max-w-xl"
-                >
                     <h1 className="font-bold text-xl text-purple-800">Forgot Password</h1>
                     <div className="mb-6">
                         <Input
@@ -62,11 +52,7 @@ export default function ForgotPasswordPage() {
                             Send
                         </Button>
                     </div>
-                </form>
-                <p className="text-center mt-6 text-gray-500 text-xs">
-                    &copy; 2024 Compass Center
-                </p>
-            </Paper>
+
         </>
     );
 }

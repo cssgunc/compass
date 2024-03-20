@@ -26,18 +26,6 @@ export default function Page() {
 
  return (
    <>
-     <Paper>
-       <form
-         onSubmit={(e) => {
-           e.preventDefault();
-           if (newPassword === confirmPassword) {
-               console.log('Passwords match. Submitting form...');
-             } else {
-               console.log('Passwords do not match. Please try again.');
-             }
-         }}
-         className="mb-0 m-auto mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-white max-w-xl"
-       >
          <div className="text-center sm:text-left">
            <h1 className="font-bold text-xl text-purple-800">New Password</h1>
          </div>
@@ -68,9 +56,6 @@ export default function Page() {
              Send
            </Button>
          </div>
-       </form>
-       <p className="text-center mt-6 text-gray-500 text-xs">&copy; 2024 Compass Center</p>
-     </Paper>
    </>
  );
 }
