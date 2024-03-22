@@ -29,7 +29,8 @@ export enum User {
 export enum COLLECTION {
     RESOURCE,
     SERVICE,
-    USER
+    USER,
+    TRAINING_MANUAL
 }
 
 export enum PROGRAM {
@@ -47,8 +48,4 @@ export enum DATATYPE {
     SELECT
 }
 
-// export const COLLECTION_MAP: {[key in COLLECTION]: CollectionImpl} = {
-//     [COLLECTION.RESOURCE]: new CollectionImpl('Resources', Icons.ResourceIcon),
-//     [COLLECTION.SERVICE]: new CollectionImpl('Services', Icons.ServiceIcon),
-//     [COLLECTION.USER]: new CollectionImpl('Users', Icons.UserIcon)
-// }
+
