@@ -20,7 +20,7 @@ export default function Page() {
                     <h1 className='font-bold text-2xl text-purple-800'>Compass Center Advocate Landing Page</h1>
                 </div>
                 <Callout>
-                    Welcome! Below you will find a list of resources for the Compass Center's trained advocates. These materials serve to virtually provide a collection of advocacy, resource, and hotline manuals and information. 
+                    Welcome! Below you will find a list of resources for the Compass Center's trained advocates. These materials serve to virtually provide a collection of advocacy, resource, and hotline manuals and information.
                     <b> If you are an advocate looking for the contact information of a particular Compass Center employee, please directly contact your staff back-up or the person in charge of your training.</b>
                 </Callout>
             </div>
