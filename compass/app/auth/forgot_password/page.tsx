@@ -1,11 +1,10 @@
 // pages/forgot-password.tsx
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import InlineLink from '@/components/InlineLink';
-import Paper from '@/components/auth/Paper';
 import ErrorBanner from '@/components/auth/ErrorBanner';
 
 
