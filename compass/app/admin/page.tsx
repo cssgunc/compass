@@ -23,6 +23,6 @@ export default function Page() {
   return (
     <>
       <Table headersData={data.headers} data={data.data} />
-    </>)
+    </>);
 
 }
