@@ -1,6 +1,6 @@
 """ Defines the table for storing resources """
 # Import our mapped SQL types from SQLAlchemy
-from sqlalchemy import Integer, String, DateTime, ARRAY
+from sqlalchemy import Integer, String, DateTime
 # Import mapping capabilities from the SQLAlchemy ORM
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 # Import the EntityBase that we are extending
@@ -12,7 +12,7 @@ import enum
 from sqlalchemy import Enum
 
 class ProgramEnum(enum.Enum):
-    """Determine program for Resource """
+    """ Determine program for Resource """
     DOMESTIC = 'DOMESTIC'
     ECONOMIC = 'ECONOMIC'
     COMMUNITY = 'COMMUNITY'
