@@ -1,46 +1,44 @@
 import { Component } from "react"
 
+// interface TableHeader {
+//   title: string,
+//   type: string
+// }
+
+// interface TableRow {
+//   [key: string]: any,
+// }
 interface TableProps {
-    headers: object;
-    rows: object;
-  }
+  headersData: string[];
+  data: { [key: string]: any }[];
+}
 
-const Table: React.FC<TableProps> = ({headers, rows}) => {
+const Table: React.FC<TableProps> = ({ headersData, data }) => {
+  const headers = headersData.map((header, i) => {
+    return <th key={"header-" + i} >{header}</th>
+  })
 
-<table>
-<caption>
-    Front-end web developer course 2021
-  </caption>
-  <thead>
-    <tr>
-      <th scope="col">Person</th>
-      <th scope="col">Most interest in</th>
-      <th scope="col">Age</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Chris</th>
-      <td>HTML tables</td>
-      <td>22</td>
-    </tr>
-    <tr>
-      <th scope="row">Dennis</th>
-      <td>Web accessibility</td>
-      <td>45</td>
-    </tr>
-    <tr>
-      <th scope="row">Sarah</th>
-      <td>JavaScript frameworks</td>
-      <td>29</td>
-    </tr>
-    <tr>
-      <th scope="row">Karen</th>
-      <td>Web performance</td>
-      <td>36</td>
-    </tr>
-  </tbody>
-</table>
+  console.log(data);
+
+  const rows = data.map((item) => {
+    const row = headersData.map(key => {
+      return <td key={"item-" + item.id + key}>{item[key]}</td>
+    });
+    return <tr key={"item-" + item.id}>{row}</tr>
+  })
+
+  return (<>
+    <table>
+      <thead>
+        <tr>
+          {headers}
+        </tr>
+      </thead>
+      <tbody>
+        {rows}
+      </tbody>
+    </table>
+  </>);
 
 }
 
