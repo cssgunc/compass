@@ -33,9 +33,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
         <div className="flex flex-col space-y-2">
           <h4 className="text-xs font-semibold text-gray-500">Pages</h4>
           <nav className="flex flex-col">
-            <SidebarItem icon={<BookmarkIcon className="w-4 h-4 text-gray-500" />} text="Resources" />
-            <SidebarItem icon={<ClipboardIcon className="w-4 h-4 text-gray-500" />} text="Services" />
-            <SidebarItem icon={<BookOpenIcon className="w-4 h-4 text-gray-500" />} text="Training Manuals" />
+            <SidebarItem icon={<BookmarkIcon  />} text="Resources" />
+            <SidebarItem icon={<ClipboardIcon />} text="Services" />
+            <SidebarItem icon={<BookOpenIcon  />} text="Training Manuals" />
           </nav>
         </div>
       </div>

@@ -38,7 +38,7 @@ export const LandingSearchBar: React.FC = () => {
       </div>
       <div className="flex flex-col pt-16 space-y-2 justify-center items-center">
         <Image alt="Landing illustration" src="/landing_illustration.png" width={250} height={250} />
-        <h2 className="font-medium text-medium text-gray-800">Need to find something? Use the links above or the search bar to get your results.</h2>
+        <h2 className="font-medium text-medium text-gray-800">Need to find something? Use the links or the search bar above to get your results.</h2>
       </div>
     </div>
   );
