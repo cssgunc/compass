@@ -8,7 +8,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
   return (
-    <div className="w-64 h-full border border-gray-200 bg-gray-50 px-4 shadow">
+    <div className="w-64 h-full border border-gray-200 bg-gray-50 px-4">
       <div className="flex justify-end">
         <button
           onClick={() => setIsSidebarOpen(false)}
