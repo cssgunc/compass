@@ -7,8 +7,8 @@ import Image from 'next/image';
 
 export default function Page() {
     return (
-        // Ensuring the main container takes at least full viewport height
         <div className="min-h-screen flex flex-col">
+            {/* icon + title  */}
             <div className="pt-16 px-8 pb-4 flex-grow">
                 <div className="mb-4 flex items-center space-x-4">
                     <Image
@@ -25,11 +25,13 @@ export default function Page() {
                 </Callout>
             </div>
             <div className="p-8 flex-grow border-t border-gray-200 bg-gray-50">
+                {/* link to different pages  */}
                 <div className="grid grid-cols-3 gap-6 pb-6">
                     <Card icon={<BookmarkIcon />} text="Resources" />
                     <Card icon={<ClipboardIcon />} text="Services" />
                     <Card icon={<BookOpenIcon />} text="Training Manuals" />
                 </div>
+                {/* search bar */}
                 <LandingSearchBar />
             </div>
         </div>

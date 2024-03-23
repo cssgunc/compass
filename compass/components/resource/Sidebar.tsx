@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDoubleLeftIcon, BookmarkIcon, ClipboardIcon, BookOpenIcon } from '@heroicons/react/24/solid';
+import { HomeIcon, ChevronDoubleLeftIcon, BookmarkIcon, ClipboardIcon, BookOpenIcon } from '@heroicons/react/24/solid';
 import { SidebarItem } from './SidebarItem';
 
 interface SidebarProps {
@@ -9,6 +9,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
   return (
     <div className="w-64 h-full border border-gray-200 bg-gray-50 px-4">
+      {/* button to close sidebar  */}
       <div className="flex justify-end">
         <button
           onClick={() => setIsSidebarOpen(false)}
@@ -20,6 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
       </div>
       <div className="flex flex-col space-y-8">
 
+      {/* user + logout button  */}
         <div className="flex items-center p-4 space-x-2 border border-gray-200 rounded-md ">
 
           <div className="flex flex-col items-start space-y-2">
@@ -30,9 +32,11 @@ const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
             <button className="text-red-600 text-xs hover:underline mt-1">Sign out</button>
           </div>
         </div>
+        {/* navigation menu  */}
         <div className="flex flex-col space-y-2">
           <h4 className="text-xs font-semibold text-gray-500">Pages</h4>
           <nav className="flex flex-col">
+          <SidebarItem icon={<HomeIcon  />} text="Home" />
             <SidebarItem icon={<BookmarkIcon  />} text="Resources" />
             <SidebarItem icon={<ClipboardIcon />} text="Services" />
             <SidebarItem icon={<BookOpenIcon  />} text="Training Manuals" />
