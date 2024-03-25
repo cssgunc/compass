@@ -7,7 +7,7 @@ from .enum_for_models import UserTypeEnum, ProgramTypeEnum
 
 
 class User(BaseModel):
-    id: int
+    id: int | None = None
     username: str = Field(..., description="The username of the user")
     email: str = Field(..., description="The e-mail of the user")
     experience: int = Field(..., description="Years of Experience of the User")
