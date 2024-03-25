@@ -16,4 +16,4 @@ from datetime import datetime
 class ServiceTag(Service, BaseModel):
     id: int | None = None
     serviceid: int | None = None
-    tagId: Tag
+    tagId: List[Tag]

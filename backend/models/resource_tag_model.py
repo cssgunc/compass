@@ -10,4 +10,4 @@ from .resource_model import Resource
 class ResourceTag(Resource, BaseModel):
     id: int | None = None
     resourceid: int | None = None
-    tagid: Tag
+    tagid: List[Tag]
