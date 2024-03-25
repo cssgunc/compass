@@ -38,4 +38,4 @@ class ResourceEntity(EntityBase):
     program: Mapped[ProgramEnum] = mapped_column(Enum(ProgramEnum), nullable=False)
 
     #relationships
-    serivceTags: Mapped[list["ServiceTagEntity"]] = relationship(back_populates="service", cascade="all,delete")
+    serviceTags: Mapped[list["ServiceTagEntity"]] = relationship(back_populates="service", cascade="all,delete")
