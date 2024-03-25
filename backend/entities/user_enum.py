@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Enum
+from sqlalchemy import Enum
 
 
 class RoleEnum(Enum):

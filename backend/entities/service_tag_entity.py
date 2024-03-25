@@ -10,15 +10,15 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .entity_base import EntityBase
 
 
-class ResourceTagEntity(EntityBase):
+class ServiceTagEntity(EntityBase):
 
     # set table name to user in the database
     __tablename__ = "serviceTag"
 
     # set fields or 'columns' for the user table
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    sericeId: Mapped[int] = mapped_column(ForeignKey("event.id"), primary_key=True)
-    tagId: Mapped[int] = mapped_column(ForeignKey("user.pid"), primary_key=True)
+    serviceId: Mapped[int] = mapped_column(ForeignKey("service.id"))
+    tagId: Mapped[int] = mapped_column(ForeignKey("tag.id"))
 
     # relationships
     service: Mapped["ServiceEntity"] = relationship(back_populates="resourceTags")
