@@ -24,7 +24,7 @@ class ProgramEnum(enum.Enum):
     COMMUNITY = "COMMUNITY"
 
 
-class ResourceEntity(EntityBase):
+class ServiceEntity(EntityBase):
 
     #set table name
     __tablename__ = "service"

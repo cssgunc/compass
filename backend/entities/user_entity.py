@@ -56,16 +56,17 @@ class UserEntity(EntityBase):
     experience: Mapped[int] = mapped_column(Integer, nullable=False)
     group: Mapped[str] = mapped_column(String(50))
 
+    """
     @classmethod
     def from_model(cls, model: User) -> Self:
-        """
+        
         Create a user entity from model
 
         Args: model (User): the model to create the entity from
 
         Returns:
             self: The entity
-        """
+        
 
         return cls(
             id=model.id,
@@ -78,12 +79,12 @@ class UserEntity(EntityBase):
         )
 
     def to_model(self) -> User:
-        """
+        
         Create a user model from entity
 
         Returns:
             User: A User model for API usage
-        """
+        
 
         return User(
             id=self.id,
@@ -94,3 +95,4 @@ class UserEntity(EntityBase):
             experience=self.experience,
             group=self.group,
         )
+    """

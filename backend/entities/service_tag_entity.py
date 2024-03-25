@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .entity_base import EntityBase
 
 
-class ResourceTagEntity(EntityBase):
+class ServiceTagEntity(EntityBase):
 
     # set table name to user in the database
     __tablename__ = "serviceTag"
