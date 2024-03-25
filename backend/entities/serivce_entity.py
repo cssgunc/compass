@@ -12,12 +12,8 @@ from .entity_base import EntityBase
 # Import datetime for created_at type
 from datetime import datetime
 
-# Import enums for Program
-import enum
-from sqlalchemy import Enum
-
 # Import ProgramType enumeration
-from backend.entities.program_type_enum import ProgramType
+from backend.entities.program_enum import ProgramEnum
 
 
 class ResourceEntity(EntityBase):
@@ -31,7 +27,7 @@ class ResourceEntity(EntityBase):
     name: Mapped[str] = mapped_column(String(32), nullable=False)
     summary: Mapped[str] = mapped_column(String(100), nullable=False)
     requirements: Mapped[list[str]] = mapped_column(ARRAY(String))
-    program: Mapped[ProgramType] = mapped_column(Enum(ProgramType), nullable=False)
+    program: Mapped[ProgramEnum] = mapped_column(ProgramEnum, nullable=False)
 
     # relationships
     resourceTags: Mapped[list["ServiceTagEntity"]] = relationship(

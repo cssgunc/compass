@@ -13,10 +13,8 @@ from .entity_base import EntityBase
 from datetime import datetime
 
 # Import enums for Role and Program
-import enum
-from sqlalchemy import Enum
-from program_type_enum import ProgramType
-from user_enum import RoleType
+from backend.entities.program_enum import ProgramEnum
+from user_enum import RoleEnum
 
 
 class UserEntity(EntityBase):
@@ -31,10 +29,10 @@ class UserEntity(EntityBase):
     username: Mapped[str] = mapped_column(
         String(32), nullable=False, default="", unique=True
     )
-    role: Mapped[RoleType] = mapped_column(Enum(RoleType), nullable=False)
+    role: Mapped[RoleEnum] = mapped_column(RoleEnum, nullable=False)
     email: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
-    program: Mapped[list[ProgramType]] = mapped_column(
-        ARRAY(Enum(ProgramType)), nullable=False
+    program: Mapped[list[ProgramEnum]] = mapped_column(
+        ARRAY(ProgramEnum), nullable=False
     )
     experience: Mapped[int] = mapped_column(Integer, nullable=False)
     group: Mapped[str] = mapped_column(String(50))

@@ -12,10 +12,6 @@ from .entity_base import EntityBase
 # Import datetime for created_at type
 from datetime import datetime
 
-# Import enums for Role and Program
-import enum
-from sqlalchemy import Enum
-
 # Import self for to model
 from typing import Self
 
