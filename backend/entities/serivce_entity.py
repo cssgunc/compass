@@ -16,26 +16,24 @@ from datetime import datetime
 import enum
 from sqlalchemy import Enum
 
-
-class ProgramEnum(enum.Enum):
-    """Determine program for Service"""
-    DOMESTIC = "DOMESTIC"
-    ECONOMIC = "ECONOMIC"
-    COMMUNITY = "COMMUNITY"
+# Import ProgramType enumeration
+from programtype_enum import ProgramType
 
 
 class ResourceEntity(EntityBase):
 
-    #set table name
+    # set table name
     __tablename__ = "service"
 
-    #set fields
+    # set fields
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     name: Mapped[str] = mapped_column(String(32), nullable=False)
     summary: Mapped[str] = mapped_column(String(100), nullable=False)
     requirements: Mapped[list[str]] = mapped_column(ARRAY(String))
-    program: Mapped[ProgramEnum] = mapped_column(Enum(ProgramEnum), nullable=False)
+    program: Mapped[ProgramType] = mapped_column(Enum(ProgramType), nullable=False)
 
-    #relationships
-    resourceTags: Mapped[list["ServiceTagEntity"]] = relationship(back_populates="service", cascade="all,delete")
+    # relationships
+    resourceTags: Mapped[list["ServiceTagEntity"]] = relationship(
+        back_populates="service", cascade="all,delete"
+    )
