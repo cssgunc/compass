@@ -17,8 +17,8 @@ class ServiceTagEntity(EntityBase):
 
     # set fields or 'columns' for the user table
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    sericeId: Mapped[int] = mapped_column(ForeignKey("event.id"), primary_key=True)
-    tagId: Mapped[int] = mapped_column(ForeignKey("user.pid"), primary_key=True)
+    serviceId: Mapped[int] = mapped_column(ForeignKey("service.id"), primary_key=True)
+    tagId: Mapped[int] = mapped_column(ForeignKey("tag.id"), primary_key=True)
 
     # relationships
     service: Mapped["ServiceEntity"] = relationship(back_populates="resourceTags")
