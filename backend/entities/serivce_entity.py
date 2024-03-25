@@ -17,7 +17,7 @@ import enum
 from sqlalchemy import Enum
 
 # Import ProgramType enumeration
-from programtype_enum import ProgramType
+from backend.entities.program_type_enum import ProgramType
 
 
 class ResourceEntity(EntityBase):

@@ -18,7 +18,7 @@ from sqlalchemy import Enum
 
 # Import self for to model
 from typing import Self
-from programtype_enum import ProgramType
+from backend.entities.program_type_enum import ProgramType
 
 
 class ResourceEntity(EntityBase):

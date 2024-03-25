@@ -15,15 +15,8 @@ from datetime import datetime
 # Import enums for Role and Program
 import enum
 from sqlalchemy import Enum
-from programtype_enumeration import ProgramType
-
-
-class RoleEnum(enum.Enum):
-    """Determine role for User"""
-
-    ADMIN = "ADMIN"
-    EMPLOYEE = "EMPLOYEE"
-    VOLUNTEER = "VOLUNTEER"
+from program_type_enum import ProgramType
+from user_enum import RoleType
 
 
 class UserEntity(EntityBase):
@@ -38,7 +31,7 @@ class UserEntity(EntityBase):
     username: Mapped[str] = mapped_column(
         String(32), nullable=False, default="", unique=True
     )
-    role: Mapped[RoleEnum] = mapped_column(Enum(RoleEnum), nullable=False)
+    role: Mapped[RoleType] = mapped_column(Enum(RoleType), nullable=False)
     email: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     program: Mapped[list[ProgramType]] = mapped_column(
         ARRAY(Enum(ProgramType)), nullable=False
