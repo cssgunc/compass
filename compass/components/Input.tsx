@@ -1,41 +1,36 @@
-import { Icons } from '@/utils/constants';
-import React, { FunctionComponent, InputHTMLAttributes, ReactElement, ReactNode } from 'react';
+import React, { FunctionComponent, InputHTMLAttributes, ReactNode, ChangeEvent } from 'react';
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  iconKey?: keyof typeof Icons; // Use keyof typeof to ensure the key exists in Icons
-  title?: string; // Assuming title is always a string
-  type?: string;
-  placeholder?: string;
+  icon?: ReactNode;
+  title?: ReactNode;
+  type?:ReactNode;
+  placeholder?:ReactNode
+  valid?:boolean;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void; 
 };
 
-const Input: FunctionComponent<InputProps> = ({ iconKey, type, title, placeholder, ...rest }) => {
-  const IconComponent = iconKey ? Icons[iconKey] : null;
-  
+const Input: FunctionComponent<InputProps> = ({ icon, type, title, placeholder, onChange, valid = true, ...rest }) => {
   return (
-    <div className="mb-4">
-      {title && (
-        <div className="mb-1">
-          <label htmlFor={title} className="text-sm font-semibold text-gray-700">
-            {title}
-          </label>
-        </div>
-      )}
-      <div className="flex items-center border border-gray-300 rounded-md shadow-sm overflow-hidden">
-        {IconComponent && (
-          <span className="inline-flex items-center px-3 border-r border-gray-300 text-gray-500">
-            <IconComponent className="h-5 w-5" />
-          </span>
-        )}
-        <input
-          {...rest}
-          type={type}
-          id={title}
-          placeholder={placeholder}
-          className="w-full border-none p-3 text-sm focus:ring-0"
-          style={{ boxShadow: 'none' }} // This ensures that the input doesn't have an inner shadow
-        />
-      </div>
-    </div>
+    <div>
+      <label
+  htmlFor={title}
+  className={valid ? "block overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-sm focus-within:border-purple-600 focus-within:ring-1 focus-within:ring-purple-600" : "block overflow-hidden rounded-md border border-gray-200 px-3 py-2 shadow-sm focus-within:border-red-600 focus-within:ring-1 focus-within:ring-red-600"}
+>
+  <span className="text-xs font-semibold text-gray-700"> {title} </span>
+  <div className="mt-1 flex items-center">
+  <input
+    type={type}
+    id={title}
+    placeholder={placeholder}
+    onChange={onChange}
+    className="w-full border-none p-0 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+  />
+  <span className="inline-flex items-center px-3 text-gray-500">
+          {icon}
+  </span>
+  </div>
+</label>
+</div>
   );
 };
 
