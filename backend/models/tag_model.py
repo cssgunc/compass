@@ -6,7 +6,7 @@ from typing import Optional
 
 
 class Tag(BaseModel):
-    id: int
+    id: int | None = None
     content: str = Field(
         ..., max_length=600, description="content associated with the tag"
     )

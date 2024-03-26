@@ -4,6 +4,7 @@ from typing import List
 from datetime import datetime
 from typing import Optional
 from .enum_for_models import ProgramTypeEnum
+from .resource_model import Resource
 
 
 class Resource(BaseModel):
