@@ -1,3 +1,4 @@
+
 "use client";
 // import Table from "@/components/Table";
 import { ColumnDef, createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
@@ -80,4 +81,17 @@ export default function Page() {
       </table>
     </>);
 
+
+
+import { PageLayout } from "@/components/admin/PageLayout"
+
+import { BookmarkIcon } from "@heroicons/react/24/solid"
+
+export default function Page() {
+    return (
+        <div className="min-h-screen flex flex-col">
+            {/* icon + title  */}
+            <PageLayout title="Resources" icon={<BookmarkIcon  />}  />
+        </div>
+    )
 }

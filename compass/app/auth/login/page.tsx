@@ -4,7 +4,6 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input'
 import InlineLink from '@/components/InlineLink';
-import Paper from '@/components/auth/Paper';
 import Image from 'next/image';
 import { useState } from "react";
 import PasswordInput from '@/components/auth/PasswordInput';
@@ -52,7 +51,7 @@ export default function Page() {
                         height={91}
                     />
 
-                    <h1 className='font-bold text-xl text-purple-800'>Login</h1>
+                    <h1 className='font-bold text-2xl text-purple-800'>Login</h1>
 
                     <div className="mb-6">
                         <Input type='email' valid={emailError == ""} title="Email" placeholder="janedoe@gmail.com" onChange={handleEmailChange} required />

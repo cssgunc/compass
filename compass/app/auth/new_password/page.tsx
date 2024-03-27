@@ -2,8 +2,6 @@
 "use client";
 import { useState, useEffect } from 'react'; 
 import Button from '@/components/Button';
-
-import Paper from '@/components/auth/Paper';
 import PasswordInput from '@/components/auth/PasswordInput';
 import ErrorBanner from '@/components/auth/ErrorBanner';
 
