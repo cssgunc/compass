@@ -1,7 +1,7 @@
 interface PageLayoutProps {
   icon: React.ReactElement;
   title: string;
-  // table: React.ReactElement
+  children: React.ReactElement
 }
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ icon, title, children }) => {
