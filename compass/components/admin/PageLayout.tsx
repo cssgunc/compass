@@ -15,7 +15,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ icon, title, children })
                 </div>
             </div>
             {/* data  */}
-            <div>
+            <div className="px-8 py-8">
                 {children}
             </div>
     </div>

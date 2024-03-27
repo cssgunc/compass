@@ -44,7 +44,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
 
     return (
         <div>
-            <Button onClick={toggleDrawer}>{isOpen ? "Close" : "Open"} Drawer</Button>
+            <button className="ml-2 uppercase opacity-0 group-hover:opacity-100 text-gray-500 font-medium border border-gray-200 bg-white shadow hover:bg-gray-50 p-2 rounded-md" onClick={toggleDrawer}>Open</button>
             <div className={drawerClassName}>
                 <div className="flex items-center justify-between p-4 border-b">
                     <h2>{title}</h2>
