@@ -1,28 +1,28 @@
 "use client";
 import Table from "@/components/Table";
 import { useState } from "react";
+import untypedDataExample from "./users.json" // EXAMPLE DATA!!!
+const dataExample = untypedDataExample as User[];
 
-// TODO: Example data. Remove later.
-const headersExample = ["username", "email", "role", "password"];
-const dataExample = [
-  {id: 1, username: "example", email: "example@gmail.com", role: "role"},
-  {id: 3, username: "erhgoejnrgexample", email: "example@gmail.com", role: "role"},
-  {id: 2, username: "another one", email: "example@gmail.com", role: "role"},
-  {id: 4, username: "examgoiadnfgople", email: "example@gmail.com", role: "role"},
-  {id: 5, username: "edfhgiebroxample", email: "example@gmail.com", role: "role"},
-  {id: 6, username: "examlsdfkjg", email: "example@gmail.com", role: "role"},
-  {id: 7, username: "exkkkample", email: "example@gmail.com", role: "role"},
-]
+type User = {
+  id: number;
+  created_at: any;
+  username: string;
+  role: "ADMIN" | "EMPLOYEE" | "VOLUNTEER";
+  email: string;
+  program: "DOMESTIC" | "ECONOMIC" | "COMMUNITY";
+  experience: number;
+  group?: string;
+}
 
 export default function Page() {
-  const [data, setData] = useState({
-    headers: [...headersExample],
-    data: [...dataExample],
-  });
+  const headers = ["username", "role", "email", "program", "experience"]
+  const [data, setData] = useState<User[]>([...dataExample])
 
   return (
     <>
-      <Table headersData={data.headers} data={data.data} />
+    <h1>EXAMPLE DATA / WORK IN PROGRESS!!</h1>
+      <Table headers={headers} data={data} />
     </>);
 
 }

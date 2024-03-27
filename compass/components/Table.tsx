@@ -9,19 +9,19 @@ import { Component } from "react"
 //   [key: string]: any,
 // }
 interface TableProps {
-  headersData: string[];
+  headers: string[];
   data: { [key: string]: any }[];
 }
 
-const Table: React.FC<TableProps> = ({ headersData, data }) => {
-  const headers = headersData.map((header, i) => {
+const Table: React.FC<TableProps> = ({ headers, data }) => {
+  const th = headers.map((header, i) => {
     return <th key={"header-" + i} >{header}</th>
   })
 
   console.log(data);
 
   const rows = data.map((item) => {
-    const row = headersData.map(key => {
+    const row = headers.map(key => {
       return <td key={"item-" + item.id + key}>{item[key]}</td>
     });
     return <tr key={"item-" + item.id}>{row}</tr>
@@ -31,7 +31,7 @@ const Table: React.FC<TableProps> = ({ headersData, data }) => {
     <table>
       <thead>
         <tr>
-          {headers}
+          {th}
         </tr>
       </thead>
       <tbody>
