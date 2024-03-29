@@ -1,6 +1,6 @@
 """Sample Test File"""
 
-from sqlalchemy import Engine, select
+from compass.backend.organization_entity import Engine, select
 
 from ... import entities
 from ...entities.sample_entity import SampleEntity

@@ -1,6 +1,6 @@
 """SQLAlchemy DB Engine and Session niceties for FastAPI dependency injection."""
 
-import sqlalchemy
+import compass.backend.organization_entity as organization_entity
 from sqlalchemy.orm import Session
 from .env import getenv
 
@@ -15,7 +15,7 @@ def _engine_str(database: str = getenv("POSTGRES_DATABASE")) -> str:
     return f"{dialect}://{user}:{password}@{host}:{port}/{database}"
 
 
-engine = sqlalchemy.create_engine(_engine_str(), echo=True)
+engine = organization_entity.create_engine(_engine_str(), echo=True)
 """Application-level SQLAlchemy database engine."""
 
 

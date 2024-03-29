@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from compass.backend.organization_entity import create_engine
 import subprocess
 
 from ..database import engine, _engine_str

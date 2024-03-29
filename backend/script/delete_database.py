@@ -1,4 +1,4 @@
-from sqlalchemy import text, create_engine
+from compass.backend.organization_entity import text, create_engine
 from ..database import engine, _engine_str
 from ..env import getenv
 

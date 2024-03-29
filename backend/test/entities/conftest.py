@@ -1,7 +1,7 @@
 """Shared pytest fixtures for database dependent tests."""
 
 import pytest
-from sqlalchemy import Engine, create_engine, text
+from compass.backend.organization_entity import Engine, create_engine, text
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import OperationalError
 
