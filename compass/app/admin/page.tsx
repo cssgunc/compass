@@ -1,7 +1,7 @@
 "use client";
 
-import { PageLayout } from "@/components/admin/PageLayout";
-import { Table } from "@/components/admin/Table/Index";
+import { PageLayout } from "@/components/PageLayout";
+import { Table } from "@/components/Table/Index";
 
 import { UsersIcon } from "@heroicons/react/24/solid";
 
