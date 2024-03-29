@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { RowAction } from "./RowAction";
+import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
 
 const usersExample = usersImport as unknown as User[];
@@ -32,6 +33,7 @@ export const Table = () => {
   const columns = [
     columnHelper.accessor("username", {
       cell: (info) => <RowAction title={info.getValue()} />,
+      cell: (info) => <RowOpenAction title={info.getValue()} />,
     }),
     columnHelper.accessor("role", {
       cell: (info) => info.renderValue(),
