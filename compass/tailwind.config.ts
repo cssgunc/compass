@@ -13,8 +13,11 @@ const config: Config = {
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        'sans': ['Inter', 'sans-serif'], // Add 'Inter' to the fontFamily theme
       },
+      fontWeight: {
+        'medium': 500, // Ensure medium is correctly set to 500
+      }
     },
   },
   plugins: [],

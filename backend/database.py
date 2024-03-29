@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """SQLAlchemy DB Engine and Session niceties for FastAPI dependency injection."""
 
 import compass.backend.organization_entity as organization_entity
@@ -27,3 +28,34 @@ def db_session():
         yield session
     finally:
         session.close()
+=======
+"""SQLAlchemy DB Engine and Session niceties for FastAPI dependency injection."""
+
+import sqlalchemy
+from sqlalchemy.orm import Session
+from .env import getenv
+
+
+def _engine_str(database: str = getenv("POSTGRES_DATABASE")) -> str:
+    """Helper function for reading settings from environment variables to produce connection string."""
+    dialect = "postgresql+psycopg2"
+    user = getenv("POSTGRES_USER")
+    password = getenv("POSTGRES_PASSWORD")
+    host = getenv("POSTGRES_HOST")
+    port = getenv("POSTGRES_PORT")
+    return f"{dialect}://{user}:{password}@{host}:{port}/{database}"
+
+
+engine = sqlalchemy.create_engine(_engine_str(), echo=True)
+"""Application-level SQLAlchemy database engine."""
+
+
+def db_session():
+    """Generator function offering dependency injection of SQLAlchemy Sessions."""
+    print("ran")
+    session = Session(engine)
+    try:
+        yield session
+    finally:
+        session.close()
+>>>>>>> 7068d74c6d04be020293acacf6cbe476b745c6fa
