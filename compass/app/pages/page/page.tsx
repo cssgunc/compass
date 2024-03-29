@@ -14,7 +14,7 @@ export default function Page()  {
     return (
       <>
     <h1 className="text-2xl font-bold text-gray-700 sm:text-3xl">Resources</h1>
-    <Drawer title="My Drawer Title">hi</Drawer>
+    <Drawer title="My Drawer Title">title</Drawer>
       </>
     );
 };

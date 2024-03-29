@@ -6,18 +6,18 @@ import InlineLink from '@/components/InlineLink'
 
 
 type DrawerProps = {
-    title: string;
     children: ReactNode;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    //onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     type?: "button" | "submit" | "reset"; // specify possible values for type
     disabled?: boolean;
-    editableContent?: DATATYPE; 
+    editableContent?: 'string'; 
 };
 
-const Drawer: FunctionComponent<DrawerProps> = ({ title, children, editableContent }) => {
+const Drawer: FunctionComponent<DrawerProps> = ({children, editableContent }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState(editableContent || '');
+    const [content, setContent] = useState('');
 
     const toggleDrawer = () => setIsOpen(!isOpen);
     const toggleEditing = () => setIsEditing(!isEditing);
@@ -29,20 +29,18 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, editableConte
         isOpen ? "translate-x-0" : "translate-x-full"
     }`;
     
-    const saveChanges = () => {
+    const saveChanges = (newContent: string) => {
+        setContent(newContent);
+        console.log(newContent);
         setIsEditing(false);
     };
 
-    const addRow = () => {
-        
-    }
 
     return (
         <div>
             <Button onClick={toggleDrawer}>{isOpen ? "Close" : "Open"} Drawer</Button>
             <div className={drawerClassName}>
                 <div className="flex items-center justify-between p-4 border-b">
-                    <h2>{title}</h2>
                     <div>
                         <Button onClick={toggleEditing}>{isEditing ? 'Cancel' : 'Edit'}</Button>
                         <Button onClick={toggleDrawer}>&laquo;</Button>
@@ -57,7 +55,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, editableConte
                                 onChange={handleContentChange}
                                 className="border p-2 w-full"
                             />
-                            <InlineLink onClick={saveChanges}>Save</InlineLink>
+                            <Button onClick={() => saveChanges(editContent)}>Save</Button>
                         </>
                     ) : (
                         children
