@@ -66,7 +66,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
     const saveIndividualChange = (index: number) => {
         const content = editContents[index].content.trim();
         if (!content) {
-            setError("Input cannot be empty.");
+            setError("Input cannot be empty."); //to-do: print error message
             return;
         }
         
