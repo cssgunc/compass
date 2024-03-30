@@ -98,15 +98,15 @@
 .sidebar-container {
     height: 100vh;
     overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
+    transition: margin 0.3s ease-in-out;
   }
   
   .sidebar-open {
-    transform: translateX(0);
+    margin-left: 0;
   }
   
   .sidebar-closed {
-    transform: translateX(-84%); /* Adjust this value to control how much of the sidebar remains visible */
+    margin-left: -17em; /* Adjust this value to control how much of the sidebar remains visible */
   }
 
   .close-button {

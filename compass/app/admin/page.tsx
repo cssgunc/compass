@@ -8,20 +8,18 @@ import Page from '../page';
 export default function LayoutPage() {
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(true);
 
-    const sidebarVariants = {
-        open: { opacity: 1, x: 0 },
-        closed: { opacity: 1, x: '-50%' },
-      };
-
     return (
         <div className="flex">
-        {(
-            <div
-            className={`sidebar-container ${isSidebarVisible ? 'sidebar-open' : 'sidebar-closed'}`}
-            >
-            <Sidebar setIsSidebarOpen={setIsSidebarVisible} isSidebarVisible={isSidebarVisible} />
+            <div className={`sidebar-container ${isSidebarVisible ? 'sidebar-open' : 'sidebar-closed'}`}>
+                <Sidebar setIsSidebarOpen={setIsSidebarVisible} isSidebarVisible={isSidebarVisible} />
             </div>
-        )}
+            <div className="flex-1 overflow-y-auto p-4">
+                <PageLayout
+                    icon={''} // Replace with your icon component
+                    title="Your Page Title"
+                    table={''} // Replace with your table component
+                />
+            </div>
         </div>
-      );
+    );
 }
