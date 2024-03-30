@@ -6,17 +6,18 @@ interface PageLayoutProps{
 }
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ icon, title, table }) => {
-    return(
-        <div flex-column> 
-            <div flex-row>
-                <span className="h-5 text-gray-500 w-5">
+    return (
+        <div>
+            <div className="flex flex-row items-center pl-20 pt-10"> 
+                <span>
                     {icon}
                 </span>
-                <span className="flex-grow font-medium text-xs text-gray-500">
+                <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl p-5">
                     {title}
-                </span>
+                </h1>
             </div>
-            <span> {table} </span>
-         </div>
+            <div className="item-center pl-20 pt-10 pr-20">
+                {table} </div>
+        </div>
     );
 };

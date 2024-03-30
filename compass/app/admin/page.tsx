@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { PageLayout } from '@/components/admin/PageLayout';
 import Sidebar from '@/components/resource/Sidebar';
+import Icon from '@/components/admin/Icon';
 import Page from '../page';
+import TableTemp from '@/components/admin/TableTemp';
 
 export default function LayoutPage() {
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(true);
@@ -15,9 +17,9 @@ export default function LayoutPage() {
             </div>
             <div className="flex-1 overflow-y-auto p-4">
                 <PageLayout
-                    icon={''} // Replace with your icon component
+                    icon={<Icon />} // Replace with your icon component
                     title="Your Page Title"
-                    table={''} // Replace with your table component
+                    table={<TableTemp />} // Replace with your table component
                 />
             </div>
         </div>
