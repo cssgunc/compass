@@ -1,4 +1,4 @@
-import { ListBulletIcon, HashtagIcon, Bars3BottomLeftIcon, EnvelopeIcon, AtSymbolIcon, ClipboardIcon, ArrowsUpDownIcon, ChevronDoubleRightIcon, ChevronDoubleLeftIcon, ChevronRightIcon, ChevronLeftIcon, EyeIcon, EyeSlashIcon, UserIcon, BookOpenIcon, MagnifyingGlassIcon, LinkIcon } from '@heroicons/react/24/solid';
+import { ListBulletIcon, HashtagIcon, Bars3BottomLeftIcon, EnvelopeIcon, AtSymbolIcon, ClipboardIcon, ArrowsUpDownIcon, ChevronDoubleRightIcon, ChevronDoubleLeftIcon, ChevronRightIcon, ChevronLeftIcon, EyeIcon, EyeSlashIcon, UserIcon, BookOpenIcon, MagnifyingGlassIcon, LinkIcon, ClipboardDocumentCheckIcon } from '@heroicons/react/24/solid';
 
 export const Icons = {
   EmailInputIcon: EnvelopeIcon,
@@ -17,10 +17,11 @@ export const Icons = {
   LinkTableIcon: LinkIcon,
   TextTableIcon: Bars3BottomLeftIcon,
   NumberTableIcon: HashtagIcon,
-  MultiselectTableIcon: ListBulletIcon
+  MultiselectTableIcon: ListBulletIcon,
+  RequirementsTableIcon: ClipboardDocumentCheckIcon
 };
 
-export enum User {
+export enum USER {
     ADMIN,
     EMPLOYEE,
     VOLUNTEER
@@ -37,6 +38,12 @@ export enum PROGRAM {
     DOMESTIC_VIOLENCE,
     ECONOMIC_STABILITY,
     COMMUNITY_EDUCATION
+}
+
+export enum STATUS {
+    FULL,
+    CLOSED,
+    ACCEPTING_CLIENTS
 }
 
 export enum DATATYPE {

@@ -4,7 +4,7 @@ import { Field } from "@/utils/classes/Field";
 
 export class StringFieldImpl extends Field {
 
-    constructor(iconKey: keyof typeof Icons, title: string) {
+    constructor(title: string, iconKey: keyof typeof Icons = "TextTableIcon") {
         super(iconKey, title);
     }
 
