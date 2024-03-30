@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 
 
-import Drawer from '@/components/page/Drawer';
+import Drawer from '@/components/admin/Drawer';
 // import { Metadata } from 'next'
 import {ChangeEvent, useState} from "react";
 

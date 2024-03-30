@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/solid';
 import { BookmarkIcon, XMarkIcon, PlusIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon, ArrowsPointingInIcon } from '@heroicons/react/24/outline';
-import Card from '@/components/page/Card'
+import Card from '@/components/admin/Card'
 
 
 
