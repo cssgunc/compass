@@ -60,7 +60,7 @@ export default function Page() {
                     {emailError && <ErrorBanner heading={emailError} />}
 
                     <div className="mb-6">
-                        <PasswordInput title="Password" valid={passwordError == ""} onChange={handlePasswordChange} required />
+                        <PasswordInput title="Password" valid={passwordError == ""} onChange={handlePasswordChange} />
                         
                     </div>
                     {passwordError && <ErrorBanner heading={passwordError} />}
