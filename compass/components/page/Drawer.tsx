@@ -2,6 +2,7 @@ import { FunctionComponent, ReactElement, ReactNode } from 'react';
 import React, { useState } from 'react';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/solid';
 import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { ArrowsPointingOutIcon, ArrowsPointingInIcon } from '@heroicons/react/24/outline';
 import Card from '@/components/page/Card'
 
 
@@ -24,6 +25,7 @@ interface EditContent {
 
 const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, editableContent }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isFull, setIsFull] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editContents, setEditContents] = useState<EditContent[]>(editableContent || [{ content: '', isEditing: true }]);
     const [currentCardText, setCurrentCardText] = useState("");
@@ -31,7 +33,14 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
     const [error, setError] = useState<string | null>(null);
 
 
-    const toggleDrawer = () => setIsOpen(!isOpen);
+    const toggleDrawer = () => {
+        setIsOpen(!isOpen);
+        if (isFull) {
+            setIsFull(!isFull);
+        }
+    }
+    
+    const toggleDrawerFullScreen = () => setIsFull(!isFull);
     
     const handleCardClick = (text: string, icon: ReactElement) => {
         console.log('click')
@@ -44,9 +53,10 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
         const newContents = editContents.map((item, idx) => idx === index ? { ...item, content: event.target.value } : item);
         setEditContents(newContents);
     };
-    const drawerClassName = `fixed top-0 right-0 w-1/2 h-full bg-white shadow-xl transform ease-in-out duration-300 ${
+    const drawerClassName = `fixed top-0 right-0 h-full bg-white shadow-xl transform ease-in-out duration-300 ${
         isOpen ? "translate-x-0" : "translate-x-full"
-    }`;
+        
+    } ${isFull ? "w-full" : "w-1/2"}`;
 
     const addInput = () => {
         setEditContents([...editContents, { content: '', isEditing: true }]);
@@ -80,6 +90,8 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
         setEditContents(filteredContents);
     };
 
+    const iconComponent = isFull ? <ArrowsPointingInIcon className="h-5 w-5" /> : <ArrowsPointingOutIcon className="h-5 w-5" />;
+
 
     return (
         <div>
@@ -93,6 +105,9 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                     <h2 className = "text-sm text-gray-800 font-semibold">{currentCardText}</h2>
                     </div>
                     <div>
+                        <button onClick={toggleDrawerFullScreen} className="py-2 text-gray-500 hover:text-gray-800">
+                            {iconComponent}
+                        </button>
                         <button 
                         onClick={toggleDrawer} className="py-2 text-gray-500 hover:text-gray-800"
                         >
