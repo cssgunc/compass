@@ -1,7 +1,7 @@
 import { FunctionComponent, ReactElement, ReactNode } from 'react';
 import React, { useState } from 'react';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/solid';
-import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { BookmarkIcon, XMarkIcon, PlusIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 import Card from '@/components/page/Card'
 
 
@@ -124,23 +124,24 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                     <span className="p-2 w-full">{item.content}</span>
                     <button 
                         onClick={() => toggleEdit(index)} 
-                        className="py-2 px-4 bg-green-500 text-white rounded"
+                        className="py-2 text-gray-500 hover:text-gray-800"
                     >
-                        Edit
+                    <PencilSquareIcon className = "h-5 w-5"/>
                     </button>
                 </>
             )}
-            {/* Delete button moved here, outside of the editing conditional */}
             <button 
                 onClick={() => deleteInput(index)} 
-                className="py-2 text-gray-500 hover:text-gray-800"
+                className="py-2 text-gray-500 hover:text-gray-800 opacity-0 hover:opacity-100"
             >
             <XMarkIcon className="h-5 w-5" />
             </button>
         </div>
     ))
 }
-    <button onClick={addInput} className="py-2 px-4 bg-blue-500 text-white rounded my-2">Add New Input</button>
+    <button onClick={addInput} className=" py-2 text-gray-500 hover:text-gray-800">
+        <PlusIcon className = "h-5 w-5" />
+    </button>
 </div>
             </div>
         </div>
