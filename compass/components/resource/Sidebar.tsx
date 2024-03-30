@@ -1,29 +1,31 @@
 import React from 'react';
-import { HomeIcon, ChevronDoubleLeftIcon, BookmarkIcon, ClipboardIcon, BookOpenIcon } from '@heroicons/react/24/solid';
+import { HomeIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon, BookmarkIcon, ClipboardIcon, BookOpenIcon } from '@heroicons/react/24/solid';
 import { SidebarItem } from './SidebarItem';
 import { UserProfile } from './UserProfile';
 
 interface SidebarProps {
+  isSidebarVisible: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen, isSidebarVisible }) => {
+  
   return (
-    <div className="w-64 h-full border border-gray-200 bg-gray-50 px-4">
+    <div className="w-80 h-full border border-gray-200 bg-gray-50 px-4 sidebar-container">
       {/* button to close sidebar  */}
       <div className="flex justify-end">
         <button
-          onClick={() => setIsSidebarOpen(false)}
-          className="py-2 text-gray-500 hover:text-gray-800"
+          onClick={() => setIsSidebarOpen(!isSidebarVisible)}
+          className={`py-2 text-gray-500 hover:text-gray-800 close-button ${isSidebarVisible ? '' : 'rotate-right'}`}
           aria-label="Close sidebar"
         >
           <ChevronDoubleLeftIcon className="h-5 w-5" />
         </button>
       </div>
-      <div className="flex flex-col space-y-8">
+      <div className="flex flex-col space-y-8 pr-8">
 
       {/* user + logout button  */}
-        <div className="flex items-center p-4 space-x-2 border border-gray-200 rounded-md ">
+        <div className="flex items-center p-4 space-x-2 border border-gray-200 rounded-md">
 
           <UserProfile />
         </div>
