@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { PageLayout } from '@/components/admin/PageLayout';
 import Sidebar from '@/components/resource/Sidebar';
-import { motion, AnimatePresence } from 'framer-motion';
 import Page from '../page';
 
 export default function LayoutPage() {
