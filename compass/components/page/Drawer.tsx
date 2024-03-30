@@ -1,5 +1,4 @@
 import { FunctionComponent, ReactElement, ReactNode } from 'react';
-import Button from '@/components/Button'
 import React, { useState } from 'react';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/solid';
 import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/solid";
@@ -87,10 +86,12 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
             <Card icon={<BookmarkIcon />} text="Resources" onClick={() => handleCardClick("Resources", <BookmarkIcon />)}/>
             <div className={drawerClassName}>
             <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center space-x-2">
                 <span className="h-5 text-purple-700 w-5">
                     {currentCardIcon}
                     </span>                    
-                    <h2>{currentCardText}</h2>
+                    <h2 className = "text-sm text-gray-800 font-semibold">{currentCardText}</h2>
+                    </div>
                     <div>
                         <button 
                         onClick={toggleDrawer} className="py-2 text-gray-500 hover:text-gray-800"
