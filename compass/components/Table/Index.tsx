@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { RowAction } from "./RowAction";
 import { TableAction } from "./TableAction";
+import TagsInput from "../TagsInput/Index";
 
 const usersExample = usersImport as unknown as User[];
 
@@ -34,7 +35,7 @@ export const Table = () => {
       cell: (info) => <RowAction title={info.getValue()} />,
     }),
     columnHelper.accessor("role", {
-      cell: (info) => info.renderValue(),
+      cell: (info) => <TagsInput />,
     }),
     columnHelper.accessor("email", {
       cell: (info) => info.renderValue(),
