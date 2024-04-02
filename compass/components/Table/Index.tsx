@@ -35,13 +35,13 @@ export const Table = () => {
       cell: (info) => <RowAction title={info.getValue()} />,
     }),
     columnHelper.accessor("role", {
-      cell: (info) => <TagsInput />,
+      cell: (info) => <TagsInput presetValue={info.getValue()} presetOptions={["Administrator","Employee","Volunteer"]} />,
     }),
     columnHelper.accessor("email", {
       cell: (info) => info.renderValue(),
     }),
     columnHelper.accessor("program", {
-      cell: (info) => info.renderValue(),
+      cell: (info) => <TagsInput presetValue={info.getValue()} presetOptions={["Domestic","Economic","Community"]} />,
     }),
   ];
 
