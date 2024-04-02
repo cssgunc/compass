@@ -26,10 +26,10 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
         setEditContent(event.target.value);
     };
 
-    const drawerClassName = `fixed top-0 right-0 w-1/2 h-full bg-white shadow-xl transform ease-in-out duration-300 ${
-        isOpen ? "translate-x-0" : "translate-x-full"
+    const drawerClassName = `fixed top-0 right-0 w-1/2 h-full bg-white transform ease-in-out duration-300 ${
+        isOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
     }`;
-    
+
     const saveChanges = () => {
         console.log(editContent);
         if (onSave) {
@@ -39,7 +39,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
     };
 
     const addRow = () => {
-        
+
     }
 
     return (
