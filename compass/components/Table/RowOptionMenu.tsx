@@ -1,9 +1,10 @@
 //delete, duplicate, open
-import { TrashIcon, DocumentDuplicateIcon, ArrowUpRightIcon, EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { TrashIcon, DocumentDuplicateIcon, ArrowUpRightIcon, EllipsisVerticalIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import Button from "../Button";
 import { useState, useEffect, useRef } from "react";
+import { RowOption } from "./RowOption";
 
-
-export const RowOptionMenu = () => {
+export const RowOptionMenu = ( { onDelete } ) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const openMenu = () => setMenuOpen(true);
   const closeMenu = () => setMenuOpen(false);
@@ -15,12 +16,12 @@ export const RowOptionMenu = () => {
     <>
     <button className="align-center" onClick={() => setMenuOpen(!menuOpen)}><EllipsisVerticalIcon className="h-4"/></button>
     <div
-      className={"absolute text-left bg-white w-auto p-1 rounded [&>*]:p-1 [&>*]:px-5 [&>*]:rounded" + (!menuOpen ? " invisible" : "")}
+      className={"justify-start border border-gray-200 shadow-lg flex flex-col absolute bg-white w-auto p-2 rounded  [&>*]:rounded" + (!menuOpen ? " invisible" : "")}
     >
-      <div className="hover:bg-gray-100"><TrashIcon className="inline h-4"/> Delete</div>
-      <div className="hover:bg-gray-100"><DocumentDuplicateIcon className="inline h-4"/> Duplicate</div>
-      <div className="hover:bg-gray-100"><ArrowUpRightIcon className="inline h-4"/> Open</div>
-    </div>
-    </>
+      <RowOption icon={TrashIcon} label="Delete" onClick={onDelete} />
+        <RowOption icon={ArrowUpRightIcon} label="Open" onClick={() => { /* handle open */ }} />
+        <RowOption icon={EyeSlashIcon} label="Hide" onClick={() => { /* handle hide */ }} />
+      </div>
+</>
   );
 }

@@ -31,13 +31,17 @@ type User = {
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
 
+  const deleteUser = (userId) => {
+    setData(currentData => currentData.filter(user => user.id !== userId));
+  };
+
   const columns = [
     columnHelper.display({
       id: "options",
-      cell: props => <RowOptionMenu />
+      cell: props => <RowOptionMenu onDelete={() => deleteUser(props.row.original.id)} />
     }),
     columnHelper.accessor("username", {
-      header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
+      header: () => <><Bars2Icon className="inline align-top h-4 mr-2" /> Username</>,
       cell: (info) => <RowOpenAction title={info.getValue()} />,
     }),
     columnHelper.accessor("role", {
@@ -99,7 +103,7 @@ export const Table = () => {
                   className={
                     "p-2 "
                     + ((1 < i && i < columns.length - 1) ? "border-x" : "")
-                    + ((i === 0) ? "text-center px-0" : "")
+                    + ((i === 0) ? "text-left px-0" : "")
                   }
                   key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
