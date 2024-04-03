@@ -43,17 +43,20 @@ export const Table = () => {
   };
 
   const hideUser = (userId: number) => {
-    console.log(`Hiding user with ID: ${userId}`); // Confirm the ID being processed
+    console.log(`Toggling visibility for user with ID: ${userId}`); 
     setData(currentData => {
       const newData = currentData.map(user => {
-        console.log(`Checking user with ID: ${user.id}`); // Confirm each user's ID being checked
-        return user.id === userId ? { ...user, visible: false } : user;
+        if (user.id === userId) {
+          return { ...user, visible: !user.visible };
+        }
+        return user;
       }).sort((a, b) => a.visible === b.visible ? 0 : a.visible ? -1 : 1);
   
-      console.log(newData); // Check the sorted data
+      console.log(newData); 
       return newData;
     });
   };
+  
   const columns = [
     columnHelper.display({
       id: "options",
@@ -114,22 +117,30 @@ export const Table = () => {
             </tr>
           ))}
         </thead>
-        <tbody className="">
-          {table.getRowModel().rows.map((row) => (
-            <tr className="text-gray-800 border-y lowercase hover:bg-gray-50" key={row.id}>
-              {row.getVisibleCells().map((cell, i) => (
-                <td
-                  className={
-                    "p-2 "
-                    + ((1 < i && i < columns.length - 1) ? "border-x" : "")
-                    + ((i === 0) ? "text-left px-0" : "")
-                  }
-                  key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
+        <tbody>
+          {table.getRowModel().rows.map((row) => {
+            const isUserVisible = row.original.visible;
+            const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isUserVisible ? "bg-gray-200 text-gray-500" : ""}`;
+            return (
+              <tr
+                className={rowClassNames}
+                key={row.id}
+              >
+                {row.getVisibleCells().map((cell, i) => (
+                  <td
+                    className={
+                      "p-2 " +
+                      ((1 < i && i < columns.length - 1) ? "border-x" : "") +
+                      (i === 0 ? "text-left px-0" : "")
+                    }
+                    key={cell.id}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
