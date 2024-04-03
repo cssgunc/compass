@@ -4,7 +4,7 @@ import Button from "../Button";
 import { useState, useEffect, useRef } from "react";
 import { RowOption } from "./RowOption";
 
-export const RowOptionMenu = ( { onDelete } ) => {
+export const RowOptionMenu = ( { onDelete, onHide } ) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const openMenu = () => setMenuOpen(true);
   const closeMenu = () => setMenuOpen(false);
@@ -20,7 +20,7 @@ export const RowOptionMenu = ( { onDelete } ) => {
     >
       <RowOption icon={TrashIcon} label="Delete" onClick={onDelete} />
         <RowOption icon={ArrowUpRightIcon} label="Open" onClick={() => { /* handle open */ }} />
-        <RowOption icon={EyeSlashIcon} label="Hide" onClick={() => { /* handle hide */ }} />
+        <RowOption icon={EyeSlashIcon} label="Hide" onClick={ onHide } />
       </div>
 </>
   );

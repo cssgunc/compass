@@ -8,7 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
@@ -25,20 +25,39 @@ type User = {
   program: "DOMESTIC" | "ECONOMIC" | "COMMUNITY";
   experience: number;
   group?: string;
+  visible: boolean;
 };
 
 
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
 
+  useEffect(() => {
+    const sortedUsers = [...usersExample].sort((a, b) => (a.visible === b.visible ? 0 : a.visible ? -1 : 1));
+    setData(sortedUsers);
+  }, []);
+
   const deleteUser = (userId) => {
+    console.log(data);
     setData(currentData => currentData.filter(user => user.id !== userId));
   };
 
+  const hideUser = (userId: number) => {
+    console.log(`Hiding user with ID: ${userId}`); // Confirm the ID being processed
+    setData(currentData => {
+      const newData = currentData.map(user => {
+        console.log(`Checking user with ID: ${user.id}`); // Confirm each user's ID being checked
+        return user.id === userId ? { ...user, visible: false } : user;
+      }).sort((a, b) => a.visible === b.visible ? 0 : a.visible ? -1 : 1);
+  
+      console.log(newData); // Check the sorted data
+      return newData;
+    });
+  };
   const columns = [
     columnHelper.display({
       id: "options",
-      cell: props => <RowOptionMenu onDelete={() => deleteUser(props.row.original.id)} />
+      cell: props => <RowOptionMenu onDelete={() => deleteUser(props.row.original.id)} onHide={() => hideUser(props.row.original.id)} />
     }),
     columnHelper.accessor("username", {
       header: () => <><Bars2Icon className="inline align-top h-4 mr-2" /> Username</>,
