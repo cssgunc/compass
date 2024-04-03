@@ -12,6 +12,8 @@ import { useState } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
+import { AtSymbolIcon, Bars2Icon } from "@heroicons/react/24/solid";
+import TagsInput from "../TagsInput/Index";
 
 const usersExample = usersImport as unknown as User[];
 
@@ -40,7 +42,7 @@ export const Table = () => {
       cell: (info) => <RowOpenAction title={info.getValue()} />,
     }),
     columnHelper.accessor("role", {
-      cell: (info) => info.renderValue(),
+      cell: (info) => <TagsInput presetValue={info.getValue() }presetOptions={["administrator","volunteer","employee"]}  />,
     }),
     columnHelper.accessor("email", {
       header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,

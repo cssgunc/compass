@@ -1,12 +1,12 @@
 import { Tag } from "./Tag"
 
-export const TagsArray = ({ tags, active = false }) => {
+export const TagsArray = ({ tags, handleDelete, active = false }) => {
     return(
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap gap-2 items-center">
         {
-          tags.map((tag) => {
+          Array.from(tags).map((tag) => {
             return (
-              <Tag active={active}>{tag}</Tag>
+              <Tag handleDelete={handleDelete} active={active}>{tag}</Tag>
             )
           })
         }
