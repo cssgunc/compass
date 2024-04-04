@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
-import 'tailwindcss/tailwind.css';
-import { TagsArray } from './TagsArray'; // Corrected path assumption
-import { TagDropdown } from './TagDropdown';
+import React, { useState } from "react";
+import "tailwindcss/tailwind.css";
+import { TagsArray } from "./TagsArray"; 
+import { TagDropdown } from "./TagDropdown";
+import { CreateNewTagAction } from "./CreateNewTagAction";
 
 interface TagsInputProps {
   presetOptions: string[];
 }
 
-const TagsInput: React.FC<TagsInputProps> = ({ presetValue, presetOptions }) => {
-  const [inputValue, setInputValue] = useState('');
+const TagsInput: React.FC<TagsInputProps> = ({
+  presetValue,
+  presetOptions,
+}) => {
+  const [inputValue, setInputValue] = useState("");
   const [cellSelected, setCellSelected] = useState(false);
-  const [tags, setTags] = useState<Set<string>>(new Set(presetValue ? [presetValue] : []));
+  const [tags, setTags] = useState<Set<string>>(
+    new Set(presetValue ? [presetValue] : [])
+  );
   const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,30 +24,62 @@ const TagsInput: React.FC<TagsInputProps> = ({ presetValue, presetOptions }) => 
   };
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputValue.trim()) {
-      // To add to a Set, you need to create a new Set for immutability in React state updates.
-      setTags(prevTags => new Set(prevTags).add(inputValue));
-      setOptions(prevOptions => new Set(prevOptions).add(inputValue));
-      setInputValue('');
+    if (e.key === "Enter" && inputValue.trim()) {
+      setTags((prevTags) => new Set(prevTags).add(inputValue));
+      setOptions((prevOptions) => new Set(prevOptions).add(inputValue));
+      setInputValue("");
     }
   };
 
   const handleSelectTag = (tagToAdd: string) => {
-    if (!tags.has(tagToAdd)){ // Corrected syntax for checking if a Set contains an item
-      setTags(prevTags => new Set(prevTags).add(tagToAdd));
+    if (!tags.has(tagToAdd)) {
+      // Corrected syntax for checking if a Set contains an item
+      setTags((prevTags) => new Set(prevTags).add(tagToAdd));
     }
-  }
+  };
 
   const handleDeleteTag = (tagToDelete: string) => {
-    setTags(prevTags => {
+    setTags((prevTags) => {
       const updatedTags = new Set(prevTags);
       updatedTags.delete(tagToDelete);
       return updatedTags;
     });
   };
-  const handleBlur = () => {
-    setCellSelected(false);
+
+  const handleDeleteTagOption = (tagToDelete: string) => {
+    setOptions((prevOptions) => {
+      const updatedOptions = new Set(prevOptions);
+      updatedOptions.delete(tagToDelete);
+      return updatedOptions;
+    });
+    if (tags.has(tagToDelete)) {
+      handleDeleteTag(tagToDelete);
+    }
   };
+
+  const handleEditTag = (oldTag: string, newTag: string) => {
+    if (oldTag !== newTag) {
+      setTags((prevTags) => {
+        const tagsArray = Array.from(prevTags);
+        const oldTagIndex = tagsArray.indexOf(oldTag);
+        if (oldTagIndex !== -1) {
+          tagsArray.splice(oldTagIndex, 1, newTag);
+        }
+        return new Set(tagsArray);
+      });
+  
+      setOptions((prevOptions) => {
+        const optionsArray = Array.from(prevOptions);
+        const oldTagIndex = optionsArray.indexOf(oldTag);
+        if (oldTagIndex !== -1) {
+          optionsArray.splice(oldTagIndex, 1, newTag);
+        }
+        return new Set(optionsArray);
+      });
+    }
+  };
+  
+
 
   return (
     <div className="cursor-pointer" onClick={() => setCellSelected(true)}>
@@ -50,7 +88,7 @@ const TagsInput: React.FC<TagsInputProps> = ({ presetValue, presetOptions }) => 
       ) : (
         <div className="absolute w-64 z-50 -ml-3 -mt-7">
           <div className="rounded-md border border-gray-200 shadow">
-            <div  className="flex flex-wrap rounded-t-md items-center gap-2 bg-gray-50 p-2">
+            <div className="flex flex-wrap rounded-t-md items-center gap-2 bg-gray-50 p-2">
               <TagsArray handleDelete={handleDeleteTag} active tags={tags} />
               <input
                 type="text"
@@ -63,8 +101,16 @@ const TagsInput: React.FC<TagsInputProps> = ({ presetValue, presetOptions }) => 
               />
             </div>
             <div className="flex rounded-b-md bg-white flex-col border-t border-gray-100 text-2xs font-medium text-gray-500 p-2">
-              Select an option or create one
-              <TagDropdown handleAdd={handleSelectTag} tags={options} />
+              <p className="capitalize">Select an option or create one</p>
+              <TagDropdown
+                handleDeleteTag={handleDeleteTagOption}
+                handleEditTag={handleEditTag}
+                handleAdd={handleSelectTag}
+                tags={options}
+              />
+              {inputValue.length > 0 && (
+                <CreateNewTagAction input={inputValue} />
+              )}
             </div>
           </div>
         </div>

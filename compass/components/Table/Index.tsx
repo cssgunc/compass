@@ -21,17 +21,17 @@ type User = {
   id: number;
   created_at: any;
   username: string;
-  role: "ADMIN" | "EMPLOYEE" | "VOLUNTEER";
+  role: "administrator" | "employee" | "volunteer";
   email: string;
-  program: "DOMESTIC" | "ECONOMIC" | "COMMUNITY";
+  program: "domestic" | "economic" | "community";
   experience: number;
   group?: string;
 };
 
 
+
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
-
   const columns = [
     columnHelper.display({
       id: "options",
