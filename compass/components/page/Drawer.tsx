@@ -110,10 +110,10 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                     <h2 className = "text-sm text-gray-800 font-semibold">{currentCardText}</h2>
                     </div>
                     <div>
-                        <button onClick={toggleFavorite} className="py-2 text-gray-500 hover:text-gray-800">
+                        <button onClick={toggleFavorite} className="py-2 text-gray-500 hover:text-gray-800 mr-2">
                             {favoriteIcon}
                         </button>
-                        <button onClick={toggleDrawerFullScreen} className="py-2 text-gray-500 hover:text-gray-800">
+                        <button onClick={toggleDrawerFullScreen} className="py-2 text-gray-500 hover:text-gray-800 mr-2">
                             {iconComponent}
                         </button>
                         <button 
