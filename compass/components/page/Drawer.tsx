@@ -15,6 +15,7 @@ type DrawerProps = {
     disabled?: boolean;
     editableContent?: any;
     onSave?: (content: any) => void;
+    rowContent?: any;
 };
 
 interface EditContent {
@@ -23,7 +24,7 @@ interface EditContent {
   }
 
 
-const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, editableContent }) => {
+const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, editableContent, rowContent }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isFull, setIsFull] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -56,8 +57,8 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
         const newContents = editContents.map((item, idx) => idx === index ? { ...item, content: event.target.value } : item);
         setEditContents(newContents);
     };
-    const drawerClassName = `fixed top-0 right-0 h-full bg-white shadow-xl transform ease-in-out duration-300 ${
-        isOpen ? "translate-x-0" : "translate-x-full"
+    const drawerClassName = `fixed top-0 right-0 h-full bg-white transform ease-in-out duration-300 ${
+        isOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
         
     } ${isFull ? "w-full" : "w-1/2"}`;
 
@@ -97,17 +98,21 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
 
     const favoriteIcon = isFavorite ? <SolidStarIcon className="h-5 w-5" /> : <OutlineStarIcon className="h-5 w-5" />
 
+    // const buttonStyle = `ml-2 uppercase opacity-0 group-hover:opacity-100 text-gray-500 font-medium border  bg-white ${isOpen ? `border-gray-200` : ``} shadow hover:bg-gray-50 p-2 rounded-md`
+
 
     return (
         <div>
-            <Card icon={<BookmarkIcon />} text="Resources" onClick={() => handleCardClick("Resources", <BookmarkIcon />)}/>
+            {/* <Card icon={<BookmarkIcon />} text="Open" onClick={() => handleCardClick("Resources", <BookmarkIcon />)}/> */}
+            <button className={"ml-2 uppercase opacity-0 group-hover:opacity-100 text-gray-500 font-medium border border-gray-200 bg-white shadow hover:bg-gray-50 p-2 rounded-md"} onClick={toggleDrawer}>Open</button>
+            <div className={drawerClassName}></div>
             <div className={drawerClassName}>
             <div className="flex items-center justify-between p-4 border-b">
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-row items-center justify-between space-x-2">
                 <span className="h-5 text-purple-700 w-5">
                     {currentCardIcon}
                     </span>                    
-                    <h2 className = "text-sm text-gray-800 font-semibold">{currentCardText}</h2>
+                    <h2 className = "text-sm text-gray-800 font-semibold">{rowContent.username}</h2>
                     </div>
                     <div>
                         <button onClick={toggleFavorite} className="py-2 text-gray-500 hover:text-gray-800 mr-2">

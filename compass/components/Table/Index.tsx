@@ -8,6 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
 import { useState } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
@@ -39,7 +40,7 @@ export const Table = () => {
     }),
     columnHelper.accessor("username", {
       header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
-      cell: (info) => <RowOpenAction title={info.getValue()} />,
+      cell: (info) => <RowOpenAction title={info.getValue()} rowData={info.row.original} />,
     }),
     columnHelper.accessor("role", {
       cell: (info) => <TagsInput presetValue={info.getValue() }presetOptions={["administrator","volunteer","employee"]}  />,
@@ -60,6 +61,16 @@ export const Table = () => {
     data,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const handleRowData = (row: any) => {
+    const rowData: any = {};
+    row.cells.forEach((cell: any) => {
+      rowData[cell.column.id] = cell.value;
+    });
+    // Use rowData object containing data from all columns for the current row
+    console.log(rowData);
+    return rowData;
+  };
 
   return (
     <div className="flex flex-col">
