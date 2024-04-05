@@ -3,16 +3,23 @@
 import usersImport from "./users.json";
 import {
   ColumnDef,
+  ColumnFiltersState,
+  GlobalFilterTableState,
+  Row,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
 import { Bars2Icon, AtSymbolIcon, HashtagIcon, ArrowDownCircleIcon } from "@heroicons/react/24/solid";
+import { compareItems, rankItem } from "@tanstack/match-sorter-utils";
 
 const usersExample = usersImport as unknown as User[];
 
@@ -27,6 +34,31 @@ type User = {
   group?: string;
 };
 
+const fuzzyFilter = (row: Row<any>, columnId: string, value: any, addMeta: (meta: any) => void) => {
+  // Rank the item
+  const itemRank = rankItem(row.getValue(columnId), value)
+
+  // Store the ranking info
+  addMeta(itemRank)
+
+  // Return if the item should be filtered in/out
+  return itemRank.passed
+}
+
+const fuzzySort = (rowA, rowB, columnId) => {
+  let dir = 0
+
+  // Only sort by rank if the column has ranking information
+  if (rowA.columnFiltersMeta[columnId]) {
+    dir = compareItems(
+      rowA.columnFiltersMeta[columnId]!,
+      rowB.columnFiltersMeta[columnId]!
+    )
+  }
+  // Provide an alphanumeric fallback for when the item ranks are equal
+  return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
+}
+
 
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
@@ -39,6 +71,7 @@ export const Table = () => {
     columnHelper.accessor("username", {
       header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
       cell: (info) => <RowOpenAction title={info.getValue()} />,
+      sortingFn: fuzzySort,
     }),
     columnHelper.accessor("role", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Role</>,
@@ -55,17 +88,47 @@ export const Table = () => {
   ];
 
   const [data, setData] = useState<User[]>([...usersExample]);
+  // const [globalFilter, setGlobalFilter] = useState<GlobalFilterTableState>();
+
+  // Searching
+  const [query, setQuery] = useState("");
+  const handleSearchChange = (e: ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    setQuery(String(target.value));
+    console.log(query);
+
+    // setColumnFilters([
+    //   {
+    //     id: "username",
+    //     value: query
+    //   }
+    // ])
+  }
+
+  // TODO: Filtering
+  // TODO: Sorting
 
   const table = useReactTable({
     columns,
     data,
+    filterFns: {
+      fuzzy: fuzzyFilter
+    },
+    state: {
+      globalFilter: query,
+    },
+    onGlobalFilterChange: setQuery,
+    globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    // onColumnFiltersChange: setColumnFilters,
   });
 
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-end">
-        <TableAction />
+        <TableAction query={query} handleChange={handleSearchChange} />
       </div>
       <table className="w-full text-xs text-left rtl:text-right">
         <thead className="text-xs text-gray-500 capitalize">
