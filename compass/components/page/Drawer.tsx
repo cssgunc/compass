@@ -1,8 +1,8 @@
 import { FunctionComponent, ReactElement, ReactNode } from 'react';
 import React, { useState } from 'react';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/solid';
-import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { ArrowsPointingOutIcon, ArrowsPointingInIcon } from '@heroicons/react/24/outline';
+import { BookmarkIcon, XMarkIcon, StarIcon as SolidStarIcon } from "@heroicons/react/24/solid";
+import { ArrowsPointingOutIcon, ArrowsPointingInIcon, StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 import Card from '@/components/page/Card'
 
 
@@ -31,6 +31,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
     const [currentCardText, setCurrentCardText] = useState("");
     const [currentCardIcon, setCurrentCardIcon] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
+    const [isFavorite, setIsFavorite] = useState(false);
 
 
     const toggleDrawer = () => {
@@ -41,6 +42,8 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
     }
     
     const toggleDrawerFullScreen = () => setIsFull(!isFull);
+
+    const toggleFavorite = () => setIsFavorite(!isFavorite);
     
     const handleCardClick = (text: string, icon: ReactElement) => {
         console.log('click')
@@ -92,6 +95,8 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
 
     const iconComponent = isFull ? <ArrowsPointingInIcon className="h-5 w-5" /> : <ArrowsPointingOutIcon className="h-5 w-5" />;
 
+    const favoriteIcon = isFavorite ? <SolidStarIcon className="h-5 w-5" /> : <OutlineStarIcon className="h-5 w-5" />
+
 
     return (
         <div>
@@ -105,6 +110,9 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                     <h2 className = "text-sm text-gray-800 font-semibold">{currentCardText}</h2>
                     </div>
                     <div>
+                        <button onClick={toggleFavorite} className="py-2 text-gray-500 hover:text-gray-800">
+                            {favoriteIcon}
+                        </button>
                         <button onClick={toggleDrawerFullScreen} className="py-2 text-gray-500 hover:text-gray-800">
                             {iconComponent}
                         </button>
