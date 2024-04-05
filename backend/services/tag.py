@@ -7,3 +7,7 @@ class TagService:
 
     def __init__(self, session: Session = Depends(db_session)):
         self._session = session
+
+#get all tags - emma
+    def get_all_tags():
+            return 
