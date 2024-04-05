@@ -38,7 +38,7 @@ export const TableAction: FunctionComponent<TableActionProps> = ({query, handleC
         type="text"
         name="search"
         placeholder="Type to search..."
-        value={query}
+        value={query ?? ""}
         onChange={handleChange}
         />
     </div>
