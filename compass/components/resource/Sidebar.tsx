@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
         <div className="flex flex-col space-y-2">
           <h4 className="text-xs font-semibold text-gray-500">Pages</h4>
           <nav className="flex flex-col">
-          <SidebarItem icon={<HomeIcon  />} text="Home" />
+          <SidebarItem active={true} icon={<HomeIcon  />} text="Home" />
             <SidebarItem icon={<BookmarkIcon  />} text="Resources" />
             <SidebarItem icon={<ClipboardIcon />} text="Services" />
             <SidebarItem icon={<BookOpenIcon  />} text="Training Manuals" />
