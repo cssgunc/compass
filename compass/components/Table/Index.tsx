@@ -64,7 +64,7 @@ export const Table = () => {
     }),
     columnHelper.accessor("username", {
       header: () => <><Bars2Icon className="inline align-top h-4 mr-2" /> Username</>,
-      cell: (info) => <RowOpenAction title={info.getValue()} />,
+      cell: (info) => <RowOpenAction title={info.getValue()} isVisible={info.row.original.visible} />,
     }),
     columnHelper.accessor("role", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Role</>,
@@ -118,29 +118,27 @@ export const Table = () => {
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => {
-            const isUserVisible = row.original.visible;
-            const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isUserVisible ? "bg-gray-200 text-gray-500" : ""}`;
-            return (
-              <tr
-                className={rowClassNames}
-                key={row.id}
-              >
-                {row.getVisibleCells().map((cell, i) => (
-                  <td
-                    className={
-                      "p-2 " +
-                      ((1 < i && i < columns.length - 1) ? "border-x" : "") +
-                      (i === 0 ? "text-left px-0" : "")
-                    }
-                    key={cell.id}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
+        {table.getRowModel().rows.map((row) => {
+  const isUserVisible = row.original.visible;
+  const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isUserVisible ? "bg-gray-100" : ""}`;
+  return (
+    <tr className={rowClassNames} key={row.id}>
+      {row.getVisibleCells().map((cell, i) => {
+        // Apply the lighter text color conditionally
+        const cellClass = isUserVisible ? "text-lighter" : "text-gray-400"; // Use "text-gray-400" for TailwindCSS as an example
+
+        return (
+          <td
+            className={`p-2 ${1 < i && i < columns.length - 1 ? "border-x" : ""} ${i === 0 ? "text-left px-0" : ""} ${cellClass}`}
+            key={cell.id}
+          >
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </td>
+        );
+      })}
+    </tr>
+  );
+})}
         </tbody>
       </table>
     </div>
