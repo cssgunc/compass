@@ -3,16 +3,20 @@
 import usersImport from "./users.json";
 import {
   ColumnDef,
+  Row,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
 import { Bars2Icon, AtSymbolIcon, HashtagIcon, ArrowDownCircleIcon } from "@heroicons/react/24/solid";
+import { rankItem } from "@tanstack/match-sorter-utils";
 
 const usersExample = usersImport as unknown as User[];
 
@@ -28,6 +32,17 @@ type User = {
   visible: boolean;
 };
 
+// For search
+const fuzzyFilter = (row: Row<any>, columnId: string, value: any, addMeta: (meta: any) => void) => {
+  // Rank the item
+  const itemRank = rankItem(row.getValue(columnId), value)
+
+  // Store the ranking info
+  addMeta(itemRank)
+
+  // Return if the item should be filtered in/out
+  return itemRank.passed
+}
 
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
@@ -43,7 +58,7 @@ export const Table = () => {
   };
 
   const hideUser = (userId: number) => {
-    console.log(`Toggling visibility for user with ID: ${userId}`); 
+    console.log(`Toggling visibility for user with ID: ${userId}`);
     setData(currentData => {
       const newData = currentData.map(user => {
         if (user.id === userId) {
@@ -51,12 +66,12 @@ export const Table = () => {
         }
         return user;
       }).sort((a, b) => a.visible === b.visible ? 0 : a.visible ? -1 : 1);
-  
-      console.log(newData); 
+
+      console.log(newData);
       return newData;
     });
   };
-  
+
   const columns = [
     columnHelper.display({
       id: "options",
@@ -82,16 +97,35 @@ export const Table = () => {
 
   const [data, setData] = useState<User[]>([...usersExample]);
 
+  // Searching
+  const [query, setQuery] = useState("");
+  const handleSearchChange = (e: ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    setQuery(String(target.value));
+  }
+
+  // TODO: Filtering
+  // TODO: Sorting
+
   const table = useReactTable({
     columns,
     data,
+    filterFns: {
+      fuzzy: fuzzyFilter
+    },
+    state: {
+      globalFilter: query,
+    },
+    onGlobalFilterChange: setQuery,
+    globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-end">
-        <TableAction />
+        <TableAction query={query} handleChange={handleSearchChange} />
       </div>
       <table className="w-full text-xs text-left rtl:text-right">
         <thead className="text-xs text-gray-500 capitalize">
