@@ -11,7 +11,7 @@ import {
   sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
@@ -29,6 +29,7 @@ type User = {
   program: "DOMESTIC" | "ECONOMIC" | "COMMUNITY";
   experience: number;
   group?: string;
+  visible: boolean;
 };
 
 // For search
@@ -46,13 +47,38 @@ const fuzzyFilter = (row: Row<any>, columnId: string, value: any, addMeta: (meta
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
 
+  useEffect(() => {
+    const sortedUsers = [...usersExample].sort((a, b) => (a.visible === b.visible ? 0 : a.visible ? -1 : 1));
+    setData(sortedUsers);
+  }, []);
+
+  const deleteUser = (userId) => {
+    console.log(data);
+    setData(currentData => currentData.filter(user => user.id !== userId));
+  };
+
+  const hideUser = (userId: number) => {
+    console.log(`Toggling visibility for user with ID: ${userId}`);
+    setData(currentData => {
+      const newData = currentData.map(user => {
+        if (user.id === userId) {
+          return { ...user, visible: !user.visible };
+        }
+        return user;
+      }).sort((a, b) => a.visible === b.visible ? 0 : a.visible ? -1 : 1);
+
+      console.log(newData);
+      return newData;
+    });
+  };
+
   const columns = [
     columnHelper.display({
       id: "options",
-      cell: props => <RowOptionMenu />
+      cell: props => <RowOptionMenu onDelete={() => deleteUser(props.row.original.id)} onHide={() => hideUser(props.row.original.id)} />
     }),
     columnHelper.accessor("username", {
-      header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
+      header: () => <><Bars2Icon className="inline align-top h-4 mr-2" /> Username</>,
       cell: (info) => <RowOpenAction title={info.getValue()} />,
     }),
     columnHelper.accessor("role", {
@@ -125,22 +151,30 @@ export const Table = () => {
             </tr>
           ))}
         </thead>
-        <tbody className="">
-          {table.getRowModel().rows.map((row) => (
-            <tr className="text-gray-800 border-y lowercase hover:bg-gray-50" key={row.id}>
-              {row.getVisibleCells().map((cell, i) => (
-                <td
-                  className={
-                    "p-2 "
-                    + ((1 < i && i < columns.length - 1) ? "border-x" : "")
-                    + ((i === 0) ? "text-center px-0" : "")
-                  }
-                  key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
+        <tbody>
+          {table.getRowModel().rows.map((row) => {
+            const isUserVisible = row.original.visible;
+            const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isUserVisible ? "bg-gray-200 text-gray-500" : ""}`;
+            return (
+              <tr
+                className={rowClassNames}
+                key={row.id}
+              >
+                {row.getVisibleCells().map((cell, i) => (
+                  <td
+                    className={
+                      "p-2 " +
+                      ((1 < i && i < columns.length - 1) ? "border-x" : "") +
+                      (i === 0 ? "text-left px-0" : "")
+                    }
+                    key={cell.id}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
