@@ -2,6 +2,7 @@
 
 import usersImport from "./users.json";
 import {
+  Cell,
   ColumnDef,
   Row,
   createColumnHelper,
@@ -11,7 +12,7 @@ import {
   sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, FunctionComponent } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
@@ -153,6 +154,7 @@ export const Table = () => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => {
+            // Individual row
             const isUserVisible = row.original.visible;
             const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isUserVisible ? "bg-gray-200 text-gray-500" : ""}`;
             return (
@@ -161,16 +163,7 @@ export const Table = () => {
                 key={row.id}
               >
                 {row.getVisibleCells().map((cell, i) => (
-                  <td
-                    className={
-                      "p-2 " +
-                      ((1 < i && i < columns.length - 1) ? "border-x" : "") +
-                      (i === 0 ? "text-left px-0" : "")
-                    }
-                    key={cell.id}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                  <TableCell key={cell.id} cell={cell} />
                 ))}
               </tr>
             );
@@ -179,4 +172,22 @@ export const Table = () => {
       </table>
     </div>
   )
+}
+
+type TableCellProps = {
+  cell: Cell<any, any>;
+  //i: number;
+}
+
+const TableCell: FunctionComponent<TableCellProps> = ({ cell }) => {
+  return (
+    <td
+      className={
+        "p-2 [&:nth-child(n+3)]:border-x "
+        + "first:text-left first:px-0 last:border-none"
+      }
+      key={cell.id}
+    >
+      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+    </td>)
 }
