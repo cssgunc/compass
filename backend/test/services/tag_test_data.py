@@ -1,61 +1,19 @@
 import pytest
 from sqlalchemy.orm import Session
-from ...models.user_model import User
+from ...models.tag_model import Tag
 
-# import model enums instead
-from ...models.enum_for_models import UserTypeEnum, ProgramTypeEnum
-from ...entities.user_entity import UserEntity
+from ...entities.tag_entity import TagEntity
 from datetime import datetime
 
+tag1 = Tag(id=1, content="Tag 1", created_at=datetime.now())
 
-programs = ProgramTypeEnum
-roles = UserTypeEnum
+tag2 = Tag(id=2, content="Tag 2", created_at=datetime.now())
 
-volunteer = User(
-    id=1,
-    username="volunteer",
-    email="volunteer@compass.com",
-    experience=1,
-    group="volunteers",
-    programtype=[programs.COMMUNITY.value],
-    created_at=datetime.now(),
-    usertype=UserTypeEnum.VOLUNTEER.value
-)
+tag3 = Tag(id=3, content="Tag 3", created_at=datetime.now())
 
-employee = User(
-    id=2,
-    username="employee",
-    email="employee@compass.com",
-    experience=5,
-    group="employees",
-    programtype=[programs.DOMESTIC.value, programs.ECONOMIC.value],
-    created_at=datetime.now(),
-    usertype=roles.EMPLOYEE.value,
-)
+tagToCreate = Tag(id=4, content="Tag 4", created_at=datetime.now())
 
-admin = User(
-    id=3,
-    username="admin",
-    email="admin@compass.com",
-    experience=10,
-    group="admin",
-    programtype=[programs.ECONOMIC.value, programs.DOMESTIC.value, programs.COMMUNITY.value],
-    created_at=datetime.now(),
-    usertype=roles.ADMIN.value,
-)
-
-newUser = User(
-    id=4,
-    username="new",
-    email="new@compass.com",
-    experience=1,
-    group="volunteer",
-    programtype=[programs.ECONOMIC.value],
-    created_at=datetime.now(),
-    usertype=roles.VOLUNTEER.value
-)
-
-users = [volunteer, employee, admin]
+tags = [tag1, tag2, tag3]
 
 
 from sqlalchemy import text
@@ -87,17 +45,17 @@ def reset_table_id_seq(
 def insert_fake_data(session: Session):
     """Inserts fake organization data into the test session."""
 
-    global users
+    global tags
 
     # Create entities for test organization data
     entities = []
-    for user in users:
-        entity = UserEntity.from_model(user)
+    for tag in tags:
+        entity = TagEntity.from_model(tag)
         session.add(entity)
         entities.append(entity)
 
     # Reset table IDs to prevent ID conflicts
-    reset_table_id_seq(session, UserEntity, UserEntity.id, len(users) + 1)
+    reset_table_id_seq(session, TagEntity, TagEntity.id, len(tags) + 1)
 
     # Commit all changes
     session.commit()

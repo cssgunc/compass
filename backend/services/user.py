@@ -12,27 +12,24 @@ class UserService:
         self._session = session
 
 
-    def get_user_by_id(self) -> User: 
+    def get_user_by_id(self, id: int) -> User: 
         """
         Gets a user by id from the database
 
         Returns: A User Pydantic model
 
         """
-        user = (
-            self._session.query(UserEntity)
-            .filter(UserEntity.id == id)
-        )
+        query = select(UserEntity).where(UserEntity.id == id)
+        user_entity: UserEntity | None = self._session.scalar(query)
 
-        if user is None:
+        if user_entity is None:
             raise Exception(
             f"No user found with matching id: {id}"
             )
 
-        return user.to_model()    
+        return user_entity.to_model()
 
         
-#get users
     def all(self) -> list[User]:
         """
         Returns a list of all Users
@@ -44,7 +41,6 @@ class UserService:
         return [entity.to_model() for entity in entities]
 
         
-#post user
     def create(self, user: User) -> User: 
 
         """
@@ -55,18 +51,16 @@ class UserService:
         Returns: User model
         
         """
+        try:
+            user_entity = self.get_user_by_id(user.id)
+        except:
+            # if does not exist, create new object
+            user_entity = UserEntity.from_model(user)
 
-        #handle if id exists
-        if user.id: 
-                user.id = None
-        
-        # if does not exist, create new object
-        user_entity = UserEntity.from_model(user)
-
-        # add new user to table
-        self._session.add(user_entity)
-        self._session.commit()
-
-        # return added object
-        return user_entity.to_model()
+            # add new user to table
+            self._session.add(user_entity)
+            self._session.commit()
+        finally:
+            # return added object
+            return user_entity.to_model()
 

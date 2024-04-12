@@ -1,7 +1,7 @@
 """ Defines the table for storing resources """
 
 # Import our mapped SQL types from SQLAlchemy
-from sqlalchemy import Integer, String, DateTime
+from sqlalchemy import Integer, String, DateTime, ARRAY
 
 # Import mapping capabilities from the SQLAlchemy ORM
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -28,8 +28,7 @@ class ResourceEntity(EntityBase):
     name: Mapped[str] = mapped_column(String(32), nullable=False)
     summary: Mapped[str] = mapped_column(String(100), nullable=False)
     link: Mapped[str] = mapped_column(String, nullable=False)
-    program: Mapped[ProgramEnum] = mapped_column(ProgramEnum, nullable=False)
-
+    program: Mapped[list[ProgramEnum]] = mapped_column(ARRAY(ProgramEnum), nullable=False)
     # relationships
     resourceTags: Mapped[list["ResourceTagEntity"]] = relationship(
         back_populates="resource", cascade="all,delete"

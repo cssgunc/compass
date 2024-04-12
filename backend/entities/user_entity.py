@@ -17,7 +17,7 @@ from datetime import datetime
 
 
 # Import enums for Role and Program
-from backend.entities.program_enum import ProgramEnum
+from .program_enum import ProgramEnum
 from .user_enum import RoleEnum
 
 #Import models for User methods
@@ -36,9 +36,9 @@ class UserEntity(EntityBase):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     username: Mapped[str] = mapped_column(String(32), nullable=False, default="", unique=True )
-    role: Mapped[RoleEnum] = mapped_column(RoleEnum, nullable=False)
+    role: Mapped[RoleEnum] = mapped_column(String, nullable=False)
     email: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
-    program: Mapped[list[ProgramEnum]] = mapped_column(ARRAY(ProgramEnum), nullable=False)
+    program: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
     experience: Mapped[int] = mapped_column(Integer, nullable=False)
     group: Mapped[str] = mapped_column(String(50))
 
@@ -56,13 +56,13 @@ class UserEntity(EntityBase):
 
         return cls(
             id=model.id,
-            username=model.username,
-            email=model.email,
-            experience=model.experience,
-            group=model.group,
-            program=model.programtype,
-            role=model.usertype,
             created_at=model.created_at,
+            username=model.username,
+            role=model.usertype,
+            email=model.email,
+            program=model.programtype,
+            experience=model.experience,
+            group=model.group,         
         )
 
     def to_model(self) -> User:

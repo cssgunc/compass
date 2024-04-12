@@ -21,5 +21,5 @@ class ServiceTagEntity(EntityBase):
     tagId: Mapped[int] = mapped_column(ForeignKey("tag.id"))
 
     # relationships
-    service: Mapped["ServiceEntity"] = relationship(back_populates="resourceTags")
-    tag: Mapped["TagEntity"] = relationship(back_populates="resourceTags")
+    service: Mapped["ServiceEntity"] = relationship(back_populates="serviceTags")
+    tag: Mapped["TagEntity"] = relationship(back_populates="serviceTags")
