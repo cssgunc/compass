@@ -52,6 +52,30 @@ service_6 = Service(
     program= ProgramTypeEnum.ECONOMIC
 )
 
+service_6_edit = Service(
+    name = "service 6",
+    status= "open",
+    summary= "program offering economic assistance",
+    requirements= ["18+"],
+    program= ProgramTypeEnum.ECONOMIC
+)
+
+service_7 = Service(
+    name = "service 7",
+    status= "waitlist",
+    summary= "insert generic description",
+    requirements= [""],
+    program= ProgramTypeEnum.ECONOMIC
+)
+
+new_service = Service(
+    name = "new service",
+    status= "open",
+    summary= "insert other generic description",
+    requirements= [""],
+    program= ProgramTypeEnum.DOMESTIC
+)
+
 services = [service_1, service_2, service_3, service_4, service_5, service_6]
 
 def insert_fake_data(session: Session):

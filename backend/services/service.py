@@ -22,7 +22,7 @@ class ServiceService:
 
         return [entity.to_model() for entity in entities]
 
-    def get_service_by_name(self, name:str) -> list[Service]:
+    def get_service_by_name(self, name:str) -> Service:
         # get service by program type
 
         query = select(ServiceEntity).filter(ServiceEntity.name == name)
@@ -64,8 +64,8 @@ class ServiceService:
 
         return service_entity.to_model()
 
-    def delete(self, name: str) -> None:
-        service_entity = self._session.get(ServiceEntity, name)
+    def delete(self, service: Service) -> None:
+        service_entity = self._session.get(ServiceEntity, service.id)
 
         if service_entity is None:
             raise ServiceNotFoundException("The service you are searching for does not exist.")
