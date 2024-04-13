@@ -27,9 +27,9 @@ export default function Page() {
                 </div>
                 <Callout>
                     Welcome! Below you will find a list of resources for the
-                    Compass Center's trained advocates. These materials serve to
-                    virtually provide a collection of advocacy, resource, and
-                    hotline manuals and information.
+                    Compass Center&apos;s trained advocates. These materials
+                    serve to virtually provide a collection of advocacy,
+                    resource, and hotline manuals and information.
                     <b>
                         {" "}
                         If you are an advocate looking for the contact
