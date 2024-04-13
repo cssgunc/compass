@@ -12,12 +12,14 @@ import {
   sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState, useEffect, FunctionComponent } from "react";
+import { ChangeEvent, useState, useEffect, FunctionComponent, useRef, ChangeEventHandler, Key } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
 import { Bars2Icon, AtSymbolIcon, HashtagIcon, ArrowDownCircleIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
+import { TableCell } from "./TableCell";
+import { PrimaryTableCell } from "./PrimaryTableCell";
 
 const usersExample = usersImport as unknown as User[];
 
@@ -80,19 +82,19 @@ export const Table = () => {
     }),
     columnHelper.accessor("username", {
       header: () => <><Bars2Icon className="inline align-top h-4 mr-2" /> Username</>,
-      cell: (info) => <RowOpenAction title={info.getValue()} />,
+      cell: PrimaryTableCell,
     }),
     columnHelper.accessor("role", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Role</>,
-      cell: (info) => info.renderValue(),
+      cell: TableCell,
     }),
     columnHelper.accessor("email", {
       header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,
-      cell: (info) => info.renderValue(),
+      cell: TableCell,
     }),
     columnHelper.accessor("program", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Program</>,
-      cell: (info) => info.renderValue(),
+      cell: TableCell,
     }),
   ];
 
@@ -103,6 +105,11 @@ export const Table = () => {
   const handleSearchChange = (e: ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     setQuery(String(target.value));
+  }
+
+  const handleCellChange = (e: ChangeEvent, key: Key) => {
+    const target = e.target as HTMLInputElement;
+    console.log(key);
   }
 
   // TODO: Filtering
@@ -121,6 +128,21 @@ export const Table = () => {
     globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    meta: {
+      updateData: (rowIndex: number, columnId: string, value: string) => {
+        setData(old =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...old[rowIndex],
+                [columnId]: value,
+              };
+            }
+            return row;
+          })
+        );
+      }
+    }
   });
 
   return (
@@ -163,7 +185,11 @@ export const Table = () => {
                 key={row.id}
               >
                 {row.getVisibleCells().map((cell, i) => (
-                  <TableCell key={cell.id} cell={cell} />
+                  <td key={cell.id}
+                    className={"p-2 [&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
                 ))}
               </tr>
             );
@@ -172,22 +198,4 @@ export const Table = () => {
       </table>
     </div>
   )
-}
-
-type TableCellProps = {
-  cell: Cell<any, any>;
-  //i: number;
-}
-
-const TableCell: FunctionComponent<TableCellProps> = ({ cell }) => {
-  return (
-    <td
-      className={
-        "p-2 [&:nth-child(n+3)]:border-x "
-        + "first:text-left first:px-0 last:border-none"
-      }
-      key={cell.id}
-    >
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </td>)
 }

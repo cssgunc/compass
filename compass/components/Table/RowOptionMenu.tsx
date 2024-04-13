@@ -16,7 +16,7 @@ export const RowOptionMenu = ( { onDelete, onHide } ) => {
     <>
     <button className="align-center" onClick={() => setMenuOpen(!menuOpen)}><EllipsisVerticalIcon className="h-4"/></button>
     <div
-      className={"justify-start border border-gray-200 shadow-lg flex flex-col absolute bg-white w-auto p-2 rounded  [&>*]:rounded" + (!menuOpen ? " invisible" : "")}
+      className={"justify-start border border-gray-200 shadow-lg flex flex-col absolute bg-white w-auto p-2 rounded [&>*]:rounded z-10" + (!menuOpen ? " invisible" : "")}
     >
       <RowOption icon={TrashIcon} label="Delete" onClick={onDelete} />
         <RowOption icon={ArrowUpRightIcon} label="Open" onClick={() => { /* handle open */ }} />

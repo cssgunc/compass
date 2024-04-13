@@ -26,7 +26,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
         setEditContent(event.target.value);
     };
 
-    const drawerClassName = `fixed top-0 right-0 w-1/2 h-full bg-white transform ease-in-out duration-300 ${
+    const drawerClassName = `fixed top-0 right-0 w-1/2 h-full bg-white transform ease-in-out duration-300 z-20 ${
         isOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
     }`;
 
