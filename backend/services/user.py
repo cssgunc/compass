@@ -52,7 +52,8 @@ class UserService:
         
         """
         try:
-            user_entity = self.get_user_by_id(user.id)
+            user_model = self.get_user_by_id(user.id)
+            return user_model
         except:
             # if does not exist, create new object
             user_entity = UserEntity.from_model(user)

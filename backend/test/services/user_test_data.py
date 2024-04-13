@@ -17,9 +17,9 @@ volunteer = User(
     email="volunteer@compass.com",
     experience=1,
     group="volunteers",
-    programtype=[programs.COMMUNITY.value],
+    programtype=[programs.COMMUNITY],
     created_at=datetime.now(),
-    usertype=UserTypeEnum.VOLUNTEER.value
+    usertype=UserTypeEnum.VOLUNTEER
 )
 
 employee = User(
@@ -28,9 +28,9 @@ employee = User(
     email="employee@compass.com",
     experience=5,
     group="employees",
-    programtype=[programs.DOMESTIC.value, programs.ECONOMIC.value],
+    programtype=[programs.DOMESTIC, programs.ECONOMIC],
     created_at=datetime.now(),
-    usertype=roles.EMPLOYEE.value,
+    usertype=roles.EMPLOYEE,
 )
 
 admin = User(
@@ -39,9 +39,9 @@ admin = User(
     email="admin@compass.com",
     experience=10,
     group="admin",
-    programtype=[programs.ECONOMIC.value, programs.DOMESTIC.value, programs.COMMUNITY.value],
+    programtype=[programs.ECONOMIC, programs.DOMESTIC, programs.COMMUNITY],
     created_at=datetime.now(),
-    usertype=roles.ADMIN.value,
+    usertype=roles.ADMIN,
 )
 
 newUser = User(
@@ -50,9 +50,9 @@ newUser = User(
     email="new@compass.com",
     experience=1,
     group="volunteer",
-    programtype=[programs.ECONOMIC.value],
+    programtype=[programs.ECONOMIC],
     created_at=datetime.now(),
-    usertype=roles.VOLUNTEER.value
+    usertype=roles.VOLUNTEER
 )
 
 users = [volunteer, employee, admin]
