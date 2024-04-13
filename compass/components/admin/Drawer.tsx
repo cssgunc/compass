@@ -20,17 +20,19 @@ type DrawerProps = {
 interface EditContent {
     content: string;
     isEditing: boolean;
+    error?: string;
   }
+
 
 
 const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, editableContent }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isFull, setIsFull] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [editContents, setEditContents] = useState<EditContent[]>(editableContent || [{ content: '', isEditing: true }]);
     const [currentCardText, setCurrentCardText] = useState("");
     const [currentCardIcon, setCurrentCardIcon] = useState<string>('');
-    const [error, setError] = useState<string | null>(null);
+    const [editContents, setEditContents] = useState<EditContent[]>(editableContent || [{ content: '', isEditing: true, error: '' }]);
+
 
 
     const toggleDrawer = () => {
@@ -66,15 +68,18 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
     const saveIndividualChange = (index: number) => {
         const content = editContents[index].content.trim();
         if (!content) {
-            setError("Input cannot be empty."); //to-do: print error message
+            const updatedContents = editContents.map((item, idx) =>
+                idx === index ? { ...item, error: "Input cannot be empty." } : item
+            );
+            setEditContents(updatedContents);
             return;
         }
-        
-        setError(null); // Clear error state if input passes validation
-    
-        const updatedContents = editContents.map((item, idx) => idx === index ? { ...item, isEditing: false } : item);
+        const updatedContents = editContents.map((item, idx) =>
+            idx === index ? { ...item, isEditing: false, error: '' } : item
+        );
+
         setEditContents(updatedContents);
-        
+
         if (onSave) {
             onSave(updatedContents);
         }
@@ -133,6 +138,14 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                     >
                         Save
                     </button>
+                    
+                    <div>
+                    </div>
+                    {item.error && (
+                    <div style={{ color: 'red' }}>
+                        {item.error}
+                    </div>
+                )}
                 </>
             ) : (
                 <>
@@ -151,6 +164,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
             >
             <XMarkIcon className="h-5 w-5" />
             </button>
+           
         </div>
     ))
 }
