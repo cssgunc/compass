@@ -1,0 +1,71 @@
+from typing import Sequence
+
+from fastapi import Depends
+from sqlalchemy import func, select, and_, func, or_, exists, or_
+from sqlalchemy.orm import Session, aliased
+from backend.entities.user_entity import UserEntity
+from backend.models.service_model import Service
+from backend.models.user_model import User
+from backend.models.service_tag_model import ServiceTag
+
+from ..database import db_session
+
+
+from ..entities import ServiceEntity
+
+
+from datetime import datetime
+
+
+class ServiceService:
+      def __init__(
+        self,
+        session: Session = Depends(db_session),
+        
+    ):
+        """Initializes the `EventService` session"""
+        self._session = session
+        self._permission = permission
+        self._user_svc = user_svc
+
+      def get_services(
+            self, service_tag: ServiceTag, subject: User | None=None
+    )->list[Service]:
+        service_entities=(self._session.query(ServiceEntity)
+                          .where (service_tag.name in ServiceEntity.name or service_tag.name in ServiceEntity.summary))
+        return [entity.to_details_model(subject) for entity in service_entities]
+        
+    
+
+      def all(
+            self,
+            subject: User | None = None
+      )->list[Service]:
+         
+        service_entities=(self._session.query(ServiceEntity)).all()
+        return [
+            entity.to_details_model(subject) for entity in service_entities
+        ]
+
+      def get_services_by_program(
+                self= User,
+                subject: User | None = None
+        ) -> list[Service]:
+                
+                services = (
+                self._session.query(ServiceEntity)
+                .filter(ServiceEntity.program== User.programtype)
+                .all()
+                )
+      def get_by_id(self, id: int, subject: User | None = None) -> Service:
+        
+        # Query the event with matching id
+        entity = self._session.get(ServiceEntity, id)
+
+
+        # Convert entry to a model and return
+        return entity.to_details_model(subject)
+      def create(self,id: int, subject: User)->Service:
+         new_service = {
+        "id": ServiceEntity.id, "name": ServiceEntity.name, "description": ServiceEntity.summary}
+          return new_service
