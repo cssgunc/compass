@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "tailwindcss/tailwind.css";
 import { TagsArray } from "./TagsArray"; 
 import { TagDropdown } from "./TagDropdown";
@@ -18,6 +18,25 @@ const TagsInput: React.FC<TagsInputProps> = ({
     new Set(presetValue ? [presetValue] : [])
   );
   const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
+  const dropdown = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log(cellSelected);
+    if (!cellSelected) {
+      return;
+    }
+    function handleClick(event: MouseEvent) {
+      if (dropdown.current && !dropdown.current.contains(event.target as Node)) {
+        setCellSelected(false);
+      }
+    }
+
+    if (cellSelected){
+      window.addEventListener("click", handleClick);
+    }
+
+    return () => window.removeEventListener("click", handleClick);
+  }, [cellSelected])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOptions(() => {
@@ -85,10 +104,14 @@ const TagsInput: React.FC<TagsInputProps> = ({
 
 
   return (
-    <div className="cursor-pointer" onClick={() => setCellSelected(true)}>
+    <div className="cursor-pointer" onClick={(e) => {
+      e.stopPropagation();
+      setCellSelected(true)
+    }}>
       {!cellSelected ? (
         <TagsArray handleDelete={handleDeleteTag} tags={tags} />
       ) : (
+        <div ref={dropdown}>
         <div className="absolute w-64 z-50 -ml-3 -mt-7">
           <div className="rounded-md border border-gray-200 shadow">
             <div className="flex flex-wrap rounded-t-md items-center gap-2 bg-gray-50 p-2">
@@ -116,6 +139,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
               )}
             </div>
           </div>
+        </div>
         </div>
       )}
     </div>
