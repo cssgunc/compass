@@ -1,0 +1,3 @@
+cd compass
+npm run lint
+npm run prettier

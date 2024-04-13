@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
+  },
+    "scripts": {
+      "precommit": "lint-staged"
+    },
+    "lint-staged": {
+      "*.ts": [
+        "cd compass",
+        "prettier --write",
+        "git add"
+      ],
+      "*.tsx": [
+        "cd compass",
+        "prettier --write",
+        "git add"
+      ]
+    }
+}
