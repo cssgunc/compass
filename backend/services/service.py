@@ -64,11 +64,12 @@ class ServiceService:
 
         return service_entity.to_model()
 
-    def delete(self, service: Service) -> None:
-        service_entity = self._session.get(ServiceEntity, service.id)
+    def delete(self, name: str) -> None:
+        query = select(ServiceEntity).filter(ServiceEntity.name == name)
+        entity = self._session.scalars(query).one_or_none
 
-        if service_entity is None:
+        if entity is None:
             raise ServiceNotFoundException("The service you are searching for does not exist.")
 
-        self._session.delete(service_entity)
+        self._session.delete(entity)
         self._session.commit()

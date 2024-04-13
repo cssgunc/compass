@@ -10,7 +10,7 @@ from backend.test.services import service_data
 
 def test_list(service_svc: ServiceService):
     service = service_svc.get_all()
-    assert len(service) == len(service_data.rooms)
+    assert len(service) == len(service_data.services)
     assert isinstance(service[0], Service)
 
 def test_get_by_name(service_svc: ServiceService):
@@ -36,21 +36,21 @@ def test_create(service_svc: ServiceService):
 
 def test_update(service_svc: ServiceService):
     service = service_svc.update(service_data.service_6_edit)
-    assert service.status == service_6_edit.status
-    assert service.requirements == service_6_edit.requirements
+    assert service.status == service_data.service_6_edit.status
+    assert service.requirements == service_data.service_6_edit.requirements
     assert isinstance(service, Service)
 
 def test_update_not_found(service_svc: ServiceService):
     with pytest.raises(ServiceNotFoundException):
-        service = service_svc.update(new_service)
+        service = service_svc.update(service_data.new_service)
         pytest.fail()
 
 def test_delete(service_svc: ServiceService):
-    service = service_svc.delete(service_data.service_1.id)
+    service = service_svc.delete("service 1")
     services = service_svc.get_all()
-    assert len(services) == len(room_data.services) - 1
+    assert len(services) == len(service_data.services) - 1
 
 def test_delete_not_found(service_svc: ServiceService):
     with pytest.raises(ServiceNotFoundException):
-        service = service_svc.delete(service_data.new_service.id)
+        service_svc.delete("service 10")
         pytest.fail()
