@@ -20,9 +20,12 @@ const TagsInput: React.FC<TagsInputProps> = ({
   const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setOptions(() => {
+      const newOptions = presetOptions.filter(item => item.includes(e.target.value.toLowerCase()));
+      return new Set(newOptions);
+    })
+    setInputValue(e.target.value); // Update input value state
   };
-
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim()) {
       setTags((prevTags) => new Set(prevTags).add(inputValue));
