@@ -9,7 +9,7 @@ from ...entities.sample_entity import SampleEntity
 def test_entity_count():
     """Checks the number of entities to be inserted"""
     print(entities.EntityBase.metadata.tables.keys())
-    assert len(entities.EntityBase.metadata.tables.keys()) == 1
+    assert len(entities.EntityBase.metadata.tables.keys()) == 7
 
 
 def test_add_sample_data(session: Engine):
