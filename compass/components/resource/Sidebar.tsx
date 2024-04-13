@@ -1,6 +1,7 @@
 import React from 'react';
 import { HomeIcon, ChevronDoubleLeftIcon, BookmarkIcon, ClipboardIcon, BookOpenIcon } from '@heroicons/react/24/solid';
 import { SidebarItem } from './SidebarItem';
+import { UserProfile } from './UserProfile';
 
 interface SidebarProps {
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,19 +25,13 @@ const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
       {/* user + logout button  */}
         <div className="flex items-center p-4 space-x-2 border border-gray-200 rounded-md ">
 
-          <div className="flex flex-col items-start space-y-2">
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-gray-800">Compass Center</span>
-              <span className="text-xs text-gray-500">cssgunc@gmail.com</span>
-            </div>
-            <button className="text-red-600 text-xs hover:underline mt-1">Sign out</button>
-          </div>
+          <UserProfile />
         </div>
         {/* navigation menu  */}
         <div className="flex flex-col space-y-2">
           <h4 className="text-xs font-semibold text-gray-500">Pages</h4>
           <nav className="flex flex-col">
-          <SidebarItem icon={<HomeIcon  />} text="Home" />
+          <SidebarItem active={true} icon={<HomeIcon  />} text="Home" />
             <SidebarItem icon={<BookmarkIcon  />} text="Resources" />
             <SidebarItem icon={<ClipboardIcon />} text="Services" />
             <SidebarItem icon={<BookOpenIcon  />} text="Training Manuals" />

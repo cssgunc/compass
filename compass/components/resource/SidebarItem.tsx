@@ -2,11 +2,12 @@
 interface SidebarItemProps {
   icon: React.ReactElement;
   text: string;
+  active: boolean;
 }
 
-export const SidebarItem: React.FC<SidebarItemProps> = ({ icon, text }) => {
+export const SidebarItem: React.FC<SidebarItemProps> = ({ icon, text, active }) => {
   return (
-    <a href="#" className="flex items-center p-2 space-x-2 hover:bg-gray-200 rounded-md">
+    <a href="#" className={active ? "flex items-center p-2 space-x-2 bg-gray-200 rounded-md"  : "flex items-center p-2 space-x-2 hover:bg-gray-200 rounded-md"}>
       <span className="h-5 text-gray-500 w-5">
       {icon}
       </span>
