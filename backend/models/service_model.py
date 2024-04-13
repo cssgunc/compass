@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List
 from datetime import datetime
 from typing import Optional
-from .enum_for_models import ProgramTypeEnum
+from ..enum_for_models import ProgramTypeEnum
 
 
 class Service(BaseModel):
