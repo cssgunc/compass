@@ -10,6 +10,4 @@ export class CollectionImpl {
         this.icon = icon;
         this.data = data;
     }
-
-
 }

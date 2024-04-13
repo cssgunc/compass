@@ -9,8 +9,7 @@ class CollectionImpl {
     }
 
     // subject to change
-    setData(data: any){
+    setData(data: any) {
         this.data = data;
     }
-
 }
