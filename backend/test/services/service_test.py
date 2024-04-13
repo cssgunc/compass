@@ -1,4 +1,3 @@
-from unittest.mock import create_autospec
 import pytest
 
 from backend.models.service_model import Service
@@ -6,8 +5,8 @@ from backend.entities.service_entity import ServiceEntity
 from backend.enum_for_models import ProgramTypeEnum
 from backend.services.service import ServiceService
 from backend.services.exceptions import ServiceNotFoundException
-from backend.test.services import service_data
-from backend.test.services.fixtures import service_svc
+from ..services import service_data
+
 
 def test_list(service_svc: ServiceService):
     service = service_svc.get_all()
