@@ -129,6 +129,19 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                     </div>
                 </div>
                 <div className="p-4">
+                    <div className="p-4" style={{fontSize:16, paddingBottom:'2px'}}>
+                    Username: { rowContent.username }
+                    </div>
+                    <div className="p-4" style={{fontSize:16, paddingBottom:'2px'}}>
+                    Role: { rowContent.role }
+                    </div>
+                    <div className="p-4" style={{fontSize:16, paddingBottom:'2px'}}>
+                    Email: { rowContent.email }
+                    </div>
+                    <div className="p-4" style={{fontSize:16, paddingBottom:'2px'}}>
+                    Program: { rowContent.program }
+                    </div>
+                    <br />
                 {
        editContents.map((item, index) => (
         <div key={index} className="flex mb-2 items-center space-x-2">
