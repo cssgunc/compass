@@ -20,23 +20,41 @@ const TagsInput: React.FC<TagsInputProps> = ({
   const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
   const dropdown = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    console.log(cellSelected);
+  // useEffect(() => {
+  //   if (!cellSelected) {
+  //     return;
+  //   }
+  //   function handleOutsideClick(event: MouseEvent) {
+  //     if (dropdown.current && !dropdown.current.contains(event.target as Node)) {
+  //       console.log("here2")
+  //       setCellSelected(false);
+  //     }
+  //   }
+
+  //   if (cellSelected){
+  //     window.addEventListener("click", handleOutsideClick);
+  //   }
+
+  //   return () => window.removeEventListener("click", handleOutsideClick);
+  // }, [cellSelected])
+
+  const handleClick = () => {
     if (!cellSelected) {
-      return;
+      setCellSelected(true);
+      // Add event listener only after setting cellSelected to true
+      setTimeout(() => {
+        window.addEventListener("click", handleOutsideClick);
+      }, 100);
     }
-    function handleClick(event: MouseEvent) {
-      if (dropdown.current && !dropdown.current.contains(event.target as Node)) {
-        setCellSelected(false);
-      }
-    }
+  }
 
-    if (cellSelected){
-      window.addEventListener("click", handleClick);
+  const handleOutsideClick = (event) => {
+    if (dropdown.current && !dropdown.current.contains(event.target)) {
+      setCellSelected(false);
+      // Remove event listener after handling outside click
+      window.removeEventListener("click", handleOutsideClick);
     }
-
-    return () => window.removeEventListener("click", handleClick);
-  }, [cellSelected])
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOptions(() => {
@@ -100,14 +118,9 @@ const TagsInput: React.FC<TagsInputProps> = ({
       });
     }
   };
-  
-
 
   return (
-    <div className="cursor-pointer" onClick={(e) => {
-      e.stopPropagation();
-      setCellSelected(true)
-    }}>
+    <div className="cursor-pointer" onClick={handleClick}>
       {!cellSelected ? (
         <TagsArray handleDelete={handleDeleteTag} tags={tags} />
       ) : (

@@ -8,7 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
@@ -32,6 +32,8 @@ type User = {
 
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
+
+
   const columns = [
     columnHelper.display({
       id: "options",
@@ -42,7 +44,8 @@ export const Table = () => {
       cell: (info) => <RowOpenAction title={info.getValue()} />,
     }),
     columnHelper.accessor("role", {
-      cell: (info) => <TagsInput presetValue={info.getValue() }presetOptions={["administrator","volunteer","employee"]}  />,
+      cell: (info) => <TagsInput presetValue={info.getValue() }
+      presetOptions={["administrator","volunteer","employee"]}/>,
     }),
     columnHelper.accessor("email", {
       header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,
