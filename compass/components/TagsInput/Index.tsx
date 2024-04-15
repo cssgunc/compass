@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import "tailwindcss/tailwind.css";
 import { TagsArray } from "./TagsArray"; 
 import { TagDropdown } from "./TagDropdown";
@@ -11,6 +11,7 @@ interface TagsInputProps {
 const TagsInput: React.FC<TagsInputProps> = ({
   presetValue,
   presetOptions,
+  addOption,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [cellSelected, setCellSelected] = useState(false);
@@ -19,24 +20,6 @@ const TagsInput: React.FC<TagsInputProps> = ({
   );
   const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
   const dropdown = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   if (!cellSelected) {
-  //     return;
-  //   }
-  //   function handleOutsideClick(event: MouseEvent) {
-  //     if (dropdown.current && !dropdown.current.contains(event.target as Node)) {
-  //       console.log("here2")
-  //       setCellSelected(false);
-  //     }
-  //   }
-
-  //   if (cellSelected){
-  //     window.addEventListener("click", handleOutsideClick);
-  //   }
-
-  //   return () => window.removeEventListener("click", handleOutsideClick);
-  // }, [cellSelected])
 
   const handleClick = () => {
     if (!cellSelected) {
@@ -63,8 +46,10 @@ const TagsInput: React.FC<TagsInputProps> = ({
     })
     setInputValue(e.target.value); // Update input value state
   };
+
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim()) {
+      addOption(inputValue);
       setTags((prevTags) => new Set(prevTags).add(inputValue));
       setOptions((prevOptions) => new Set(prevOptions).add(inputValue));
       setInputValue("");

@@ -32,7 +32,11 @@ type User = {
 
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
+  const [presetOptions, setPresetOptions] = useState(["administrator", "volunteer", "employee"]);
 
+  const handleAddTag = (newTag) => {
+    setPresetOptions((prevOptions) => [...prevOptions, newTag]);
+  }
 
   const columns = [
     columnHelper.display({
@@ -45,7 +49,9 @@ export const Table = () => {
     }),
     columnHelper.accessor("role", {
       cell: (info) => <TagsInput presetValue={info.getValue() }
-      presetOptions={["administrator","volunteer","employee"]}/>,
+      presetOptions={presetOptions}
+      addOption={handleAddTag}
+      />,
     }),
     columnHelper.accessor("email", {
       header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,
