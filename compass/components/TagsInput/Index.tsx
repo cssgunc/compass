@@ -11,7 +11,8 @@ interface TagsInputProps {
 const TagsInput: React.FC<TagsInputProps> = ({
   presetValue,
   presetOptions,
-  addOption,
+  setPresetOptions,
+  getTagColor
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [cellSelected, setCellSelected] = useState(false);
@@ -49,7 +50,11 @@ const TagsInput: React.FC<TagsInputProps> = ({
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim()) {
-      addOption(inputValue);
+      // setPresetOptions((prevPreset) => {
+      //   const uniqueSet = new Set(presetOptions);
+      //   uniqueSet.add(inputValue);
+      //   return Array.from(uniqueSet);
+      // });
       setTags((prevTags) => new Set(prevTags).add(inputValue));
       setOptions((prevOptions) => new Set(prevOptions).add(inputValue));
       setInputValue("");
@@ -72,6 +77,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
   };
 
   const handleDeleteTagOption = (tagToDelete: string) => {
+    // setPresetOptions(presetOptions.filter(tag => tag !== tagToDelete));
     setOptions((prevOptions) => {
       const updatedOptions = new Set(prevOptions);
       updatedOptions.delete(tagToDelete);

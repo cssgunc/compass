@@ -33,10 +33,16 @@ type User = {
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
   const [presetOptions, setPresetOptions] = useState(["administrator", "volunteer", "employee"]);
+  const [tagColors, setTagColors] = useState(new Map());
 
-  const handleAddTag = (newTag) => {
-    setPresetOptions((prevOptions) => [...prevOptions, newTag]);
-  }
+  const getTagColor = (tag: string) => {
+    if (!tagColors.has(tag)) {
+      const colors = ["bg-cyan-100", "bg-blue-100", "bg-green-100", "bg-yellow-100", "bg-purple-100"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setTagColors(new Map(tagColors).set(tag, randomColor));
+    }
+    return tagColors.get(tag);
+  };
 
   const columns = [
     columnHelper.display({
@@ -50,7 +56,9 @@ export const Table = () => {
     columnHelper.accessor("role", {
       cell: (info) => <TagsInput presetValue={info.getValue() }
       presetOptions={presetOptions}
-      addOption={handleAddTag}
+      setPresetOptions={setPresetOptions}
+      getTagColor={getTagColor}
+      setTagColors={setTagColors}
       />,
     }),
     columnHelper.accessor("email", {

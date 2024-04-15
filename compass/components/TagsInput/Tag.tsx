@@ -1,7 +1,9 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export const Tag = ({ children, handleDelete, active = false }) => {
+
+  const [tagColor, setTagColor] = useState('');
 
   return (
     <span className={`font-normal bg-cyan-100 text-gray-800 flex flex-row p-1 px-2 rounded-lg`}>
