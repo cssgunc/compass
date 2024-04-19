@@ -16,7 +16,7 @@ import { ChangeEvent, useState, useEffect, FunctionComponent, useRef, ChangeEven
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
-import { Bars2Icon, AtSymbolIcon, HashtagIcon, ArrowDownCircleIcon } from "@heroicons/react/24/solid";
+import { Bars2Icon, AtSymbolIcon, HashtagIcon, ArrowDownCircleIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { TableCell } from "./TableCell";
 import { PrimaryTableCell } from "./PrimaryTableCell";
@@ -99,6 +99,10 @@ export const Table = () => {
   ];
 
   const [data, setData] = useState<User[]>([...usersExample]);
+
+  const addUser = () => {
+    setData([...data, {}]);
+  }
 
   // Searching
   const [query, setQuery] = useState("");
@@ -195,7 +199,19 @@ export const Table = () => {
             );
           })}
         </tbody>
+        <tfoot>
+
+          <tr>
+            <td className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50" colSpan={100} onClick={addUser}>
+              <span className="flex ml-1 text-gray-500">
+                <PlusIcon className="inline h-4 mr-1" />
+                New
+              </span>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   )
 }
+
