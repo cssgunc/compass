@@ -40,7 +40,7 @@ export const Table = () => {
     }),
     columnHelper.accessor("username", {
       header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
-      cell: (info) => <RowOpenAction title={info.getValue()} rowData={info.row.original} />,
+      cell: (info) => <RowOpenAction title={info.getValue()} rowData={info.row.original} onRowUpdate={handleRowUpdate} />,
     }),
     columnHelper.accessor("role", {
       cell: (info) => <TagsInput presetValue={info.getValue() }presetOptions={["administrator","volunteer","employee"]}  />,
@@ -55,6 +55,16 @@ export const Table = () => {
   ];
 
   const [data, setData] = useState<User[]>([...usersExample]);
+
+  // added this fn for editing rows
+  const handleRowUpdate = (updatedRow: User) => {
+    const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
+    if (dataIndex !== -1) {
+      const updatedData = [...data];
+      updatedData[dataIndex] = updatedRow;
+      setData(updatedData);
+    }
+  };
 
   const table = useReactTable({
     columns,
