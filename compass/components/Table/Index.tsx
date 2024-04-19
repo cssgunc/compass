@@ -113,6 +113,7 @@ export const Table = () => {
   }
 
   // TODO: Filtering
+  
   // TODO: Sorting
 
   const table = useReactTable({
