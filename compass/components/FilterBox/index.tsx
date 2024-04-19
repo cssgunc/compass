@@ -1,11 +1,17 @@
 // FilterBox.tsx
 import { useState } from "react";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ContainsDropdown } from "./ContainsDropdown";
 
 const mockTags = ["food relief", "period poverty", "nutrition education"];
+
+type FilterType = "contains" | "does not contain" | "is empty" | "is not empty";
 
 export const FilterBox = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showContainsDropdown, setShowContainsDropdown] = useState(false);
+  const [filterType, setFilterType] = useState<FilterType>("contains");
 
   const handleTagChange = (tag: string) => {
     setSelectedTags((prevTags) =>
@@ -38,18 +44,24 @@ export const FilterBox = () => {
   return (
     <div className="bg-white border border-gray-300 rounded-md p-2">
       <div className="mb-2">
-        <span className="font-semibold">Tags contains:</span>
-        
+        <span className="font-semibold">
+          Tags{" "}
+          <button
+            onClick={() => setShowContainsDropdown((prevState) => !prevState)}
+            className="hover:bg-gray-50 text-gray-500 hover:text-gray-700"
+          >
+            {filterType} <ChevronDownIcon className="inline h-3" />
+          </button>
+        </span>
       </div>
       <div className="flex flex-wrap mb-2 px-2 py-1 border border-gray-300 rounded w-full">
-      {selectedTags.length > 0 && renderSelectedTags()}
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        placeholder="Search tags..."
-        
-      />
+        {selectedTags.length > 0 && renderSelectedTags()}
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder="Search tags..."
+        />
       </div>
       <div className="max-h-48 overflow-y-auto">
         {mockTags
@@ -68,6 +80,14 @@ export const FilterBox = () => {
             </div>
           ))}
       </div>
+      {showContainsDropdown && (
+        <ContainsDropdown
+          isDropdownOpen={showContainsDropdown}
+          setIsDropdownOpen={setShowContainsDropdown}
+          filterType={filterType}
+          setFilterType={setFilterType}
+        />
+      )}
     </div>
   );
 };
