@@ -186,7 +186,7 @@ export const Table = () => {
               >
                 {row.getVisibleCells().map((cell, i) => (
                   <td key={cell.id}
-                    className={"p-2 [&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"}
+                    className={"[&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

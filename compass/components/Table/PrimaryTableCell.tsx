@@ -12,9 +12,9 @@ export const PrimaryTableCell = ({ getValue, row, column, table }) => {
   };
 
   return (
-    <div className="font-semibold group flex flex-row items-center justify-between pr-2">
+    <div className="font-semibold group">
       <TableCell getValue={getValue} row={row} column={column} table={table} />
-      <span>
+      <span className="absolute right-1 top-1">
         <Drawer title={getValue()} editableContent={pageContent} onSave={handleDrawerContentChange}>{pageContent}</Drawer>
       </span>
     </div>
