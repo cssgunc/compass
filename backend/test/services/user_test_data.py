@@ -17,9 +17,9 @@ volunteer = User(
     email="volunteer@compass.com",
     experience=1,
     group="volunteers",
-    programtype=[programs.COMMUNITY.value],
+    program=[programs.COMMUNITY],
     created_at=datetime.now(),
-    usertype=UserTypeEnum.VOLUNTEER.value
+    role=UserTypeEnum.VOLUNTEER,
 )
 
 employee = User(
@@ -28,9 +28,9 @@ employee = User(
     email="employee@compass.com",
     experience=5,
     group="employees",
-    programtype=[programs.DOMESTIC.value, programs.ECONOMIC.value],
+    program=[programs.DOMESTIC, programs.ECONOMIC],
     created_at=datetime.now(),
-    usertype=roles.EMPLOYEE.value,
+    role=roles.EMPLOYEE,
 )
 
 admin = User(
@@ -39,9 +39,13 @@ admin = User(
     email="admin@compass.com",
     experience=10,
     group="admin",
-    programtype=[programs.ECONOMIC.value, programs.DOMESTIC.value, programs.COMMUNITY.value],
+    program=[
+        programs.ECONOMIC,
+        programs.DOMESTIC,
+        programs.COMMUNITY,
+    ],
     created_at=datetime.now(),
-    usertype=roles.ADMIN.value,
+    role=roles.ADMIN,
 )
 
 newUser = User(
@@ -50,9 +54,9 @@ newUser = User(
     email="new@compass.com",
     experience=1,
     group="volunteer",
-    programtype=[programs.ECONOMIC.value],
+    program=[programs.ECONOMIC],
     created_at=datetime.now(),
-    usertype=roles.VOLUNTEER.value
+    role=roles.VOLUNTEER,
 )
 
 users = [volunteer, employee, admin]
@@ -109,6 +113,6 @@ def fake_data_fixture(session: Session):
     Note:
         This function runs automatically due to the fixture property `autouse=True`.
     """
-    insert_fake_data(session)
+    # insert_fake_data(session)
     session.commit()
     yield

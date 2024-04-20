@@ -11,8 +11,7 @@ class UserService:
     def __init__(self, session: Session = Depends(db_session)):
         self._session = session
 
-
-    def get_user_by_id(self, id: int) -> User: 
+    def get_user_by_id(self, id: int) -> User:
         """
         Gets a user by id from the database
 
@@ -23,36 +22,31 @@ class UserService:
         user_entity: UserEntity | None = self._session.scalar(query)
 
         if user_entity is None:
-            raise Exception(
-            f"No user found with matching id: {id}"
-            )
+            raise Exception(f"No user found with matching id: {id}")
 
         return user_entity.to_model()
 
-        
     def all(self) -> list[User]:
         """
         Returns a list of all Users
 
         """
-        query = select(UserEntity)   
+        query = select(UserEntity)
         entities = self._session.scalars(query).all()
 
         return [entity.to_model() for entity in entities]
 
-        
-    def create(self, user: User) -> User: 
-
+    def create(self, user: User) -> User:
         """
         Creates a new User Entity and adds to database
 
         Args: User model
 
         Returns: User model
-        
+
         """
         try:
-            user_entity = self.get_user_by_id(user.id)
+            user = self.get_user_by_id(user.id)
         except:
             # if does not exist, create new object
             user_entity = UserEntity.from_model(user)
@@ -62,5 +56,4 @@ class UserService:
             self._session.commit()
         finally:
             # return added object
-            return user_entity.to_model()
-
+            return user

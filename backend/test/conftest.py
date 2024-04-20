@@ -13,6 +13,7 @@ from .. import entities
 POSTGRES_DATABASE = f'{getenv("POSTGRES_DATABASE")}_test'
 POSTGRES_USER = getenv("POSTGRES_USER")
 
+
 def reset_database():
     engine = create_engine(_engine_str(database=""))
     with engine.connect() as connection:
@@ -50,9 +51,10 @@ def session(test_engine: Engine):
     finally:
         session.close()
 
+
 @pytest.fixture(autouse=True)
 def setup_insert_data_fixture(session: Session):
     user_test_data.insert_fake_data(session)
     tag_test_data.insert_fake_data(session)
     session.commit()
-    yield        
+    yield

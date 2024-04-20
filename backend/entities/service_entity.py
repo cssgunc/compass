@@ -13,16 +13,8 @@ from .entity_base import EntityBase
 from datetime import datetime
 
 # Import enums for Program
-import enum
+from .program_enum import Program_Enum
 from sqlalchemy import Enum
-
-
-class ProgramEnum(enum.Enum):
-    """Determine program for Service"""
-
-    DOMESTIC = "DOMESTIC"
-    ECONOMIC = "ECONOMIC"
-    COMMUNITY = "COMMUNITY"
 
 
 class ServiceEntity(EntityBase):
@@ -36,7 +28,7 @@ class ServiceEntity(EntityBase):
     name: Mapped[str] = mapped_column(String(32), nullable=False)
     summary: Mapped[str] = mapped_column(String(100), nullable=False)
     requirements: Mapped[list[str]] = mapped_column(ARRAY(String))
-    program: Mapped[ProgramEnum] = mapped_column(Enum(ProgramEnum), nullable=False)
+    program: Mapped[Program_Enum] = mapped_column(Enum(Program_Enum), nullable=False)
 
     # relationships
     serviceTags: Mapped[list["ServiceTagEntity"]] = relationship(
