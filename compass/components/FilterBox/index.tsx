@@ -42,7 +42,7 @@ export const FilterBox = () => {
     ));
 
   return (
-    <div className="bg-white border border-gray-300 rounded-md p-2">
+    <div className="text-xs bg-white border border-gray-300 z-50 rounded-md p-2 shadow absolute right-5 top-[200px]">
       <div className="mb-2">
         <span className="font-semibold">
           Tags{" "}
