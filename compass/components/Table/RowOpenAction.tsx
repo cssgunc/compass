@@ -1,21 +1,22 @@
 import Drawer from "@/components/page/Drawer";
 import { useState } from "react";
 
-export const RowOpenAction = ({ title, isVisible }) => {
-    const [pageContent, setPageContent] = useState("");
+export const RowOpenAction = ({ title, rowData, onRowUpdate }) => {
+    const [pageContent, setPageContent] = useState("")
 
     const handleDrawerContentChange = (newContent) => {
       setPageContent(newContent);
     };
 
-    return (
-        <div className="font-semibold group flex flex-row items-center justify-between pr-2">
-            {title}
-            {isVisible && (
-                <span>
-                    <Drawer title="My Drawer Title" editableContent={pageContent} onSave={handleDrawerContentChange}>{pageContent}</Drawer>
-                </span>
-            )}
-        </div>
-    );
+
+
+  return (
+    <div className="font-semibold group flex flex-row items-center justify-between pr-2">
+      {title}
+      <span >
+        {/* Added OnRowUpdate to drawer */}
+        <Drawer title="My Drawer Title" editableContent={pageContent} rowContent={rowData} onSave={handleDrawerContentChange} onRowUpdate={onRowUpdate}>{pageContent}</Drawer>
+    </span>
+    </div>
+  );
 };

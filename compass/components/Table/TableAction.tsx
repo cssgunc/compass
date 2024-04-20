@@ -1,9 +1,16 @@
+/** The actions (Filter, Sort, Search) at the top of the table. */
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { useRef, useState } from "react";
+import { ChangeEventHandler, Dispatch, FunctionComponent, SetStateAction, useRef, useState } from "react";
 
-export const TableAction = () => {
+type TableActionProps = {
+  query: string
+  handleChange: ChangeEventHandler<HTMLInputElement>
+}
+
+export const TableAction: FunctionComponent<TableActionProps> = ({query, handleChange}) => {
   const searchInput = useRef<HTMLInputElement>(null);
   const [searchActive, setSearchActive] = useState(false);
+
   const activateSearch = () => {
     setSearchActive(true);
     if (searchInput.current === null) { return; }
@@ -30,7 +37,10 @@ export const TableAction = () => {
         className={"outline-none transition-all duration-300 " + (searchActive ? "w-48" : "w-0")}
         type="text"
         name="search"
-        placeholder="Type to search..." />
+        placeholder="Type to search..."
+        value={query ?? ""}
+        onChange={handleChange}
+        />
     </div>
   );
 };

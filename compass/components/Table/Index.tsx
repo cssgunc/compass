@@ -2,17 +2,25 @@
 
 import usersImport from "./users.json";
 import {
+  Cell,
   ColumnDef,
+  Row,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, FunctionComponent, useRef, ChangeEventHandler, Key } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
-import { Bars2Icon, AtSymbolIcon, HashtagIcon, ArrowDownCircleIcon } from "@heroicons/react/24/solid";
+import { AtSymbolIcon, Bars2Icon, ArrowDownCircleIcon, PlusIcon } from "@heroicons/react/24/solid";
+import TagsInput from "../TagsInput/Index";
+import { rankItem } from "@tanstack/match-sorter-utils";
+import { TableCell } from "./TableCell";
+import { PrimaryTableCell } from "./PrimaryTableCell";
 
 const usersExample = usersImport as unknown as User[];
 
@@ -20,14 +28,26 @@ type User = {
   id: number;
   created_at: any;
   username: string;
-  role: "ADMIN" | "EMPLOYEE" | "VOLUNTEER";
+  role: "administrator" | "employee" | "volunteer";
   email: string;
-  program: "DOMESTIC" | "ECONOMIC" | "COMMUNITY";
+  program: "domestic" | "economic" | "community";
   experience: number;
   group?: string;
   visible: boolean;
 };
 
+
+// For search
+const fuzzyFilter = (row: Row<any>, columnId: string, value: any, addMeta: (meta: any) => void) => {
+  // Rank the item
+  const itemRank = rankItem(row.getValue(columnId), value)
+
+  // Store the ranking info
+  addMeta(itemRank)
+
+  // Return if the item should be filtered in/out
+  return itemRank.passed
+}
 
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
@@ -43,7 +63,7 @@ export const Table = () => {
   };
 
   const hideUser = (userId: number) => {
-    console.log(`Toggling visibility for user with ID: ${userId}`); 
+    console.log(`Toggling visibility for user with ID: ${userId}`);
     setData(currentData => {
       const newData = currentData.map(user => {
         if (user.id === userId) {
@@ -51,28 +71,44 @@ export const Table = () => {
         }
         return user;
       }).sort((a, b) => a.visible === b.visible ? 0 : a.visible ? -1 : 1);
-  
-      console.log(newData); 
+
+      console.log(newData);
       return newData;
     });
   };
-  
+  const [presetOptions, setPresetOptions] = useState(["administrator", "volunteer", "employee"]);
+  const [tagColors, setTagColors] = useState(new Map());
+
+  const getTagColor = (tag: string) => {
+    if (!tagColors.has(tag)) {
+      const colors = ["bg-cyan-100", "bg-blue-100", "bg-green-100", "bg-yellow-100", "bg-purple-100"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setTagColors(new Map(tagColors).set(tag, randomColor));
+    }
+    return tagColors.get(tag);
+  };
+
   const columns = [
     columnHelper.display({
       id: "options",
       cell: props => <RowOptionMenu onDelete={() => deleteUser(props.row.original.id)} onHide={() => hideUser(props.row.original.id)} />
     }),
     columnHelper.accessor("username", {
-      header: () => <><Bars2Icon className="inline align-top h-4 mr-2" /> Username</>,
-      cell: (info) => <RowOpenAction title={info.getValue()} isVisible={info.row.original.visible} />,
+      header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
+      cell: (info) => <RowOpenAction title={info.getValue()} rowData={info.row.original} onRowUpdate={handleRowUpdate} />,
     }),
     columnHelper.accessor("role", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Role</>,
-      cell: (info) => info.renderValue(),
+      cell: (info) => <TagsInput presetValue={info.getValue() }
+      presetOptions={presetOptions}
+      setPresetOptions={setPresetOptions}
+      getTagColor={getTagColor}
+      setTagColors={setTagColors}
+      />,
     }),
     columnHelper.accessor("email", {
       header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,
-      cell: (info) => info.renderValue(),
+      cell: TableCell,
     }),
     columnHelper.accessor("program", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Program</>,
@@ -82,16 +118,79 @@ export const Table = () => {
 
   const [data, setData] = useState<User[]>([...usersExample]);
 
+  const addUser = () => {
+    setData([...data, {}]);
+  }
+
+  // Searching
+  const [query, setQuery] = useState("");
+  const handleSearchChange = (e: ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    setQuery(String(target.value));
+  }
+
+  const handleCellChange = (e: ChangeEvent, key: Key) => {
+    const target = e.target as HTMLInputElement;
+    console.log(key);
+  }
+
+  // TODO: Filtering
+  // TODO: Sorting
+
+  // added this fn for editing rows
+  const handleRowUpdate = (updatedRow: User) => {
+    const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
+    if (dataIndex !== -1) {
+      const updatedData = [...data];
+      updatedData[dataIndex] = updatedRow;
+      setData(updatedData);
+    }
+  };
+
   const table = useReactTable({
     columns,
     data,
+    filterFns: {
+      fuzzy: fuzzyFilter
+    },
+    state: {
+      globalFilter: query,
+    },
+    onGlobalFilterChange: setQuery,
+    globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    meta: {
+      updateData: (rowIndex: number, columnId: string, value: string) => {
+        setData(old =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...old[rowIndex],
+                [columnId]: value,
+              };
+            }
+            return row;
+          })
+        );
+      }
+    }
   });
+
+  const handleRowData = (row: any) => {
+    const rowData: any = {};
+    row.cells.forEach((cell: any) => {
+      rowData[cell.column.id] = cell.value;
+    });
+    // Use rowData object containing data from all columns for the current row
+    console.log(rowData);
+    return rowData;
+  };
 
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-end">
-        <TableAction />
+        <TableAction query={query} handleChange={handleSearchChange} />
       </div>
       <table className="w-full text-xs text-left rtl:text-right">
         <thead className="text-xs text-gray-500 capitalize">
@@ -118,29 +217,39 @@ export const Table = () => {
           ))}
         </thead>
         <tbody>
-        {table.getRowModel().rows.map((row) => {
-  const isUserVisible = row.original.visible;
-  const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isUserVisible ? "bg-gray-100" : ""}`;
-  return (
-    <tr className={rowClassNames} key={row.id}>
-      {row.getVisibleCells().map((cell, i) => {
-        // Apply the lighter text color conditionally
-        const cellClass = isUserVisible ? "text-lighter" : "text-gray-400"; // Use "text-gray-400" for TailwindCSS as an example
-
-        return (
-          <td
-            className={`p-2 ${1 < i && i < columns.length - 1 ? "border-x" : ""} ${i === 0 ? "text-left px-0" : ""} ${cellClass}`}
-            key={cell.id}
-          >
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-          </td>
-        );
-      })}
-    </tr>
-  );
-})}
+          {table.getRowModel().rows.map((row) => {
+            // Individual row
+            const isUserVisible = row.original.visible;
+            const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isUserVisible ? "bg-gray-200 text-gray-500" : ""}`;
+            return (
+              <tr
+                className={rowClassNames}
+                key={row.id}
+              >
+                {row.getVisibleCells().map((cell, i) => (
+                  <td key={cell.id}
+                    className={"[&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
+        <tfoot>
+
+          <tr>
+            <td className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50" colSpan={100} onClick={addUser}>
+              <span className="flex ml-1 text-gray-500">
+                <PlusIcon className="inline h-4 mr-1" />
+                New
+              </span>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   )
 }
+
