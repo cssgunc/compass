@@ -16,7 +16,8 @@ import { ChangeEvent, useState, useEffect, FunctionComponent, useRef, ChangeEven
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
-import { Bars2Icon, AtSymbolIcon, HashtagIcon, ArrowDownCircleIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { AtSymbolIcon, Bars2Icon, ArrowDownCircleIcon, PlusIcon } from "@heroicons/react/24/solid";
+import TagsInput from "../TagsInput/Index";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { TableCell } from "./TableCell";
 import { PrimaryTableCell } from "./PrimaryTableCell";
@@ -27,13 +28,14 @@ type User = {
   id: number;
   created_at: any;
   username: string;
-  role: "ADMIN" | "EMPLOYEE" | "VOLUNTEER";
+  role: "administrator" | "employee" | "volunteer";
   email: string;
-  program: "DOMESTIC" | "ECONOMIC" | "COMMUNITY";
+  program: "domestic" | "economic" | "community";
   experience: number;
   group?: string;
   visible: boolean;
 };
+
 
 // For search
 const fuzzyFilter = (row: Row<any>, columnId: string, value: any, addMeta: (meta: any) => void) => {
@@ -74,6 +76,17 @@ export const Table = () => {
       return newData;
     });
   };
+  const [presetOptions, setPresetOptions] = useState(["administrator", "volunteer", "employee"]);
+  const [tagColors, setTagColors] = useState(new Map());
+
+  const getTagColor = (tag: string) => {
+    if (!tagColors.has(tag)) {
+      const colors = ["bg-cyan-100", "bg-blue-100", "bg-green-100", "bg-yellow-100", "bg-purple-100"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setTagColors(new Map(tagColors).set(tag, randomColor));
+    }
+    return tagColors.get(tag);
+  };
 
   const columns = [
     columnHelper.display({
@@ -81,12 +94,17 @@ export const Table = () => {
       cell: props => <RowOptionMenu onDelete={() => deleteUser(props.row.original.id)} onHide={() => hideUser(props.row.original.id)} />
     }),
     columnHelper.accessor("username", {
-      header: () => <><Bars2Icon className="inline align-top h-4 mr-2" /> Username</>,
-      cell: PrimaryTableCell,
+      header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
+      cell: (info) => <RowOpenAction title={info.getValue()} rowData={info.row.original} onRowUpdate={handleRowUpdate} />,
     }),
     columnHelper.accessor("role", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Role</>,
-      cell: TableCell,
+      cell: (info) => <TagsInput presetValue={info.getValue() }
+      presetOptions={presetOptions}
+      setPresetOptions={setPresetOptions}
+      getTagColor={getTagColor}
+      setTagColors={setTagColors}
+      />,
     }),
     columnHelper.accessor("email", {
       header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,
@@ -94,7 +112,7 @@ export const Table = () => {
     }),
     columnHelper.accessor("program", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Program</>,
-      cell: TableCell,
+      cell: (info) => info.renderValue(),
     }),
   ];
 
@@ -118,6 +136,16 @@ export const Table = () => {
 
   // TODO: Filtering
   // TODO: Sorting
+
+  // added this fn for editing rows
+  const handleRowUpdate = (updatedRow: User) => {
+    const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
+    if (dataIndex !== -1) {
+      const updatedData = [...data];
+      updatedData[dataIndex] = updatedRow;
+      setData(updatedData);
+    }
+  };
 
   const table = useReactTable({
     columns,
@@ -148,6 +176,16 @@ export const Table = () => {
       }
     }
   });
+
+  const handleRowData = (row: any) => {
+    const rowData: any = {};
+    row.cells.forEach((cell: any) => {
+      rowData[cell.column.id] = cell.value;
+    });
+    // Use rowData object containing data from all columns for the current row
+    console.log(rowData);
+    return rowData;
+  };
 
   return (
     <div className="flex flex-col">
