@@ -119,12 +119,9 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
 
     const favoriteIcon = isFavorite ? <SolidStarIcon className="h-5 w-5" /> : <OutlineStarIcon className="h-5 w-5" />
 
-    // const buttonStyle = `ml-2 uppercase opacity-0 group-hover:opacity-100 text-gray-500 font-medium border  bg-white ${isOpen ? `border-gray-200` : ``} shadow hover:bg-gray-50 p-2 rounded-md`
-
 
     return (
         <div>
-            {/* <Card icon={<BookmarkIcon />} text="Open" onClick={() => handleCardClick("Resources", <BookmarkIcon />)}/> */}
             <button className={"ml-2 uppercase opacity-0 group-hover:opacity-100 text-gray-500 font-medium border border-gray-200 bg-white shadow hover:bg-gray-50 p-2 rounded-md"} onClick={toggleDrawer}>Open</button>
             <div className={drawerClassName}></div>
             <div className={drawerClassName}>
@@ -150,18 +147,25 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                         <tbody style={{fontWeight: 'normal'}}>
                             <tr>
                                 <td style={{paddingRight: '5px'}}><UserIcon className="h-5 w-5" /></td>
-                                <td style={{fontSize:13, paddingRight: '12px'}}>Username</td>
-                                <td style={{fontSize:13}}>{rowContent.username}</td>
+                                <td style={{fontSize:17, paddingRight: '30px'}}>Username</td>
+                                <td style={{fontSize:17}}>
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        value={tempRowContent.username}
+                                        onChange={handleTempRowContentChange}
+                                        onKeyDown={handleEnterPress}
+                                /></td>
                             </tr>
                             <tr>
                                 <td style={{paddingRight: '5px'}}><ListBulletIcon className="h-5 w-5" /></td>
-                                <td style={{fontSize:13, paddingRight: '12px'}}>Role</td>
-                                <td style={{fontSize:13}}>{rowContent.role}</td>
+                                <td style={{fontSize:17, paddingRight: '30px'}}>Role</td>
+                                <td style={{fontSize:17}}>{rowContent.role}</td>
                             </tr>
                             <tr>
                                 <td style={{paddingRight: '5px'}}><EnvelopeIcon className="h-5 w-5" /></td>
-                                <td style={{fontSize:13, paddingRight: '12px'}}>Email</td>
-                                <td style={{fontSize:13}}>
+                                <td style={{fontSize:17, paddingRight: '30px'}}>Email</td>
+                                <td style={{fontSize:17}}>
                                     <input
                                     type="text"
                                     name="email"
@@ -172,35 +176,12 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                             </tr>
                             <tr>
                                 <td style={{paddingRight: '5px'}}><ListBulletIcon className="h-5 w-5" /></td>
-                                <td style={{fontSize:13, paddingRight: '12px'}}>Type of Program</td>
-                                <td style={{fontSize:13}}>{rowContent.program}</td>
+                                <td style={{fontSize:17, paddingRight: '70px'}}>Type of Program</td>
+                                <td style={{fontSize:17}}>{rowContent.program}</td>
                             </tr>
                         </tbody>
                     </table>
                     <br />
-                    {/* {editContents.map((item, index) => (
-                        <div key={index} className="flex mb-2 items-center space-x-2">
-                            {item.isEditing ? (
-                                <>
-                                    <input type="text" value={item.content} onChange={handleInputChange(index)} className="border p-2 w-full"/>
-                                    <button onClick={() => saveIndividualChange(index)} className="py-2 px-4 bg-blue-500 text-white rounded">
-                                        Save
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <span className="p-2 w-full">{item.content}</span>
-                                    <button onClick={() => toggleEdit(index)} className="py-2 px-4 bg-green-500 text-white rounded">
-                                        Edit
-                                    </button>
-                                </>
-                            )}
-                            <button onClick={() => deleteInput(index)} className="py-2 text-gray-500 hover:text-gray-800">
-                                <XMarkIcon className="h-5 w-5" />
-                            </button>
-                        </div>
-                    ))}
-                    <button onClick={addInput} className="py-2 px-4 bg-blue-500 text-white rounded my-2">Add New Input</button> */}
                 </div>
             </div>
         </div>
