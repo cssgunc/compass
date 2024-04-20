@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "tailwindcss/tailwind.css";
 import { TagsArray } from "./TagsArray"; 
 import { TagDropdown } from "./TagDropdown";
@@ -11,6 +11,8 @@ interface TagsInputProps {
 const TagsInput: React.FC<TagsInputProps> = ({
   presetValue,
   presetOptions,
+  setPresetOptions,
+  getTagColor
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [cellSelected, setCellSelected] = useState(false);
@@ -18,13 +20,41 @@ const TagsInput: React.FC<TagsInputProps> = ({
     new Set(presetValue ? [presetValue] : [])
   );
   const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
+  const dropdown = useRef<HTMLDivElement>(null);
+
+  const handleClick = () => {
+    if (!cellSelected) {
+      setCellSelected(true);
+      // Add event listener only after setting cellSelected to true
+      setTimeout(() => {
+        window.addEventListener("click", handleOutsideClick);
+      }, 100);
+    }
+  }
+
+  const handleOutsideClick = (event) => {
+    if (dropdown.current && !dropdown.current.contains(event.target)) {
+      setCellSelected(false);
+      // Remove event listener after handling outside click
+      window.removeEventListener("click", handleOutsideClick);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setOptions(() => {
+      const newOptions = presetOptions.filter(item => item.includes(e.target.value.toLowerCase()));
+      return new Set(newOptions);
+    })
+    setInputValue(e.target.value); // Update input value state
   };
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim()) {
+      // setPresetOptions((prevPreset) => {
+      //   const uniqueSet = new Set(presetOptions);
+      //   uniqueSet.add(inputValue);
+      //   return Array.from(uniqueSet);
+      // });
       setTags((prevTags) => new Set(prevTags).add(inputValue));
       setOptions((prevOptions) => new Set(prevOptions).add(inputValue));
       setInputValue("");
@@ -47,6 +77,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
   };
 
   const handleDeleteTagOption = (tagToDelete: string) => {
+    // setPresetOptions(presetOptions.filter(tag => tag !== tagToDelete));
     setOptions((prevOptions) => {
       const updatedOptions = new Set(prevOptions);
       updatedOptions.delete(tagToDelete);
@@ -78,14 +109,13 @@ const TagsInput: React.FC<TagsInputProps> = ({
       });
     }
   };
-  
-
 
   return (
-    <div className="cursor-pointer" onClick={() => setCellSelected(true)}>
+    <div className="cursor-pointer" onClick={handleClick}>
       {!cellSelected ? (
         <TagsArray handleDelete={handleDeleteTag} tags={tags} />
       ) : (
+        <div ref={dropdown}>
         <div className="absolute w-64 z-50 -ml-3 -mt-7">
           <div className="rounded-md border border-gray-200 shadow">
             <div className="flex flex-wrap rounded-t-md items-center gap-2 bg-gray-50 p-2">
@@ -113,6 +143,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
               )}
             </div>
           </div>
+        </div>
         </div>
       )}
     </div>

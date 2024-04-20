@@ -8,8 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
@@ -33,6 +32,18 @@ type User = {
 
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
+  const [presetOptions, setPresetOptions] = useState(["administrator", "volunteer", "employee"]);
+  const [tagColors, setTagColors] = useState(new Map());
+
+  const getTagColor = (tag: string) => {
+    if (!tagColors.has(tag)) {
+      const colors = ["bg-cyan-100", "bg-blue-100", "bg-green-100", "bg-yellow-100", "bg-purple-100"];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setTagColors(new Map(tagColors).set(tag, randomColor));
+    }
+    return tagColors.get(tag);
+  };
+
   const columns = [
     columnHelper.display({
       id: "options",
@@ -43,7 +54,12 @@ export const Table = () => {
       cell: (info) => <RowOpenAction title={info.getValue()} rowData={info.row.original} onRowUpdate={handleRowUpdate} />,
     }),
     columnHelper.accessor("role", {
-      cell: (info) => <TagsInput presetValue={info.getValue() }presetOptions={["administrator","volunteer","employee"]}  />,
+      cell: (info) => <TagsInput presetValue={info.getValue() }
+      presetOptions={presetOptions}
+      setPresetOptions={setPresetOptions}
+      getTagColor={getTagColor}
+      setTagColors={setTagColors}
+      />,
     }),
     columnHelper.accessor("email", {
       header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,
