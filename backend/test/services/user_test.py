@@ -4,7 +4,7 @@
 import pytest
 
 from ...services import UserService
-from .fixtures import user_svc
+#from .fixtures import user_svc
 from ...models.enum_for_models import ProgramTypeEnum
 
 from .user_test_data import employee, volunteer, admin, newUser
