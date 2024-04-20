@@ -37,7 +37,7 @@ export const TableAction: FunctionComponent<TableActionProps> = ({
   return (
     <div className="w-auto flex flex-row gap-x-0.5 items-center justify-between text-xs font-medium text-gray-500 p-2">
       <span
-        className="p-1 rounded hover:bg-gray-100"
+        className="p-1 rounded hover:text-purple-700 focus:bg-purple-50 hover:bg-purple-50"
         onClick={toggleFilterBox}
       >
         Filter

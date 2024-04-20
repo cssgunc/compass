@@ -1,9 +1,12 @@
-import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/solid"
+import { ChevronDownIcon, MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { FilterBox } from "../FilterBox";
 
 export const LandingSearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showFilterBox, setShowFilterBox] = useState(false);
+  const toggleFilterBox = () => setShowFilterBox((prev) => !prev);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -34,7 +37,9 @@ export const LandingSearchBar: React.FC = () => {
             <XMarkIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
           </button>
         )}
-        <div className="p-3">
+        <div className="flex flex-row space-x-1 p-3">
+          <span><ChevronDownIcon className="h-5 w-5 text-gray-500" onClick={toggleFilterBox} /></span>
+          {showFilterBox && <FilterBox className="relative top-50" />}
           <MagnifyingGlassIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
         </div>
       </div>
