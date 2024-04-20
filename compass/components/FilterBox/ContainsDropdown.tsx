@@ -24,25 +24,25 @@ export const ContainsDropdown = ({
         }`}
       >
         <div
-          className="cursor-pointer hover:bg-gray-100 p-1 rounded"
+          className="cursor-pointer hover:bg-gray-100 rounded"
           onClick={() => handleFilterTypeChange("contains")}
         >
           Contains
         </div>
         <div
-          className="cursor-pointer hover:bg-gray-100 p-1 rounded"
+          className="cursor-pointer hover:bg-gray-100 rounded"
           onClick={() => handleFilterTypeChange("does not contain")}
         >
           Does not contain
         </div>
         <div
-          className="cursor-pointer hover:bg-gray-100 p-1 rounded"
+          className="cursor-pointer hover:bg-gray-100 rounded"
           onClick={() => handleFilterTypeChange("is empty")}
         >
           Is empty
         </div>
         <div
-          className="cursor-pointer hover:bg-gray-100 p-1 rounded"
+          className="cursor-pointer hover:bg-gray-100 rounded"
           onClick={() => handleFilterTypeChange("is not empty")}
         >
           Is not empty
