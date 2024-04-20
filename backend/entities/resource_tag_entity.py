@@ -19,7 +19,7 @@ from typing import Self
 class ResourceTagEntity(EntityBase):
 
     # set table name to user in the database
-    __tablename__ = "resourceTag"
+    __tablename__ = "resource_tag"
 
     # set fields or 'columns' for the user table
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
