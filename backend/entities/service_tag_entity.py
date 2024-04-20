@@ -13,7 +13,7 @@ from .entity_base import EntityBase
 class ServiceTagEntity(EntityBase):
 
     # set table name to user in the database
-    __tablename__ = "serviceTag"
+    __tablename__ = "service_tag"
 
     # set fields or 'columns' for the user table
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -21,5 +21,5 @@ class ServiceTagEntity(EntityBase):
     tagId: Mapped[int] = mapped_column(ForeignKey("tag.id"))
 
     # relationships
-    service: Mapped["ServiceEntity"] = relationship(back_populates="resourceTags")
-    tag: Mapped["TagEntity"] = relationship(back_populates="resourceTags")
+    service: Mapped["ServiceEntity"] = relationship(back_populates="serviceTags")
+    tag: Mapped["TagEntity"] = relationship(back_populates="serviceTags")

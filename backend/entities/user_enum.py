@@ -1,12 +1,9 @@
-from sqlalchemy import Enum
+from enum import Enum
 
 
-class RoleEnum(Enum):
+class Role_Enum(Enum):
     """Determine role for User"""
 
     ADMIN = "ADMIN"
     EMPLOYEE = "EMPLOYEE"
     VOLUNTEER = "VOLUNTEER"
-
-    def __init__(self):
-        super().__init__(name="role_enum")
