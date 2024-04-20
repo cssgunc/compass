@@ -1,0 +1,14 @@
+import pytest
+from sqlalchemy.orm import Session
+from backend.entities.user_entity import UserEntity
+from backend.models.user_model import User
+from backend.enum_for_models import UserTypeEnum,ProgramTypeEnum
+
+user_1 = User(
+    username="testadminuser",
+    email = "adminmail@gmail.com"
+    experience=5
+    group="something"
+    usertype=UserTypeEnum.ADMIN
+)
+
