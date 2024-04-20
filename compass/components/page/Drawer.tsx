@@ -58,14 +58,14 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
             setIsFull(!isFull);
         }
     }
-    
+
     const toggleDrawerFullScreen = () => setIsFull(!isFull);
 
     const toggleFavorite = () => setIsFavorite(!isFavorite);
 
-    const drawerClassName = `fixed top-0 right-0 h-full bg-white transform ease-in-out duration-300 ${
+    const drawerClassName = `fixed top-0 right-0 w-1/2 h-full bg-white transform ease-in-out duration-300 z-20 ${
         isOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
-        
+
     } ${isFull ? "w-full" : "w-1/2"}`;
 
     const iconComponent = isFull ? <ArrowsPointingInIcon className="h-5 w-5" /> : <ArrowsPointingOutIcon className="h-5 w-5" />;
@@ -80,7 +80,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
             <div className={drawerClassName}>
                 <div className="flex items-center justify-between p-4 border-b">
                     <div className="flex flex-row items-center justify-between space-x-2">
-                        <span className="h-5 text-purple-700 w-5">{currentCardIcon}</span>                    
+                        <span className="h-5 text-purple-700 w-5">{currentCardIcon}</span>
                         <h2 style={{ fontSize: '20px' }} className = "text-sm text-gray-800 font-semibold">{rowContent.username}</h2>
                     </div>
                     <div>
