@@ -5,6 +5,7 @@ from unittest.mock import create_autospec
 from sqlalchemy.orm import Session
 from ...services import UserService
 from ...services import TagService
+from ...services import ServiceService
 
 
 
@@ -18,3 +19,8 @@ def user_svc(session: Session):
 def tag_svc(session: Session):
     """This fixture is used to test the TagService class"""
     return TagService(session)
+
+@pytest.fixture()
+def service_svc(session: Session):
+    """This fixture is used to test the ServiceService class"""
+    return ServiceService(session)

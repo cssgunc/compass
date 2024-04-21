@@ -61,7 +61,8 @@ class UserService:
 
         """
         try:
-            user = self.get_user_by_id(user.id)
+            if (user.id != None):
+                user = self.get_user_by_id(user.id)
         except:
             # if does not exist, create new object
             user_entity = UserEntity.from_model(user)
