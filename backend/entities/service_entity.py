@@ -13,9 +13,12 @@ from .entity_base import EntityBase
 from datetime import datetime
 
 # Import enums for Program
-from .program_enum import Program_Enum
+import enum
 from sqlalchemy import Enum
 
+from backend.models.service_model import Service
+from typing import Self
+from backend.models.enum_for_models import ProgramTypeEnum
 
 class ServiceEntity(EntityBase):
 
@@ -26,11 +29,19 @@ class ServiceEntity(EntityBase):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     name: Mapped[str] = mapped_column(String(32), nullable=False)
+    status: Mapped[str] = mapped_column(String(32), nullable=False)
     summary: Mapped[str] = mapped_column(String(100), nullable=False)
     requirements: Mapped[list[str]] = mapped_column(ARRAY(String))
-    program: Mapped[Program_Enum] = mapped_column(Enum(Program_Enum), nullable=False)
+    program: Mapped[ProgramTypeEnum] = mapped_column(Enum(ProgramTypeEnum), nullable=False)
 
     # relationships
     serviceTags: Mapped[list["ServiceTagEntity"]] = relationship(
         back_populates="service", cascade="all,delete"
     )
+
+    def to_model(self) -> Service:
+        return Service(id=self.id, name=self.name, status=self.status, summary=self.summary, requirements=self.requirements, program=self.program)
+
+    @classmethod
+    def from_model(cls, model:Service) -> Self:
+         return cls(id=model.id, name=model.name, status=model.status, summary=model.summary, requirements=model.requirements, program=model.program)

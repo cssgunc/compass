@@ -13,8 +13,7 @@ from .entity_base import EntityBase
 from datetime import datetime
 
 # Import enums for Role and Program
-from .program_enum import Program_Enum
-from .user_enum import Role_Enum
+from backend.models.enum_for_models import UserTypeEnum, ProgramTypeEnum
 
 # Import models for User methods
 from ..models.user_model import User
@@ -34,10 +33,10 @@ class UserEntity(EntityBase):
     username: Mapped[str] = mapped_column(
         String(32), nullable=False, default="", unique=True
     )
-    role: Mapped[Role_Enum] = mapped_column(Enum(Role_Enum), nullable=False)
+    role: Mapped[UserTypeEnum] = mapped_column(Enum(UserTypeEnum), nullable=False)
     email: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
-    program: Mapped[list[Program_Enum]] = mapped_column(
-        ARRAY(Enum(Program_Enum)), nullable=False
+    program: Mapped[list[ProgramTypeEnum]] = mapped_column(
+        ARRAY(Enum(ProgramTypeEnum)), nullable=False
     )
     experience: Mapped[int] = mapped_column(Integer, nullable=False)
     group: Mapped[str] = mapped_column(String(50))

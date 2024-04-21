@@ -35,7 +35,8 @@ def test_get_all(user_svc: UserService):
 
 def test_get_user_by_id(user_svc: UserService):
     """Test getting a user by an id"""
-    user = user_svc.get_user_by_id(volunteer.id)
+    if (volunteer.id != None):
+        user = user_svc.get_user_by_id(volunteer.id)
     assert user is not None
     assert user.id is not None
 
@@ -43,4 +44,4 @@ def test_get_user_by_id(user_svc: UserService):
 def test_get_user_by_id_nonexistent(user_svc: UserService):
     """Test getting a user by id that does not exist"""
     with pytest.raises(Exception):
-        user_svc.get_by_id(5)
+        user_svc.get_user_by_id(5)

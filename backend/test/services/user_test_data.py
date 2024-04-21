@@ -113,6 +113,6 @@ def fake_data_fixture(session: Session):
     Note:
         This function runs automatically due to the fixture property `autouse=True`.
     """
-    # insert_fake_data(session)
+    insert_fake_data(session)
     session.commit()
     yield
