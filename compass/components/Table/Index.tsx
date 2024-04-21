@@ -99,7 +99,12 @@ export const Table = () => {
     }),
     columnHelper.accessor("role", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Role</>,
-      cell: (info) => info.renderValue(),
+      cell: (info) => <TagsInput presetValue={info.getValue() }
+      presetOptions={presetOptions}
+      setPresetOptions={setPresetOptions}
+      getTagColor={getTagColor}
+      setTagColors={setTagColors}
+      />,
     }),
     columnHelper.accessor("email", {
       header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,
