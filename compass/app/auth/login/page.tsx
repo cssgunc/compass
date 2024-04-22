@@ -5,18 +5,39 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import InlineLink from "@/components/InlineLink";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PasswordInput from "@/components/auth/PasswordInput";
 import ErrorBanner from "@/components/auth/ErrorBanner";
+import { login } from "../actions";
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const supabase = createClient();
+
+        async function checkUser() {
+            const { data } = await supabase.auth.getUser();
+
+            if (data.user) {
+                router.push("/resource");
+            }
+        }
+
+        checkUser();
+    }, [router]);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [loginError, setLoginError] = useState("");
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.currentTarget.value);
+        setEmail;
     };
 
     const handlePasswordChange = (
@@ -25,23 +46,33 @@ export default function Page() {
         setPassword(event.currentTarget.value);
     };
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        // Priority: Incorrect combo > Missing email > Missing password
+    const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email.trim().length === 0) {
+            console.log(email);
+            setEmailError("Please enter your email.");
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            setEmailError("Please enter a valid email address.");
+            return;
+        }
+
+        setEmailError("");
 
         if (password.trim().length === 0) {
-            setEmailError("Please enter your password.");
-            event.preventDefault();
+            console.log(password);
+            setPasswordError("Please enter your password.");
+            return;
         }
-        // This shouldn't happen, <input type="email"> already provides validation, but just in case.
-        if (email.trim().length === 0) {
-            setPasswordError("Please enter your email.");
-            event.preventDefault();
-        }
-        // Placeholder for incorrect email + password combo.
-        if (email === "incorrect@gmail.com" && password) {
-            setPasswordError("Incorrect password.");
-            event.preventDefault();
-        }
+
+        setPasswordError("");
+
+        const error = await login(email, password);
+        setLoginError(error);
     };
 
     return (
@@ -60,7 +91,7 @@ export default function Page() {
                     type="email"
                     valid={emailError == ""}
                     title="Email"
-                    placeholder="janedoe@gmail.com"
+                    placeholder="Enter Email"
                     onChange={handleEmailChange}
                     required
                 />
@@ -70,6 +101,7 @@ export default function Page() {
             <div className="mb-6">
                 <PasswordInput
                     title="Password"
+                    placeholder="Enter Password"
                     valid={passwordError == ""}
                     onChange={handlePasswordChange}
                 />
@@ -82,6 +114,8 @@ export default function Page() {
                 </InlineLink>
                 <Button onClick={handleClick}>Login</Button>
             </div>
+
+            {loginError && <ErrorBanner heading={loginError} />}
         </>
     );
 }
