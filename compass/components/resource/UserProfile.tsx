@@ -1,13 +1,23 @@
-export const UserProfile = () => {
+import { signOut } from "@/app/auth/actions";
+
+interface UserProfileProps {
+    name: string;
+    email: string;
+}
+
+export const UserProfile = ({ name, email }: UserProfileProps) => {
     return (
         <div className="flex flex-col items-start space-y-2">
             <div className="flex flex-col">
                 <span className="text-sm font-semibold text-gray-800">
-                    Compass Center
+                    {name}
                 </span>
-                <span className="text-xs text-gray-500">cssgunc@gmail.com</span>
+                <span className="text-xs text-gray-500">{email}</span>
             </div>
-            <button className="text-red-600 font-semibold text-xs hover:underline mt-1">
+            <button
+                onClick={signOut}
+                className="text-red-600 font-semibold text-xs hover:underline mt-1"
+            >
                 Sign out
             </button>
         </div>

@@ -11,9 +11,11 @@ import { UserProfile } from "./UserProfile";
 
 interface SidebarProps {
     setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    name: string;
+    email: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen, name, email }) => {
     return (
         <div className="w-64 h-full border border-gray-200 bg-gray-50 px-4">
             {/* button to close sidebar  */}
@@ -29,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen }) => {
             <div className="flex flex-col space-y-8">
                 {/* user + logout button  */}
                 <div className="flex items-center p-4 space-x-2 border border-gray-200 rounded-md ">
-                    <UserProfile />
+                    <UserProfile name={name} email={email} />
                 </div>
                 {/* navigation menu  */}
                 <div className="flex flex-col space-y-2">

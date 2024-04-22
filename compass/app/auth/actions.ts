@@ -5,22 +5,34 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/server";
 
-export async function login(username: string, password: string) {
-    const supabase = createClient();
+const supabase = createClient();
 
+export async function login(email: string, password: string) {
     // type-casting here for convenience
     // in practice, you should validate your inputs
     const data = {
-        email: username,
-        password: password,
+        email,
+        password,
     };
 
     const { error } = await supabase.auth.signInWithPassword(data);
 
     if (error) {
-        redirect("/auth/error");
+        return "Incorrect email/password";
     }
 
     revalidatePath("/resource", "layout");
     redirect("/resource");
+}
+
+export async function signOut() {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data?.user) {
+        redirect("auth/login");
+    }
+
+    supabase.auth.signOut();
+
+    revalidatePath("/resource", "layout");
+    redirect("/auth/login");
 }
