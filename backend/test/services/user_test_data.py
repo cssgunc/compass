@@ -59,7 +59,18 @@ newUser = User(
     role=roles.VOLUNTEER,
 )
 
-users = [volunteer, employee, admin]
+toDelete = User(
+    id=5,
+    username="delete",
+    email="delete@compass.com",
+    experience=0,
+    group="none",
+    program=[programs.COMMUNITY],
+    created_at=datetime.now(),
+    role=roles.VOLUNTEER
+)
+
+users = [volunteer, employee, admin, toDelete]
 
 
 from sqlalchemy import text
