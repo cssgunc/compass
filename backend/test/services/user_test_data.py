@@ -13,6 +13,7 @@ roles = UserTypeEnum
 
 volunteer = User(
     id=1,
+    uuid="test1",
     username="volunteer",
     email="volunteer@compass.com",
     experience=1,
@@ -24,6 +25,7 @@ volunteer = User(
 
 employee = User(
     id=2,
+    uuid="test2",
     username="employee",
     email="employee@compass.com",
     experience=5,
@@ -35,6 +37,7 @@ employee = User(
 
 admin = User(
     id=3,
+    uuid="test3",
     username="admin",
     email="admin@compass.com",
     experience=10,
@@ -51,6 +54,7 @@ admin = User(
 newUser = User(
     id=4,
     username="new",
+    uuid="test4",
     email="new@compass.com",
     experience=1,
     group="volunteer",

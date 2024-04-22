@@ -1,9 +1,12 @@
 from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 import subprocess
 
 from ..database import engine, _engine_str
 from ..env import getenv
 from .. import entities
+
+from ..test.services import user_test_data
 
 database = getenv("POSTGRES_DATABASE")
 
@@ -16,3 +19,6 @@ subprocess.run(["python3", "-m", "backend.script.create_database"])
 
 entities.EntityBase.metadata.drop_all(engine)
 entities.EntityBase.metadata.create_all(engine)
+
+with Session(engine) as session:
+    user_test_data.insert_fake_data(session)
