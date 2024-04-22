@@ -41,6 +41,7 @@ class UserEntity(EntityBase):
     )
     experience: Mapped[int] = mapped_column(Integer, nullable=False)
     group: Mapped[str] = mapped_column(String(50))
+    uuid: Mapped[str] = mapped_column(String, nullable=True)
 
     @classmethod
     def from_model(cls, model: User) -> Self:
@@ -62,6 +63,7 @@ class UserEntity(EntityBase):
             program=model.program,
             experience=model.experience,
             group=model.group,
+            uuid=model.uuid,
         )
 
     def to_model(self) -> User:
@@ -83,4 +85,5 @@ class UserEntity(EntityBase):
             program=self.program,
             role=self.role,
             created_at=self.created_at,
+            uuid=self.uuid,
         )

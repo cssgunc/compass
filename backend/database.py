@@ -21,7 +21,6 @@ engine = sqlalchemy.create_engine(_engine_str(), echo=True)
 
 def db_session():
     """Generator function offering dependency injection of SQLAlchemy Sessions."""
-    print("ran")
     session = Session(engine)
     try:
         yield session

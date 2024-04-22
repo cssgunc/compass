@@ -15,3 +15,4 @@ class User(BaseModel):
     program: List[ProgramTypeEnum]
     role: UserTypeEnum
     created_at: Optional[datetime]
+    uuid: str | None = None
