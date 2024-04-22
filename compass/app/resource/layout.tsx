@@ -3,6 +3,10 @@
 import Sidebar from "@/components/resource/Sidebar";
 import React, { useState } from "react";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
+import { createClient } from "@/utils/supabase/client";
+import { useEffect } from "react";
+import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 export default function RootLayout({
     children,
@@ -10,6 +14,26 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [user, setUser] = useState<User>();
+    const router = useRouter();
+
+    useEffect(() => {
+        const supabase = createClient();
+
+        async function getUser() {
+            const { data, error } = await supabase.auth.getUser();
+
+            if (error || data.user === null) {
+                router.push("auth/login");
+                return;
+            }
+
+            setUser(data.user);
+            console.log(data.user);
+        }
+
+        getUser();
+    }, [router]);
 
     return (
         <div className="flex-row">
@@ -27,13 +51,21 @@ export default function RootLayout({
             </button>
             {/* sidebar  */}
             <div
-                className={`absolute inset-y-0 left-0 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} w-64 transition duration-300 ease-in-out`}
+                className={`absolute inset-y-0 left-0 transform ${
+                    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                } w-64 transition duration-300 ease-in-out`}
             >
-                <Sidebar setIsSidebarOpen={setIsSidebarOpen} />
+                <Sidebar
+                    name={""}
+                    email={(user && user.email) ?? "No email found!"}
+                    setIsSidebarOpen={setIsSidebarOpen}
+                />
             </div>
             {/* page ui  */}
             <div
-                className={`flex-1 transition duration-300 ease-in-out ${isSidebarOpen ? "ml-64" : "ml-0"}`}
+                className={`flex-1 transition duration-300 ease-in-out ${
+                    isSidebarOpen ? "ml-64" : "ml-0"
+                }`}
             >
                 {children}
             </div>

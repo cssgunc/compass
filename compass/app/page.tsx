@@ -7,7 +7,7 @@ import InlineLink from "@/components/InlineLink";
 import Paper from "@/components/auth/Paper";
 // import { Metadata } from 'next'
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
 // export const metadata: Metadata = {
 //   title: 'Login',
