@@ -4,8 +4,8 @@ const nextConfig = {
         domains: ["notioly.com"],
     },
     experimental: {
-        serverActions: true
-    }
+        serverActions: true,
+    },
 };
 
 module.exports = nextConfig;
