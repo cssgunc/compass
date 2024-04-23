@@ -21,4 +21,4 @@ entities.EntityBase.metadata.drop_all(engine)
 entities.EntityBase.metadata.create_all(engine)
 
 with Session(engine) as session:
-    user_test_data.insert_fake_data(session)
+    user_test_data.insert_test_data(session)

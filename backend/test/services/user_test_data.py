@@ -76,6 +76,52 @@ toDelete = User(
 
 users = [volunteer, employee, admin, toDelete]
 
+admin1 = User(
+    username="Prajwal Moharana",
+    uuid="acc6e112-d296-4739-a80c-b89b2933e50b",
+    email="root@compass.com",
+    experience=10,
+    group="admin",
+    program=[programs.ECONOMIC, programs.DOMESTIC, programs.COMMUNITY],
+    created_at=datetime.now(),
+    role=roles.ADMIN,
+)
+
+employee1 = User(
+    username="Mel Ho",
+    uuid="c5fcff86-3deb-4d09-9f60-9b529e40161a",
+    email="employee@compass.com",
+    experience=5,
+    group="employee",
+    program=[programs.ECONOMIC, programs.DOMESTIC, programs.COMMUNITY],
+    created_at=datetime.now(),
+    role=roles.EMPLOYEE,
+)
+
+volunteer1 = User(
+    username="Pranav Wagh",
+    uuid="1d2e114f-b286-4464-8528-d177dc226b09",
+    email="volunteer1@compass.com",
+    experience=2,
+    group="volunteer",
+    program=[programs.DOMESTIC],
+    created_at=datetime.now(),
+    role=roles.VOLUNTEER,
+)
+
+volunteer2 = User(
+    username="Yashu Singhai",
+    uuid="13888204-1bae-4be4-8192-1ca46be4fc7d",
+    email="volunteer2@compass.com",
+    experience=1,
+    group="volunteer",
+    program=[programs.COMMUNITY, programs.ECONOMIC],
+    created_at=datetime.now(),
+    role=roles.VOLUNTEER,
+)
+
+users1 = [admin1, employee1, volunteer1, volunteer2]
+
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session, DeclarativeBase, InstrumentedAttribute
@@ -117,6 +163,23 @@ def insert_fake_data(session: Session):
 
     # Reset table IDs to prevent ID conflicts
     reset_table_id_seq(session, UserEntity, UserEntity.id, len(users) + 1)
+
+    # Commit all changes
+    session.commit()
+
+
+def insert_test_data(session: Session):
+    """Inserts fake organization data into the test session."""
+
+    global users1
+
+    # Create entities for test organization data
+    for user in users1:
+        entity = UserEntity.from_model(user)
+        session.add(entity)
+
+    # Reset table IDs to prevent ID conflicts
+    reset_table_id_seq(session, UserEntity, UserEntity.id, len(users1) + 1)
 
     # Commit all changes
     session.commit()

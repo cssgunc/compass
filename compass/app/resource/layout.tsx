@@ -29,7 +29,12 @@ export default function RootLayout({
             }
 
             setUser(data.user);
-            console.log(data.user);
+
+            const userData = await fetch(
+                `${process.env.NEXT_PUBLIC_HOST}/api/user?uuid=${data.user.id}`
+            );
+
+            console.log(await userData.json());
         }
 
         getUser();
