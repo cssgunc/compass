@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 
-interface ResponseData {
-  message: string;
-}
-
 export async function GET() {
-  return NextResponse.json({ message: "Hello World!" }, { status: 200 });
+    const apiEndpoint = `${process.env.NEXT_PUBLIC_API_HOST}/api/health`;
+    console.log(apiEndpoint);
+
+    const result = await fetch(apiEndpoint);
+
+    return NextResponse.json(await result.json(), { status: result.status });
 }

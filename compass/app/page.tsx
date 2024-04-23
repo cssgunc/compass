@@ -18,10 +18,19 @@ export default function Page() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const testFetch = () => {
-        const result = fetch("/api/health");
-        console.log(result);
+    const testFetch = async () => {
+        const apiEndpoint = `${process.env.NEXT_PUBLIC_HOST}/api/health`;
+
+        const result = await fetch(apiEndpoint);
+
+        if (result.status != 200) {
+            console.log(`Error has occurred when accessing ${apiEndpoint}`);
+        }
+
+        console.log(await result.json());
     };
+
+    testFetch();
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.currentTarget.value);
