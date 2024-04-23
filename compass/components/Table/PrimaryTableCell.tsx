@@ -7,15 +7,17 @@ import { SetStateAction, useState } from "react";
 export const PrimaryTableCell = ({ getValue, row, column, table }) => {
   const [pageContent, setPageContent] = useState("")
 
-  const handleDrawerContentChange = (newContent: SetStateAction<string>) => {
+  const handleDrawerContentChange = (newContent: SetStateAction<string>) =>{
     setPageContent(newContent);
   };
+
+  console.debug(row);
 
   return (
     <div className="font-semibold group">
       <TableCell getValue={getValue} row={row} column={column} table={table} />
       <span className="absolute right-1 top-1">
-        <Drawer title={getValue()} editableContent={pageContent} onSave={handleDrawerContentChange}>{pageContent}</Drawer>
+        <Drawer title={getValue()} editableContent={pageContent} onSave={handleDrawerContentChange} row={row}>{pageContent}</Drawer>
       </span>
     </div>
   );

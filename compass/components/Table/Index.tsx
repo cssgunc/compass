@@ -95,7 +95,7 @@ export const Table = () => {
     }),
     columnHelper.accessor("username", {
       header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
-      cell: (info) => <RowOpenAction title={info.getValue()} rowData={info.row.original} onRowUpdate={handleRowUpdate} />,
+      cell: PrimaryTableCell,
     }),
     columnHelper.accessor("role", {
       header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Role</>,
