@@ -71,7 +71,7 @@ toDelete = User(
     group="none",
     program=[programs.COMMUNITY],
     created_at=datetime.now(),
-    role=roles.VOLUNTEER
+    role=roles.VOLUNTEER,
 )
 
 users = [volunteer, employee, admin, toDelete]

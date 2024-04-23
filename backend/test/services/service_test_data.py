@@ -1,88 +1,89 @@
 import pytest
 from sqlalchemy.orm import Session
-from backend.entities.service_entity import ServiceEntity
-from backend.models.service_model import Service
-from backend.models.enum_for_models import ProgramTypeEnum
+
+from ...entities import ServiceEntity
+from ...models.enum_for_models import ProgramTypeEnum
+from ...models.service_model import Service
 
 service_1 = Service(
-    id = 1,
-    name = "service 1",
-    status= "open",
-    summary= "presentation educating community on domestic violence",
-    requirements= [""],
-    program= ProgramTypeEnum.COMMUNITY
+    id=1,
+    name="service 1",
+    status="open",
+    summary="presentation educating community on domestic violence",
+    requirements=[""],
+    program=ProgramTypeEnum.COMMUNITY,
 )
 
 service_2 = Service(
-    id = 2, 
-    name = "service 2",
-    status= "closed",
-    summary= "service finding safe places to stay",
-    requirements= [""],
-    program= ProgramTypeEnum.DOMESTIC
+    id=2,
+    name="service 2",
+    status="closed",
+    summary="service finding safe places to stay",
+    requirements=[""],
+    program=ProgramTypeEnum.DOMESTIC,
 )
 
 service_3 = Service(
-    id = 3,
-    name = "service 3",
-    status= "open",
-    summary= "",
-    requirements= [""],
-    program= ProgramTypeEnum.DOMESTIC
+    id=3,
+    name="service 3",
+    status="open",
+    summary="",
+    requirements=[""],
+    program=ProgramTypeEnum.DOMESTIC,
 )
 
 service_4 = Service(
-    id = 4,
-    name = "service 4",
-    status= "waitlist",
-    summary= "community event",
-    requirements= [""],
-    program= ProgramTypeEnum.COMMUNITY
+    id=4,
+    name="service 4",
+    status="waitlist",
+    summary="community event",
+    requirements=[""],
+    program=ProgramTypeEnum.COMMUNITY,
 )
 
 service_5 = Service(
-    id = 5,
-    name = "service 5",
-    status= "open",
-    summary= "talk circle for victims of domestic violence",
-    requirements= ["18+"],
-    program= ProgramTypeEnum.COMMUNITY
+    id=5,
+    name="service 5",
+    status="open",
+    summary="talk circle for victims of domestic violence",
+    requirements=["18+"],
+    program=ProgramTypeEnum.COMMUNITY,
 )
 
 service_6 = Service(
-    id = 6,
-    name = "service 6",
-    status= "waitlist",
-    summary= "program offering economic assistance",
-    requirements= [""],
-    program= ProgramTypeEnum.ECONOMIC
+    id=6,
+    name="service 6",
+    status="waitlist",
+    summary="program offering economic assistance",
+    requirements=[""],
+    program=ProgramTypeEnum.ECONOMIC,
 )
 
 service_6_edit = Service(
-    id = 6,
-    name = "service 6",
-    status= "open",
-    summary= "program offering economic assistance",
-    requirements= ["18+"],
-    program= ProgramTypeEnum.ECONOMIC
+    id=6,
+    name="service 6",
+    status="open",
+    summary="program offering economic assistance",
+    requirements=["18+"],
+    program=ProgramTypeEnum.ECONOMIC,
 )
 
 service_7 = Service(
-    id = 7,
-    name = "service 7",
-    status= "waitlist",
-    summary= "insert generic description",
-    requirements= [""],
-    program= ProgramTypeEnum.ECONOMIC
+    id=7,
+    name="service 7",
+    status="waitlist",
+    summary="insert generic description",
+    requirements=[""],
+    program=ProgramTypeEnum.ECONOMIC,
 )
 
 new_service = Service(
-    id = 8,
-    name = "new service",
-    status= "open",
-    summary= "insert other generic description",
-    requirements= [""],
-    program= ProgramTypeEnum.DOMESTIC
+    id=8,
+    name="new service",
+    status="open",
+    summary="insert other generic description",
+    requirements=[""],
+    program=ProgramTypeEnum.DOMESTIC,
 )
 
 services = [service_1, service_2, service_3, service_4, service_5, service_6]
@@ -115,7 +116,6 @@ def reset_table_id_seq(
 
 def insert_fake_data(session: Session):
     """Inserts fake organization data into the test session."""
-
     global services
 
     # Create entities for test organization data
@@ -130,14 +130,3 @@ def insert_fake_data(session: Session):
 
     # Commit all changes
     session.commit()
-
-
-@pytest.fixture(autouse=True)
-def fake_data_fixture(session: Session):
-    """Insert fake data the session automatically when test is run.
-    Note:
-        This function runs automatically due to the fixture property `autouse=True`.
-    """
-    insert_fake_data(session)
-    session.commit()
-    yield

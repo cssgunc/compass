@@ -2,11 +2,13 @@ import pytest
 
 from ...services import ServiceService
 from .fixtures import service_svc
+from ...models.service_model import Service
 from ...models.enum_for_models import ProgramTypeEnum
 
 from . import user_test_data
 from . import service_test_data
 from ...services.exceptions import ServiceNotFoundException, ProgramNotAssignedException
+
 
 def test_get_all(service_svc: ServiceService):
     service = service_svc.get_all(user_test_data.admin)
@@ -14,7 +16,7 @@ def test_get_all(service_svc: ServiceService):
 
 
 def test_get_by_id(service_svc: ServiceService):
-    if service_test_data.service_1.id != None: 
+    if service_test_data.service_1.id != None:
         service = service_svc.get_service_by_id(service_test_data.service_1.id)
     assert service.id == service_test_data.service_1.id
 
@@ -47,7 +49,9 @@ def test_update(service_svc: ServiceService):
 
 def test_update_not_found(service_svc: ServiceService):
     with pytest.raises(ServiceNotFoundException):
-        service = service_svc.update(user_test_data.admin, service_test_data.new_service)
+        service = service_svc.update(
+            user_test_data.admin, service_test_data.new_service
+        )
         pytest.fail()
 
 
