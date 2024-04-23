@@ -105,14 +105,3 @@ def insert_fake_data(session: Session):
 
     # Commit all changes
     session.commit()
-
-
-@pytest.fixture(autouse=True)
-def fake_data_fixture(session: Session):
-    """Insert fake data the session automatically when test is run.
-    Note:
-        This function runs automatically due to the fixture property `autouse=True`.
-    """
-    insert_fake_data(session)
-    session.commit()
-    yield
