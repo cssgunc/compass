@@ -135,6 +135,7 @@ export const Table = () => {
   }
 
   // TODO: Filtering
+  
   // TODO: Sorting
 
   // added this fn for editing rows
