@@ -22,6 +22,7 @@ from .exceptions import ResourceNotFoundException
 
 
 class ResourceService:
+    _session: Session
 
     def __init__(self, session: Session = Depends(db_session)):
         self._session = session
@@ -154,7 +155,7 @@ class ResourceService:
         # Save Changes
         self._session.commit()
 
-    def get_by_slug(self, search_string: str) -> list[Resource]:
+    def search(self, search_string: str) -> list[Resource]:
         """
         Get a list of resources given a search string
         If none retrieved, a debug description is displayed.

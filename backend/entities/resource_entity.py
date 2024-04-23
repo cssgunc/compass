@@ -15,6 +15,7 @@ from datetime import datetime
 # Import self for to model
 from typing import Self
 from backend.entities.program_enum import ProgramEnum
+from ..models.resource_model import Resource
 
 
 class ResourceEntity(EntityBase):
@@ -28,15 +29,13 @@ class ResourceEntity(EntityBase):
     name: Mapped[str] = mapped_column(String(32), nullable=False)
     summary: Mapped[str] = mapped_column(String(100), nullable=False)
     link: Mapped[str] = mapped_column(String, nullable=False)
-    program: Mapped[ProgramEnum] = mapped_column(ProgramEnum, nullable=False)
+    programtype: Mapped[ProgramEnum] = mapped_column(ProgramEnum, nullable=False)
 
     # relationships
     resourceTags: Mapped[list["ResourceTagEntity"]] = relationship(
         back_populates="resource", cascade="all,delete"
     )
 
-    #
-    # @classmethod
     # def from_model(cls, model: user_model) -> Self:
     #     """
     #     Create a UserEntity from a User model.
@@ -48,21 +47,31 @@ class ResourceEntity(EntityBase):
     #         Self: The entity (not yet persisted).
     #     """
 
-    #     return cls (
-    #         id = model.id,
-    #         created_at = model.created_at,
-    #         name = model.name,
-    #         summary = model.summary,
-    #         link = model.link,
-    #         program = model.program,
-    #     )
+    # return cls (
+    #     id = model.id,
+    #     created_at = model.created_at,
+    #     name = model.name,
+    #     summary = model.summary,
+    #     link = model.link,
+    #     program = model.program,
+    # )
+    @classmethod
+    def from_model(cls, model: Resource) -> Self:
+        return cls(
+            id=model.id,
+            created_at=model.created_at,
+            name=model.name,
+            summary=model.summary,
+            link=model.link,
+            programtype=model.programtype,
+        )
 
-    # def to_model(self) -> user_model:
-    #     return user_model (
-    #         id = self.id,
-    #         created_at = self.created_at,
-    #         name = self.name,
-    #         summary = self.summary,
-    #         link = self.link,
-    #         program = self.program,
-    #     )
+    def to_model(self) -> Resource:
+        return Resource(
+            id=self.id,
+            created_at=self.created_at,
+            name=self.name,
+            summary=self.summary,
+            link=self.link,
+            programtypr=self.programtype,
+        )
