@@ -3,7 +3,7 @@ import { Tag } from "./Tag"
 export const TagsArray = ({ tags, handleDelete, active = false }) => {
   
     return(
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex ml-2 flex-wrap gap-2 items-center">
         {
           Array.from(tags).map((tag) => {
             return (

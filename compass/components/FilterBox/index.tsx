@@ -29,7 +29,7 @@ export const FilterBox = () => {
     selectedTags.map((tag) => (
       <div
         key={tag}
-        className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center mr-2"
+        className="bg-purple-100 text-purple-800 px-2 py-1 rounded-md flex items-center mr-2"
       >
         <span>{tag}</span>
         <span
@@ -74,7 +74,7 @@ export const FilterBox = () => {
                 type="checkbox"
                 checked={selectedTags.includes(tag)}
                 onChange={() => handleTagChange(tag)}
-                className="mr-2"
+                className="mr-2 accent-purple-500"
               />
               <label>{tag}</label>
             </div>

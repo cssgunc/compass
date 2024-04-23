@@ -43,8 +43,8 @@ export const TableAction: FunctionComponent<TableActionProps> = ({
         Filter
       </span>
       {showFilterBox && <FilterBox />}
-      <span className="p-1 rounded hover:bg-gray-100">Sort</span>
-      <span className="p-1 rounded hover:bg-gray-100" onClick={activateSearch}>
+      <span className="p-1 rounded  hover:text-purple-700 focus:bg-purple-50 hover:bg-purple-50 hover:bg-gray-100">Sort</span>
+      <span className="p-1 rounded  hover:text-purple-700 focus:bg-purple-50 hover:bg-purple-50 hover:bg-gray-100" onClick={activateSearch}>
         <MagnifyingGlassIcon className="w-4 h-4 inline" />
       </span>
       <input

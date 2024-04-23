@@ -12,11 +12,24 @@ import {
   sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState, useEffect, FunctionComponent, useRef, ChangeEventHandler, Key } from "react";
+import {
+  ChangeEvent,
+  useState,
+  useEffect,
+  FunctionComponent,
+  useRef,
+  ChangeEventHandler,
+  Key,
+} from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
 import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
-import { AtSymbolIcon, Bars2Icon, ArrowDownCircleIcon, PlusIcon } from "@heroicons/react/24/solid";
+import {
+  AtSymbolIcon,
+  Bars2Icon,
+  ArrowDownCircleIcon,
+  PlusIcon,
+} from "@heroicons/react/24/solid";
 import TagsInput from "../TagsInput/Index";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { TableCell } from "./TableCell";
@@ -36,52 +49,70 @@ type User = {
   visible: boolean;
 };
 
-
 // For search
-const fuzzyFilter = (row: Row<any>, columnId: string, value: any, addMeta: (meta: any) => void) => {
+const fuzzyFilter = (
+  row: Row<any>,
+  columnId: string,
+  value: any,
+  addMeta: (meta: any) => void
+) => {
   // Rank the item
-  const itemRank = rankItem(row.getValue(columnId), value)
+  const itemRank = rankItem(row.getValue(columnId), value);
 
   // Store the ranking info
-  addMeta(itemRank)
+  addMeta(itemRank);
 
   // Return if the item should be filtered in/out
-  return itemRank.passed
-}
+  return itemRank.passed;
+};
 
 export const Table = () => {
   const columnHelper = createColumnHelper<User>();
 
   useEffect(() => {
-    const sortedUsers = [...usersExample].sort((a, b) => (a.visible === b.visible ? 0 : a.visible ? -1 : 1));
+    const sortedUsers = [...usersExample].sort((a, b) =>
+      a.visible === b.visible ? 0 : a.visible ? -1 : 1
+    );
     setData(sortedUsers);
   }, []);
 
   const deleteUser = (userId) => {
     console.log(data);
-    setData(currentData => currentData.filter(user => user.id !== userId));
+    setData((currentData) => currentData.filter((user) => user.id !== userId));
   };
 
   const hideUser = (userId: number) => {
     console.log(`Toggling visibility for user with ID: ${userId}`);
-    setData(currentData => {
-      const newData = currentData.map(user => {
-        if (user.id === userId) {
-          return { ...user, visible: !user.visible };
-        }
-        return user;
-      }).sort((a, b) => a.visible === b.visible ? 0 : a.visible ? -1 : 1);
+    setData((currentData) => {
+      const newData = currentData
+        .map((user) => {
+          if (user.id === userId) {
+            return { ...user, visible: !user.visible };
+          }
+          return user;
+        })
+        .sort((a, b) => (a.visible === b.visible ? 0 : a.visible ? -1 : 1));
 
       console.log(newData);
       return newData;
     });
   };
-  const [presetOptions, setPresetOptions] = useState(["administrator", "volunteer", "employee"]);
+  const [presetOptions, setPresetOptions] = useState([
+    "administrator",
+    "volunteer",
+    "employee",
+  ]);
   const [tagColors, setTagColors] = useState(new Map());
 
   const getTagColor = (tag: string) => {
     if (!tagColors.has(tag)) {
-      const colors = ["bg-cyan-100", "bg-blue-100", "bg-green-100", "bg-yellow-100", "bg-purple-100"];
+      const colors = [
+        "bg-cyan-100",
+        "bg-blue-100",
+        "bg-green-100",
+        "bg-yellow-100",
+        "bg-purple-100",
+      ];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
       setTagColors(new Map(tagColors).set(tag, randomColor));
     }
@@ -91,28 +122,62 @@ export const Table = () => {
   const columns = [
     columnHelper.display({
       id: "options",
-      cell: props => <RowOptionMenu onDelete={() => deleteUser(props.row.original.id)} onHide={() => hideUser(props.row.original.id)} />
+      cell: (props) => (
+        <RowOptionMenu
+          onDelete={() => deleteUser(props.row.original.id)}
+          onHide={() => hideUser(props.row.original.id)}
+        />
+      ),
     }),
     columnHelper.accessor("username", {
-      header: () => <><Bars2Icon className="inline align-top h-4" /> Username</>,
-      cell: (info) => <RowOpenAction title={info.getValue()} rowData={info.row.original} onRowUpdate={handleRowUpdate} />,
+      header: () => (
+        <>
+          <Bars2Icon className="inline align-top h-4" /> Username
+        </>
+      ),
+      cell: (info) => (
+        <RowOpenAction
+          title={info.getValue()}
+          rowData={info.row.original}
+          onRowUpdate={handleRowUpdate}
+        />
+      ),
     }),
     columnHelper.accessor("role", {
-      header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Role</>,
-      cell: (info) => <TagsInput presetValue={info.getValue() }
-      presetOptions={presetOptions}
-      setPresetOptions={setPresetOptions}
-      getTagColor={getTagColor}
-      setTagColors={setTagColors}
-      />,
+      header: () => (
+        <>
+          <ArrowDownCircleIcon className="inline align-top h-4" /> Role
+        </>
+      ),
+      cell: (info) => (
+        <TagsInput
+          presetValue={info.getValue()}
+          presetOptions={presetOptions}
+          setPresetOptions={setPresetOptions}
+          getTagColor={getTagColor}
+          setTagColors={setTagColors}
+        />
+      ),
     }),
     columnHelper.accessor("email", {
-      header: () => <><AtSymbolIcon className="inline align-top h-4" /> Email</>,
-      cell: TableCell,
+      header: () => (
+        <>
+          <AtSymbolIcon className="inline align-top h-4" /> Email
+        </>
+      ),
+      cell: (info) => (
+        <span className="ml-2 text-gray-500 underline hover:text-gray-400">
+          {info.getValue()}
+        </span>
+      ),
     }),
     columnHelper.accessor("program", {
-      header: () => <><ArrowDownCircleIcon className="inline align-top h-4" /> Program</>,
-      cell: (info) => info.renderValue(),
+      header: () => (
+        <>
+          <ArrowDownCircleIcon className="inline align-top h-4" /> Program
+        </>
+      ),
+      cell: (info) => <TagsInput presetValue={info.getValue()} />,
     }),
   ];
 
@@ -120,22 +185,22 @@ export const Table = () => {
 
   const addUser = () => {
     setData([...data, {}]);
-  }
+  };
 
   // Searching
   const [query, setQuery] = useState("");
   const handleSearchChange = (e: ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     setQuery(String(target.value));
-  }
+  };
 
   const handleCellChange = (e: ChangeEvent, key: Key) => {
     const target = e.target as HTMLInputElement;
     console.log(key);
-  }
+  };
 
   // TODO: Filtering
-  
+
   // TODO: Sorting
 
   // added this fn for editing rows
@@ -152,7 +217,7 @@ export const Table = () => {
     columns,
     data,
     filterFns: {
-      fuzzy: fuzzyFilter
+      fuzzy: fuzzyFilter,
     },
     state: {
       globalFilter: query,
@@ -185,17 +250,17 @@ export const Table = () => {
                 <th
                   scope="col"
                   className={
-                    "p-2 border-gray-200 border-y font-medium "
-                    + ((1 < i && i < columns.length - 1) ? "border-x" : "")
+                    "p-2 border-gray-200 border-y font-medium " +
+                    (1 < i && i < columns.length - 1 ? "border-x" : "")
                   }
                   key={header.id}
                 >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                 </th>
               ))}
             </tr>
@@ -205,15 +270,17 @@ export const Table = () => {
           {table.getRowModel().rows.map((row) => {
             // Individual row
             const isUserVisible = row.original.visible;
-            const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isUserVisible ? "bg-gray-200 text-gray-500" : ""}`;
+            const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${
+              !isUserVisible ? "bg-gray-200 text-gray-500" : ""
+            }`;
             return (
-              <tr
-                className={rowClassNames}
-                key={row.id}
-              >
+              <tr className={rowClassNames} key={row.id}>
                 {row.getVisibleCells().map((cell, i) => (
-                  <td key={cell.id}
-                    className={"[&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"}
+                  <td
+                    key={cell.id}
+                    className={
+                      "[&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"
+                    }
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -223,9 +290,12 @@ export const Table = () => {
           })}
         </tbody>
         <tfoot>
-
           <tr>
-            <td className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50" colSpan={100} onClick={addUser}>
+            <td
+              className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50"
+              colSpan={100}
+              onClick={addUser}
+            >
               <span className="flex ml-1 text-gray-500">
                 <PlusIcon className="inline h-4 mr-1" />
                 New
@@ -235,6 +305,5 @@ export const Table = () => {
         </tfoot>
       </table>
     </div>
-  )
-}
-
+  );
+};
