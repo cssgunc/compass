@@ -1,7 +1,7 @@
 from fastapi import Depends
 from ..database import db_session
 from sqlalchemy.orm import Session
-from sqlalchemy import select, or_
+from sqlalchemy import select
 from ..models.resource_model import Resource
 from ..entities.resource_entity import ResourceEntity
 from ..models.user_model import User
@@ -15,7 +15,7 @@ class ResourceService:
 
     def all(self, user: User) -> list[Resource]:
         """
-        Retrieves all Resources from the table that the user has access to
+        Retrieves all Resources that the user has access to based on their role and group.
 
         Parameters:
             user: a valid User model representing the currently logged in User
@@ -23,16 +23,18 @@ class ResourceService:
         Returns:
             list[Resource]: list of accessible `Resource` for the user
         """
-        # Assuming user has 'categories' attribute listing accessible resource categories
-        accessible_categories = user.categories
-        query = select(ResourceEntity).where(ResourceEntity.category.in_(accessible_categories))
+        # Filter resources based on user's role and group
+        query = select(ResourceEntity).where(
+            ResourceEntity.role == user.role,
+            ResourceEntity.group == user.group
+        )
         entities = self._session.scalars(query).all()
 
         return [entity.to_model() for entity in entities]
 
     def create(self, user: User, resource: Resource) -> Resource:
         """
-        Creates a resource based on the input object and adds it to the table if the user has the right to do so.
+        Creates a resource based on the input object and adds it to the table if the user has the right permissions.
 
         Parameters:
             user: a valid User model representing the currently logged in User
@@ -41,10 +43,8 @@ class ResourceService:
         Returns:
             Resource: Object added to table
         """
-
-        # Assuming we check user's right to create resources in specific categories
-        if resource.category not in user.categories:
-            raise PermissionError("User does not have permission to add resources to this category")
+        if resource.role != user.role or resource.group != user.group:
+            raise PermissionError("User does not have permission to add resources in this role or group.")
 
         resource_entity = ResourceEntity.from_model(resource)
         self._session.add(resource_entity)
@@ -66,10 +66,9 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with id
         """
-        accessible_categories = user.categories
         resource = (
             self._session.query(ResourceEntity)
-            .filter(ResourceEntity.id == id, ResourceEntity.category.in_(accessible_categories))
+            .filter(ResourceEntity.id == id, ResourceEntity.role == user.role, ResourceEntity.group == user.group)
             .one_or_none()
         )
 
@@ -92,9 +91,8 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding ID
         """
-        # Check if user has permission to update the resource
-        if resource.category not in user.categories:
-            raise PermissionError("User does not have permission to update this category")
+        if resource.role != user.role or resource.group != user.group:
+            raise PermissionError("User does not have permission to update this resource.")
 
         obj = self._session.get(ResourceEntity, resource.id) if resource.id else None
 
@@ -117,10 +115,9 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding id
         """
-        accessible_categories = user.categories
         resource = (
             self._session.query(ResourceEntity)
-            .filter(ResourceEntity.id == id, ResourceEntity.category.in_(accessible_categories))
+            .filter(ResourceEntity.id == id, ResourceEntity.role == user.role, ResourceEntity.group == user.group)
             .one_or_none()
         )
 
@@ -144,14 +141,10 @@ class ResourceService:
         Raises:
             ResourceNotFoundException if no resource is found with the corresponding slug
         """
-        accessible_categories = user.categories
         query = select(ResourceEntity).where(
-            or_(
-                ResourceEntity.title.ilike(f"%{search_string}%"),
-                ResourceEntity.details.ilike(f"%{search_string}%"),
-                ResourceEntity.location.ilike(f"%{search_string}%")
-            ),
-            ResourceEntity.category.in_(accessible_categories)
+            ResourceEntity.title.ilike(f"%{search_string}%"),
+            ResourceEntity.role == user.role,
+            ResourceEntity.group == user.group
         )
         entities = self._session.scalars(query).all()
 
