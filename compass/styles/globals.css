@@ -1,8 +1,7 @@
 /* globals.css */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 :root {
     /* Colors */
@@ -11,7 +10,8 @@
     --ring-opacity: 0.5;
 
     /* Shadows */
-    --shadow-default: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-default: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+        0 1px 2px 0 rgba(0, 0, 0, 0.06);
     --shadow-focus: 0 0 0 3px rgba(66, 153, 225, 0.5);
 
     /* Borders */
@@ -31,66 +31,65 @@
     /* A shade of gray */
 }
 
-
 @font-face {
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
-    src: url('/fonts/Inter-Regular.ttf') format('truetype');
+    src: url("/fonts/Inter-Regular.ttf") format("truetype");
 }
 
 /* Inter-Bold */
 @font-face {
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 700;
-    src: url('/fonts/Inter-Bold.ttf') format('truetype');
+    src: url("/fonts/Inter-Bold.ttf") format("truetype");
 }
 
 /* Inter-Black */
 @font-face {
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 900;
-    src: url('/fonts/Inter-Black.ttf') format('truetype');
+    src: url("/fonts/Inter-Black.ttf") format("truetype");
 }
 
 /* Inter-ExtraBold */
 @font-face {
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 800;
-    src: url('/fonts/Inter-ExtraBold.ttf') format('truetype');
+    src: url("/fonts/Inter-ExtraBold.ttf") format("truetype");
 }
 
 /* Inter-ExtraLight */
 @font-face {
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 200;
-    src: url('/fonts/Inter-ExtraLight.ttf') format('truetype');
+    src: url("/fonts/Inter-ExtraLight.ttf") format("truetype");
 }
 
 /* Inter-Medium */
 @font-face {
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 500;
-    src: url('/fonts/Inter-Medium.ttf') format('truetype');
+    src: url("/fonts/Inter-Medium.ttf") format("truetype");
 }
 
 /* Inter-SemiBold */
 @font-face {
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 600;
-    src: url('/fonts/Inter-SemiBold.ttf') format('truetype');
+    src: url("/fonts/Inter-SemiBold.ttf") format("truetype");
 }
 
 /* Inter-Thin */
 @font-face {
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 100;
-    src: url('/fonts/Inter-Thin.ttf') format('truetype');
+    src: url("/fonts/Inter-Thin.ttf") format("truetype");
 }

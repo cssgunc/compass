@@ -1,19 +1,17 @@
 import { Field } from "@/utils/classes/Field";
 
-
 export class MultiselectFieldImpl extends Field {
-
     tags: Set<any>;
     selectedTags: Set<any>;
 
     constructor(title: string, tags: Set<any> = new Set()) {
-        super('MultiselectTableIcon', title);
-        this.tags = tags
+        super("MultiselectTableIcon", title);
+        this.tags = tags;
         this.selectedTags = new Set();
     }
 
     getTags() {
-        return this.tags
+        return this.tags;
     }
 
     addTag(tag: any) {
@@ -21,7 +19,7 @@ export class MultiselectFieldImpl extends Field {
     }
 
     removeTag(tag: any) {
-        if (this.tags.has(tag)){
+        if (this.tags.has(tag)) {
             this.tags.delete(tag);
         }
     }
@@ -31,9 +29,8 @@ export class MultiselectFieldImpl extends Field {
     }
 
     removeSelectedTag(tag: any) {
-        if (this.selectedTags.has(tag)){
+        if (this.selectedTags.has(tag)) {
             this.selectedTags.delete(tag);
         }
     }
-
 }
