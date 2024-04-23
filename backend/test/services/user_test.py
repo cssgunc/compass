@@ -31,7 +31,7 @@ def test_create_id_exists(user_svc: UserService):
 def test_get_all(user_svc: UserService):
     """Test that all users can be retrieved."""
     users = user_svc.all()
-    assert len(users) == 3
+    assert len(users) == 4
 
 
 def test_get_user_by_id(user_svc: UserService):
@@ -56,12 +56,13 @@ def test_delete_user(user_svc: UserService):
 
 def test_delete_user_nonexistent(user_svc: UserService):
     """Test deleting a user that does not exist"""
-    with pytest.raises(Exception): 
+    with pytest.raises(Exception):
         user_svc.delete(newUser)
 
-def test_update_user(user_svc: UserService): 
+
+def test_update_user(user_svc: UserService):
     """Test updating a user
-        Updating volunteer
+    Updating volunteer
     """
     user = user_svc.get_user_by_id(volunteer.id)
     assert user is not None
@@ -73,10 +74,8 @@ def test_update_user(user_svc: UserService):
     assert updated_user.username == "volunteer 1"
     assert updated_user.email == "newemail@compass.com"
 
+
 def test_update_user_nonexistent(user_svc: UserService):
-    """ Test updated a user that does not exist"""
+    """Test updated a user that does not exist"""
     with pytest.raises(Exception):
         user_svc.update(newUser)
-
-
-
