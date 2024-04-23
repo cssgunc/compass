@@ -57,3 +57,47 @@ class UserService:
         finally:
             # return added object
             return user
+        
+    def delete(self, user: User) -> None:   
+        """
+        Delete a user 
+
+        Args: the user to delete
+
+        Returns: none
+        """
+        obj = self._session.get(UserEntity, user.id)
+
+        if obj is None:
+            raise Exception(f"No matching user found")
+        
+        self._session.delete(obj)
+        self._session.commit()
+
+
+
+    def update(self, user: User) -> User: 
+        """
+        Updates a user
+
+        Args: User to be updated
+
+        Returns: The updated User
+        """   
+        obj = self._session.get(UserEntity, user.id)
+
+        if obj is None:
+            raise Exception(f"No matching user found")
+        
+        obj.username = user.username
+        obj.role = user.role
+        obj.email = user.email
+        obj.program = user.program
+        obj.experience = user.experience
+        obj.group = user.group
+
+        self._session.commit()
+
+        return obj.to_model()
+
+
