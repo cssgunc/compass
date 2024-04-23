@@ -159,22 +159,6 @@ export const Table = () => {
     onGlobalFilterChange: setQuery,
     globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    meta: {
-      updateData: (rowIndex: number, columnId: string, value: string) => {
-        setData(old =>
-          old.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...old[rowIndex],
-                [columnId]: value,
-              };
-            }
-            return row;
-          })
-        );
-      }
-    }
   });
 
   const handleRowData = (row: any) => {

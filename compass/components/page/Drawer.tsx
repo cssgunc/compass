@@ -4,6 +4,7 @@ import { ChevronDoubleLeftIcon } from '@heroicons/react/24/solid';
 import { BookmarkIcon, XMarkIcon, StarIcon as SolidStarIcon, EnvelopeIcon, UserIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon, ArrowsPointingInIcon, StarIcon as OutlineStarIcon, ListBulletIcon } from '@heroicons/react/24/outline';
 import Card from '@/components/page/Card'
+import TagsInput from '../TagsInput/Index';
 
 
 
@@ -72,6 +73,19 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
 
     const favoriteIcon = isFavorite ? <SolidStarIcon className="h-5 w-5" /> : <OutlineStarIcon className="h-5 w-5" />
 
+    const [presetOptions, setPresetOptions] = useState(["administrator", "volunteer", "employee"]);
+    const [rolePresetOptions, setRolePresetOptions] = useState(["domestic", "community", "economic"]);
+    const [tagColors, setTagColors] = useState(new Map());
+
+    const getTagColor = (tag: string) => {
+        if (!tagColors.has(tag)) {
+        const colors = ["bg-cyan-100", "bg-blue-100", "bg-green-100", "bg-yellow-100", "bg-purple-100"];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        setTagColors(new Map(tagColors).set(tag, randomColor));
+        }
+        return tagColors.get(tag);
+    };
+
 
     return (
         <div>
@@ -97,13 +111,13 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                 </div>
                 <div className="p-4">
                     <table className="p-4">
-                        <tbody>
+                        <tbody className="items-center">
                             <tr className="w-full text-sm items-center flex flex-row justify-between">
-                                <div className="flex flex-row space-x-2 text-gray-500">
+                                <div className="flex flex-row space-x-2 text-gray-500 items-center">
                                 <td><UserIcon className="h-4 w-4" /></td>
-                                <td className="w-20">Username</td>
+                                <td className="w-32">Username</td>
                                 </div>
-                                <td className="w-3/4">
+                                <td className="w-3/4 w-3/4 p-2 pl-0">
                                     <input
                                     type="text"
                                     name="username"
@@ -114,36 +128,47 @@ const Drawer: FunctionComponent<DrawerProps> = ({ title, children, onSave, edita
                                 /></td>
                             </tr>
                             <tr className="w-full text-sm items-center flex flex-row justify-between">
-                                <div className="flex flex-row space-x-2 text-gray-500">
+                                <div className="flex flex-row space-x-2 text-gray-500 items-center">
                                 <td><ListBulletIcon className="h-4 w-4" /></td>
-                                <td className="w-20">Role</td>
+                                <td className="w-32">Role</td>
                                 </div>
-                                <td className="w-3/4">
-                                    {rowContent.role}
+                                <td className="w-3/4 hover:bg-gray-50">
+                                    <TagsInput presetValue={ tempRowContent.role }
+                                        presetOptions={presetOptions}
+                                        setPresetOptions={setPresetOptions}
+                                        getTagColor={getTagColor}
+                                        setTagColors={setTagColors}
+                                    />
                                 </td>
                             </tr>
                             <tr className="w-full text-sm items-center flex flex-row justify-between">
-                                <div className="flex flex-row space-x-2 text-gray-500">
+                                <div className="flex flex-row space-x-2 text-gray-500 items-center">
                                 <td><EnvelopeIcon className="h-4 w-4" /></td>
-                                <td className="w-20">Email</td>
+                                <td className="w-32">Email</td>
                                 </div>
-                                <td className="w-3/4">
+                                <td className="w-3/4 p-2 pl-0">
                                     <input
                                     type="text"
                                     name="email"
                                     value={tempRowContent.email}
                                     onChange={handleTempRowContentChange}
                                     onKeyDown={handleEnterPress}
-                                    className="w-full p-1 focus:outline-gray-200  hover:bg-gray-50"
+                                    className="w-80 p-1 focus:outline-gray-200  hover:bg-gray-50 underline text-gray-500"
                                 /></td>
                             </tr>
                             <tr className="w-full text-sm items-center flex flex-row justify-between">
-                                <div className="flex flex-row space-x-2 text-gray-500">
+                                <div className="flex flex-row space-x-2 text-gray-500 items-center">
                                 <td><ListBulletIcon className="h-4 w-4" /></td>
-                                <td className="w-20">Type of Program</td>
+                                <td className="w-32">Type of Program</td>
                                 </div>
-                                <td className="w-3/4">
-                                    {rowContent.program}
+                                <td className="w-3/4 hover:bg-gray-50">
+                                    {/* {rowContent.program} */}
+                                    <TagsInput presetValue={ tempRowContent.program }
+                                        presetOptions={rolePresetOptions}
+                                        setPresetOptions={setRolePresetOptions}
+                                        getTagColor={getTagColor}
+                                        setTagColors={setTagColors}
+                                    />
                                 </td>
                             </tr>
                         </tbody>
