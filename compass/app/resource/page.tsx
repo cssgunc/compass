@@ -1,9 +1,13 @@
-"use client"
+"use client";
 import Callout from "@/components/resource/Callout";
 import Card from "@/components/resource/Card";
 import { LandingSearchBar } from "@/components/resource/LandingSearchBar";
-import { BookOpenIcon, BookmarkIcon, ClipboardIcon } from "@heroicons/react/24/solid";
-import Image from 'next/image';
+import {
+    BookOpenIcon,
+    BookmarkIcon,
+    ClipboardIcon,
+} from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 export default function Page() {
     return (
@@ -13,15 +17,26 @@ export default function Page() {
                 <div className="mb-4 flex items-center space-x-4">
                     <Image
                         src="/logo.png"
-                        alt='Compass Center logo.'
+                        alt="Compass Center logo."
                         width={25}
                         height={25}
                     />
-                    <h1 className='font-bold text-2xl text-purple-800'>Compass Center Advocate Landing Page</h1>
+                    <h1 className="font-bold text-2xl text-purple-800">
+                        Compass Center Advocate Landing Page
+                    </h1>
                 </div>
                 <Callout>
-                    Welcome! Below you will find a list of resources for the Compass Center's trained advocates. These materials serve to virtually provide a collection of advocacy, resource, and hotline manuals and information.
-                    <b> If you are an advocate looking for the contact information of a particular Compass Center employee, please directly contact your staff back-up or the person in charge of your training.</b>
+                    Welcome! Below you will find a list of resources for the
+                    Compass Center's trained advocates. These materials serve to
+                    virtually provide a collection of advocacy, resource, and
+                    hotline manuals and information.
+                    <b>
+                        {" "}
+                        If you are an advocate looking for the contact
+                        information of a particular Compass Center employee,
+                        please directly contact your staff back-up or the person
+                        in charge of your training.
+                    </b>
                 </Callout>
             </div>
             <div className="p-8 flex-grow border-t border-gray-200 bg-gray-50">
@@ -35,5 +50,5 @@ export default function Page() {
                 <LandingSearchBar />
             </div>
         </div>
-    )
+    );
 }
