@@ -13,9 +13,15 @@ interface SidebarProps {
     setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
     name: string;
     email: string;
+    admin: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen, name, email }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+    setIsSidebarOpen,
+    name,
+    email,
+    admin,
+}) => {
     return (
         <div className="w-64 h-full border border-gray-200 bg-gray-50 px-4">
             {/* button to close sidebar  */}
@@ -39,12 +45,38 @@ const Sidebar: React.FC<SidebarProps> = ({ setIsSidebarOpen, name, email }) => {
                         Pages
                     </h4>
                     <nav className="flex flex-col">
-                        <SidebarItem icon={<HomeIcon />} text="Home" />
-                        <SidebarItem icon={<BookmarkIcon />} text="Resources" />
-                        <SidebarItem icon={<ClipboardIcon />} text="Services" />
+                        {admin && (
+                            <SidebarItem
+                                icon={<HomeIcon />}
+                                text="Admin"
+                                active={true}
+                                redirect="/admin"
+                            />
+                        )}
+
+                        <SidebarItem
+                            icon={<HomeIcon />}
+                            text="Home"
+                            active={true}
+                            redirect="/resource"
+                        />
+                        <SidebarItem
+                            icon={<BookmarkIcon />}
+                            text="Resources"
+                            active={true}
+                            redirect="/resource"
+                        />
+                        <SidebarItem
+                            icon={<ClipboardIcon />}
+                            text="Services"
+                            active={true}
+                            redirect="/service"
+                        />
                         <SidebarItem
                             icon={<BookOpenIcon />}
                             text="Training Manuals"
+                            active={true}
+                            redirect="/training-manuals"
                         />
                     </nav>
                 </div>

@@ -20,4 +20,5 @@ export default interface User {
     program: Program[];
     role: Role;
     created_at: Date;
+    visible: boolean;
 }

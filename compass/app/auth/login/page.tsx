@@ -1,6 +1,5 @@
 // pages/index.tsx
 "use client";
-
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import InlineLink from "@/components/InlineLink";
@@ -14,30 +13,26 @@ import { useRouter } from "next/navigation";
 
 export default function Page() {
     const router = useRouter();
-
-    useEffect(() => {
-        const supabase = createClient();
-
-        async function checkUser() {
-            const { data } = await supabase.auth.getUser();
-
-            if (data.user) {
-                router.push("/resource");
-            }
-        }
-
-        checkUser();
-    }, [router]);
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [loginError, setLoginError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const supabase = createClient();
+        async function checkUser() {
+            const { data } = await supabase.auth.getUser();
+            if (data.user) {
+                router.push("/resource");
+            }
+        }
+        checkUser();
+    }, [router]);
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.currentTarget.value);
-        setEmail;
     };
 
     const handlePasswordChange = (
@@ -51,28 +46,28 @@ export default function Page() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (email.trim().length === 0) {
-            console.log(email);
             setEmailError("Please enter your email.");
             return;
         }
-
         if (!emailRegex.test(email)) {
             setEmailError("Please enter a valid email address.");
             return;
         }
-
         setEmailError("");
 
         if (password.trim().length === 0) {
-            console.log(password);
             setPasswordError("Please enter your password.");
             return;
         }
-
         setPasswordError("");
 
+        setIsLoading(true);
         const error = await login(email, password);
-        setLoginError(error);
+        setIsLoading(false);
+
+        if (error) {
+            setLoginError(error);
+        }
     };
 
     return (
@@ -83,13 +78,11 @@ export default function Page() {
                 width={100}
                 height={91}
             />
-
             <h1 className="font-bold text-2xl text-purple-800">Login</h1>
-
             <div className="mb-6">
                 <Input
                     type="email"
-                    valid={emailError == ""}
+                    valid={emailError === ""}
                     title="Email"
                     placeholder="Enter Email"
                     onChange={handleEmailChange}
@@ -97,24 +90,28 @@ export default function Page() {
                 />
             </div>
             {emailError && <ErrorBanner heading={emailError} />}
-
             <div className="mb-6">
                 <PasswordInput
                     title="Password"
                     placeholder="Enter Password"
-                    valid={passwordError == ""}
+                    valid={passwordError === ""}
                     onChange={handlePasswordChange}
                 />
             </div>
             {passwordError && <ErrorBanner heading={passwordError} />}
-
             <div className="flex flex-col items-left space-y-4">
                 <InlineLink href="/auth/forgot_password">
                     Forgot password?
                 </InlineLink>
-                <Button onClick={handleClick}>Login</Button>
+                <Button onClick={handleClick} disabled={isLoading}>
+                    <div className="flex items-center justify-center">
+                        {isLoading && (
+                            <div className="w-4 h-4 border-2 border-white border-t-purple-500 rounded-full animate-spin mr-2"></div>
+                        )}
+                        {isLoading ? "Logging in..." : "Login"}
+                    </div>
+                </Button>
             </div>
-
             {loginError && <ErrorBanner heading={loginError} />}
         </>
     );

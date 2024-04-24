@@ -1,4 +1,9 @@
+"use client";
+
 import "../styles/globals.css";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function RootLayout({
     // Layouts must accept a children prop.

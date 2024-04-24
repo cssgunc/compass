@@ -1,6 +1,6 @@
 // for showcasing to compass
 
-import usersImport from "./users.json";
+import users from "./users.json";
 import {
     Cell,
     ColumnDef,
@@ -32,22 +32,7 @@ import {
 } from "@heroicons/react/24/solid";
 import TagsInput from "../TagsInput/Index";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import { TableCell } from "./TableCell";
-import { PrimaryTableCell } from "./PrimaryTableCell";
-
-const usersExample = usersImport as unknown as User[];
-
-type User = {
-    id: number;
-    created_at: any;
-    username: string;
-    role: "administrator" | "employee" | "volunteer";
-    email: string;
-    program: "domestic" | "economic" | "community";
-    experience: number;
-    group?: string;
-    visible: boolean;
-};
+import User from "@/utils/models/User";
 
 // For search
 const fuzzyFilter = (
@@ -66,17 +51,17 @@ const fuzzyFilter = (
     return itemRank.passed;
 };
 
-export const Table = () => {
+export const Table = ({ users }: { users: User[] }) => {
     const columnHelper = createColumnHelper<User>();
 
     useEffect(() => {
-        const sortedUsers = [...usersExample].sort((a, b) =>
+        const sortedUsers = [...users].sort((a, b) =>
             a.visible === b.visible ? 0 : a.visible ? -1 : 1
         );
         setData(sortedUsers);
-    }, []);
+    }, [users]);
 
-    const deleteUser = (userId) => {
+    const deleteUser = (userId: number) => {
         console.log(data);
         setData((currentData) =>
             currentData.filter((user) => user.id !== userId)
@@ -188,10 +173,10 @@ export const Table = () => {
         }),
     ];
 
-    const [data, setData] = useState<User[]>([...usersExample]);
+    const [data, setData] = useState<User[]>([...users]);
 
     const addUser = () => {
-        setData([...data, {}]);
+        setData([...data]);
     };
 
     // Searching
