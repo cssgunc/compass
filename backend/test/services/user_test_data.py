@@ -18,7 +18,7 @@ volunteer = User(
     email="volunteer@compass.com",
     experience=1,
     group="volunteers",
-    program=[programs.COMMUNITY],
+    program=[programs.COMMUNITY, programs.ECONOMIC],
     created_at=datetime.now(),
     role=UserTypeEnum.VOLUNTEER,
 )

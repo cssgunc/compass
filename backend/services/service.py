@@ -58,9 +58,11 @@ class ServiceService:
             services = []
             for program in programs:
                 query = select(ServiceEntity).filter(ServiceEntity.program == program)
-                entities = self._session.scalars(query)
-                services.append(entities)
-            return [service.to_model() for service in entities]
+                entities = self._session.scalars(query).all()
+                for entity in entities:
+                    services.append(entity)
+
+            return [service.to_model() for service in services]
 
     def get_all(self, subject: User) -> list[Service]:
         """Service method retrieving all of the services in the table."""

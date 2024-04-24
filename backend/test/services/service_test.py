@@ -35,7 +35,7 @@ def test_get_service_by_user_admin(service_svc: ServiceService):
 
 def test_get_service_by_user_volun(service_svc: ServiceService):
     service = service_svc.get_service_by_user(user_test_data.volunteer)
-    assert len(service) == 3
+    assert len(service) == 4
 
 
 def test_get_by_program(service_svc: ServiceService):
