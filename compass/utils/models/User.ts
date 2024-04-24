@@ -1,13 +1,13 @@
 export enum Program {
-    "ECONOMIC",
-    "DOMESTIC",
-    "COMMUNITY",
+    ECONOMIC = "ECONOMIC",
+    DOMESTIC = "DOMESTIC",
+    COMMUNITY = "COMMUNITY",
 }
 
 export enum Role {
-    "ADMIN",
-    "EMPLOYEE",
-    "VOLUNTEER",
+    ADMIN = "ADMIN",
+    EMPLOYEE = "EMPLOYEE",
+    VOLUNTEER = "VOLUNTEER",
 }
 
 export default interface User {

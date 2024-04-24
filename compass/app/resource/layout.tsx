@@ -23,7 +23,10 @@ export default function RootLayout({
         async function getUser() {
             const { data, error } = await supabase.auth.getUser();
 
-            if (error || data.user === null) {
+            console.log(data, error);
+
+            if (error) {
+                console.log("Accessed resource page but not logged in");
                 router.push("auth/login");
                 return;
             }
@@ -33,8 +36,6 @@ export default function RootLayout({
             const userData = await fetch(
                 `${process.env.NEXT_PUBLIC_HOST}/api/user?uuid=${data.user.id}`
             );
-
-            console.log(await userData.json());
         }
 
         getUser();
