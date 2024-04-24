@@ -36,6 +36,16 @@ class ServiceService:
 
         return entity.to_model()
 
+    def get_service_by_name(self, name: str) -> Service:
+        """Service method getting services by id."""
+        query = select(ServiceEntity).filter(ServiceEntity.name == name)
+        entity = self._session.scalars(query).one_or_none()
+
+        if entity is None:
+            raise ServiceNotFoundException(f"Service with name: {name} does not exist")
+
+        return entity.to_model()
+
     def get_service_by_user(self, subject: User):
         """Service method getting all of the services that a user has access to based on role"""
         if subject.role != UserTypeEnum.VOLUNTEER:
@@ -50,7 +60,7 @@ class ServiceService:
                 query = select(ServiceEntity).filter(ServiceEntity.program == program)
                 entities = self._session.scalars(query)
                 services.append(entities)
-            return [service.to_model() for service in services]
+            return [service.to_model() for service in entities]
 
     def get_all(self, subject: User) -> list[Service]:
         """Service method retrieving all of the services in the table."""
