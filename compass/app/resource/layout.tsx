@@ -1,5 +1,4 @@
 "use client";
-
 import Sidebar from "@/components/resource/Sidebar";
 import React, { useState } from "react";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
@@ -7,7 +6,6 @@ import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-
 export default function RootLayout({
     children,
 }: {
@@ -16,30 +14,26 @@ export default function RootLayout({
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [user, setUser] = useState<User>();
     const router = useRouter();
-
     useEffect(() => {
         const supabase = createClient();
-
         async function getUser() {
             const { data, error } = await supabase.auth.getUser();
 
-            if (error || data.user === null) {
+            console.log(data, error);
+
+            if (error) {
+                console.log("Accessed resource page but not logged in");
                 router.push("auth/login");
                 return;
             }
-
             setUser(data.user);
-
             const userData = await fetch(
                 `${process.env.NEXT_PUBLIC_HOST}/api/user?uuid=${data.user.id}`
             );
-
-            console.log(await userData.json());
         }
 
         getUser();
     }, [router]);
-
     return (
         <div className="flex-row">
             {/* button to open sidebar */}
