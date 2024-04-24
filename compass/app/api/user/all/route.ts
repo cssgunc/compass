@@ -1,3 +1,4 @@
+import User from "@/utils/models/User";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -10,5 +11,14 @@ export async function GET(request: Request) {
 
     const data = await fetch(`${apiEndpoint}?user_id=${uuid}`);
 
-    return NextResponse.json(await data.json(), { status: data.status });
+    const userData: User[] = await data.json();
+    // TODO: Remove make every user visible
+
+    const users = userData.map((user: User) => {
+        user.visible = true;
+
+        return user;
+    });
+
+    return NextResponse.json(users, { status: data.status });
 }

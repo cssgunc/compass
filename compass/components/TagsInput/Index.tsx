@@ -118,7 +118,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
                 <TagsArray handleDelete={handleDeleteTag} tags={tags} />
             ) : (
                 <div ref={dropdown}>
-                    <div className="absolute w-64 z-50 -ml-3 -mt-7">
+                    <div className="absolute w-64 z-50 ml-1 mt-5">
                         <div className="rounded-md border border-gray-200 shadow">
                             <div className="flex flex-wrap rounded-t-md items-center gap-2 bg-gray-50 p-2">
                                 <TagsArray

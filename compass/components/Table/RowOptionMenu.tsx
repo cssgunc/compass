@@ -20,7 +20,7 @@ export const RowOptionMenu = ({ onDelete, onHide }) => {
     return (
         <>
             <button
-                className="align-center"
+                className="items-end"
                 onClick={() => setMenuOpen(!menuOpen)}
             >
                 <EllipsisVerticalIcon className="h-4" />

@@ -1,4 +1,4 @@
-import Drawer from "@/components/page/Drawer";
+import Drawer from "@/components/Drawer/Drawer";
 import { ChangeEvent, useState } from "react";
 
 export const RowOpenAction = ({ title, rowData, onRowUpdate }) => {

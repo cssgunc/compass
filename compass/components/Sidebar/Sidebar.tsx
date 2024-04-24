@@ -7,20 +7,20 @@ import {
     BookOpenIcon,
 } from "@heroicons/react/24/solid";
 import { SidebarItem } from "./SidebarItem";
-import { UserProfile } from "./UserProfile";
+import { UserProfile } from "../resource/UserProfile";
 
 interface SidebarProps {
     setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
     name: string;
     email: string;
-    admin: boolean;
+    isAdmin: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
     setIsSidebarOpen,
     name,
     email,
-    admin,
+    isAdmin: admin,
 }) => {
     return (
         <div className="w-64 h-full border border-gray-200 bg-gray-50 px-4">

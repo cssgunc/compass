@@ -1,6 +1,6 @@
 "use client";
 
-import Sidebar from "@/components/resource/Sidebar";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import React, { useState } from "react";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
@@ -80,7 +80,7 @@ export default function RootLayout({
                             setIsSidebarOpen={setIsSidebarOpen}
                             name={user.username}
                             email={user.email}
-                            admin={user.role === Role.ADMIN}
+                            isAdmin={user.role === Role.ADMIN}
                         />
                     </div>
                     {/* page ui  */}
