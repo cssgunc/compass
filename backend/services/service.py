@@ -38,19 +38,25 @@ class ServiceService:
 
     def get_service_by_user(self, subject: User):
         """Service method getting all of the services that a user has access to based on role"""
-        programs = subject.program
-        services = []
-        for program in programs:
-            query = select(ServiceEntity).filter(ServiceEntity.program == program)
-            entities = self._session.scalars(query)
-            services.append(entities)
-        return [service.to_model() for service in services]
+        if subject.role != UserTypeEnum.VOLUNTEER:
+            query = select(ServiceEntity)
+            entities = self._session.scalars(query).all()
+
+            return [service.to_model() for service in entities]
+        else:
+            programs = subject.program
+            services = []
+            for program in programs:
+                query = select(ServiceEntity).filter(ServiceEntity.program == program)
+                entities = self._session.scalars(query)
+                services.append(entities)
+            return [service.to_model() for service in services]
 
     def get_all(self, subject: User) -> list[Service]:
         """Service method retrieving all of the services in the table."""
-        if subject.role != UserTypeEnum.ADMIN:
+        if subject.role == UserTypeEnum.VOLUNTEER:
             raise ProgramNotAssignedException(
-                f"User is not {UserTypeEnum.ADMIN}, cannot get all"
+                f"User is not {UserTypeEnum.ADMIN} or {UserTypeEnum.VOLUNTEER}, cannot get all"
             )
 
         query = select(ServiceEntity)
