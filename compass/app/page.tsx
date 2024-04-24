@@ -8,12 +8,17 @@ import Paper from "@/components/auth/Paper";
 // import { Metadata } from 'next'
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // export const metadata: Metadata = {
 //   title: 'Login',
 // }
 
 export default function Page() {
+    const router = useRouter();
+
+    router.push("/auth/login");
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
