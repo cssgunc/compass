@@ -13,7 +13,7 @@ export default function Page() {
     return (
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
-            <div className="pt-16 px-8 pb-4 flex-grow">
+            <div className="pt-16 px-8 pb-4 flex-row">
                 <div className="mb-4 flex items-center space-x-4">
                     <Image
                         src="/logo.png"
