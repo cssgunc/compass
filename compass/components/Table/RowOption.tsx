@@ -3,7 +3,7 @@ import { TrashIcon, DocumentDuplicateIcon, ArrowUpRightIcon, EyeSlashIcon } from
 
 export const RowOption = ({ icon: Icon, label, onClick }) => {
   return (
-    <button onClick={onClick} className="hover:bg-gray-100 flex items-center gap-2 p-2 w-full">
+    <button onClick={onClick} className="hover:bg-gray-100 flex items-center gap-1 p-1 w-full">
     <Icon className="inline h-4" /> {label}
   </button>
   );

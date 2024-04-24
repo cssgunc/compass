@@ -19,12 +19,12 @@ export const RowOptionMenu = ({ onDelete, onHide }) => {
 
   return (
     <>
-      <button className="align-center" onClick={() => setMenuOpen(!menuOpen)}>
+      <button className="items-end" onClick={() => setMenuOpen(!menuOpen)}>
         <EllipsisVerticalIcon className="h-4" />
       </button>
       <div
         className={
-          "justify-start border border-gray-200 shadow-lg flex flex-col absolute bg-white w-auto p-2 rounded [&>*]:rounded z-10" +
+          "justify-start border border-gray-200 shadow-lg flex flex-col absolute bg-white w-auto p-1 rounded [&>*]:rounded z-10" +
           (!menuOpen ? " invisible" : "")
         }
       >
