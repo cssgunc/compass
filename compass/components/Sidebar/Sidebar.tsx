@@ -5,6 +5,7 @@ import {
     BookmarkIcon,
     ClipboardIcon,
     BookOpenIcon,
+    LockClosedIcon,
 } from "@heroicons/react/24/solid";
 import { SidebarItem } from "./SidebarItem";
 import { UserProfile } from "../resource/UserProfile";
@@ -47,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <nav className="flex flex-col">
                         {admin && (
                             <SidebarItem
-                                icon={<HomeIcon />}
+                                icon={<LockClosedIcon />}
                                 text="Admin"
                                 active={true}
                                 redirect="/admin"
@@ -58,7 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                             icon={<HomeIcon />}
                             text="Home"
                             active={true}
-                            redirect="/resource"
+                            redirect="/home"
                         />
                         <SidebarItem
                             icon={<BookmarkIcon />}

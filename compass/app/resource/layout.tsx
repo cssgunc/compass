@@ -1,10 +1,11 @@
 "use client";
+
 import Sidebar from "@/components/Sidebar/Sidebar";
 import React, { useState } from "react";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import User, { Role } from "@/utils/models/User";
 import Loading from "@/components/auth/Loading";
 
@@ -14,8 +15,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [user, setUser] = useState<User>();
     const router = useRouter();
+    const [user, setUser] = useState<User>();
 
     useEffect(() => {
         async function getUser() {
@@ -27,7 +28,7 @@ export default function RootLayout({
 
             if (error) {
                 console.log("Accessed resource page but not logged in");
-                router.push("auth/login");
+                router.push("/auth/login");
                 return;
             }
 
@@ -35,7 +36,9 @@ export default function RootLayout({
                 `${process.env.NEXT_PUBLIC_HOST}/api/user?uuid=${data.user.id}`
             );
 
-            setUser(await userData.json());
+            const user: User = await userData.json();
+
+            setUser(user);
         }
 
         getUser();
@@ -66,9 +69,9 @@ export default function RootLayout({
                         } w-64 transition duration-300 ease-in-out`}
                     >
                         <Sidebar
+                            setIsSidebarOpen={setIsSidebarOpen}
                             name={user.username}
                             email={user.email}
-                            setIsSidebarOpen={setIsSidebarOpen}
                             isAdmin={user.role === Role.ADMIN}
                         />
                     </div>

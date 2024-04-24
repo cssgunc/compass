@@ -21,8 +21,8 @@ export async function login(email: string, password: string) {
     const supabaseUser = await supabase.auth.getUser();
 
     if (!supabaseUser.data.user) {
-        revalidatePath("/resource", "layout");
-        redirect("/resource");
+        revalidatePath("/home", "layout");
+        redirect("/home");
     }
 
     const apiData = await fetch(
@@ -37,8 +37,8 @@ export async function login(email: string, password: string) {
         redirect("/admin");
     }
 
-    revalidatePath("/resource", "layout");
-    redirect("/resource");
+    revalidatePath("/home", "layout");
+    redirect("/home");
 }
 
 export async function signOut() {
@@ -53,6 +53,6 @@ export async function signOut() {
 
     await supabase.auth.signOut();
 
-    revalidatePath("/resource", "layout");
+    revalidatePath("/auth/login", "layout");
     redirect("/auth/login");
 }

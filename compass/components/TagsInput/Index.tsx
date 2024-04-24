@@ -17,7 +17,9 @@ const TagsInput: React.FC<TagsInputProps> = ({
     const [inputValue, setInputValue] = useState("");
     const [cellSelected, setCellSelected] = useState(false);
     const [tags, setTags] = useState<Set<string>>(
-        new Set(presetValue ? [presetValue] : [])
+        typeof presetValue === "string"
+            ? new Set([presetValue])
+            : new Set(presetValue)
     );
     const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
     const dropdown = useRef<HTMLDivElement>(null);
