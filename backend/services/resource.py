@@ -4,33 +4,33 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from ..models.resource_model import Resource
 from ..entities.resource_entity import ResourceEntity
-from ..models.user_model import User
+from ..models.user_model import User, UserTypeEnum
 
 from .exceptions import ResourceNotFoundException
+
 
 class ResourceService:
 
     def __init__(self, session: Session = Depends(db_session)):
         self._session = session
 
-    def all(self, user: User) -> list[Resource]:
-        """
-        Retrieves all Resources that the user has access to based on their role and group.
+    def get_resource_by_user(self, subject: User):
+        """Resource method getting all of the resources that a user has access to based on role"""
+        if subject.role != UserTypeEnum.VOLUNTEER:
+            query = select(ResourceEntity)
+            entities = self._session.scalars(query).all()
 
-        Parameters:
-            user: a valid User model representing the currently logged in User
+            return [resource.to_model() for resource in entities]
+        else:
+            programs = subject.program
+            resources = []
+            for program in programs:
+                query = select(ResourceEntity).filter(ResourceEntity.program == program)
+                entities = self._session.scalars(query).all()
+                for entity in entities:
+                    resources.append(entity)
 
-        Returns:
-            list[Resource]: list of accessible `Resource` for the user
-        """
-        # Filter resources based on user's role and group
-        query = select(ResourceEntity).where(
-            ResourceEntity.role == user.role,
-            ResourceEntity.group == user.group
-        )
-        entities = self._session.scalars(query).all()
-
-        return [entity.to_model() for entity in entities]
+            return [resource.to_model() for resource in resources]
 
     def create(self, user: User, resource: Resource) -> Resource:
         """
@@ -44,7 +44,9 @@ class ResourceService:
             Resource: Object added to table
         """
         if resource.role != user.role or resource.group != user.group:
-            raise PermissionError("User does not have permission to add resources in this role or group.")
+            raise PermissionError(
+                "User does not have permission to add resources in this role or group."
+            )
 
         resource_entity = ResourceEntity.from_model(resource)
         self._session.add(resource_entity)
@@ -68,7 +70,11 @@ class ResourceService:
         """
         resource = (
             self._session.query(ResourceEntity)
-            .filter(ResourceEntity.id == id, ResourceEntity.role == user.role, ResourceEntity.group == user.group)
+            .filter(
+                ResourceEntity.id == id,
+                ResourceEntity.role == user.role,
+                ResourceEntity.group == user.group,
+            )
             .one_or_none()
         )
 
@@ -92,12 +98,16 @@ class ResourceService:
             ResourceNotFoundException: If no resource is found with the corresponding ID
         """
         if resource.role != user.role or resource.group != user.group:
-            raise PermissionError("User does not have permission to update this resource.")
+            raise PermissionError(
+                "User does not have permission to update this resource."
+            )
 
         obj = self._session.get(ResourceEntity, resource.id) if resource.id else None
 
         if obj is None:
-            raise ResourceNotFoundException(f"No resource found with matching id: {resource.id}")
+            raise ResourceNotFoundException(
+                f"No resource found with matching id: {resource.id}"
+            )
 
         obj.update_from_model(resource)  # Assuming an update method exists
         self._session.commit()
@@ -117,7 +127,11 @@ class ResourceService:
         """
         resource = (
             self._session.query(ResourceEntity)
-            .filter(ResourceEntity.id == id, ResourceEntity.role == user.role, ResourceEntity.group == user.group)
+            .filter(
+                ResourceEntity.id == id,
+                ResourceEntity.role == user.role,
+                ResourceEntity.group == user.group,
+            )
             .one_or_none()
         )
 
@@ -144,7 +158,7 @@ class ResourceService:
         query = select(ResourceEntity).where(
             ResourceEntity.title.ilike(f"%{search_string}%"),
             ResourceEntity.role == user.role,
-            ResourceEntity.group == user.group
+            ResourceEntity.group == user.group,
         )
         entities = self._session.scalars(query).all()
 
