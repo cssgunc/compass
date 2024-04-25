@@ -4,7 +4,6 @@ from typing import List
 from datetime import datetime
 from typing import Optional
 from .enum_for_models import ProgramTypeEnum
-from .resource_model import Resource
 
 
 class Resource(BaseModel):
@@ -12,5 +11,5 @@ class Resource(BaseModel):
     name: str = Field(..., max_length=150, description="The name of the resource")
     summary: str = Field(..., max_length=300, description="The summary of the resource")
     link: str = Field(..., max_length=150, description="link to the resource")
-    programtype: ProgramTypeEnum
+    program: ProgramTypeEnum
     created_at: Optional[datetime]

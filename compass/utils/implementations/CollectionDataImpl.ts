@@ -15,19 +15,21 @@ export class CollectionDataImpl {
         for (const header of this.headers) {
             const value = row[header.title];
             if (!header.validateInput(value)) {
-                console.error(`Validation failed for ${header.title} with value ${value}`);
+                console.error(
+                    `Validation failed for ${header.title} with value ${value}`
+                );
                 isValidRow = false;
-                break; 
+                break;
             }
         }
 
         if (isValidRow) {
             this.rows.push(row);
         } else {
-            console.log('Row not added due to validation failure.');
+            console.log("Row not added due to validation failure.");
         }
     }
-    
+
     getRows(): Record<string, any>[] {
         return this.rows;
     }
@@ -35,5 +37,4 @@ export class CollectionDataImpl {
     getHeaders(): Field[] {
         return this.headers;
     }
-
 }

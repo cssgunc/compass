@@ -26,6 +26,21 @@ class UserService:
 
         return user_entity.to_model()
 
+    def get_user_by_uuid(self, uuid: str) -> User:
+        """
+        Gets a user by uuid from the database
+
+        Returns: A User Pydantic model
+
+        """
+        query = select(UserEntity).where(UserEntity.uuid == uuid)
+        user_entity: UserEntity | None = self._session.scalar(query)
+
+        if user_entity is None:
+            raise Exception(f"No user found with matching uuid: {uuid}")
+
+        return user_entity.to_model()
+
     def all(self) -> list[User]:
         """
         Returns a list of all Users
@@ -46,7 +61,8 @@ class UserService:
 
         """
         try:
-            user = self.get_user_by_id(user.id)
+            if (user.id != None):
+                user = self.get_user_by_id(user.id)
         except:
             # if does not exist, create new object
             user_entity = UserEntity.from_model(user)
