@@ -1,18 +1,18 @@
 "use client";
 
 import { PageLayout } from "@/components/PageLayout";
-import { Table } from "@/components/Table/Index";
-import User from "@/utils/models/User";
+import { ResourceTable } from "@/components/Table/ResourceIndex";
+import Resource from "@/utils/models/Resource";
 import { createClient } from "@/utils/supabase/client";
 
-import { UsersIcon } from "@heroicons/react/24/solid";
+import { BookmarkIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-    const [users, setUsers] = useState<User[]>([]);
+    const [resources, setResources] = useState<Resource[]>([]);
 
     useEffect(() => {
-        async function getUser() {
+        async function getResources() {
             const supabase = createClient();
 
             const { data, error } = await supabase.auth.getUser();
@@ -23,22 +23,22 @@ export default function Page() {
             }
 
             const userListData = await fetch(
-                `${process.env.NEXT_PUBLIC_HOST}/api/user/all?uuid=${data.user.id}`
+                `${process.env.NEXT_PUBLIC_HOST}/api/resource/all?uuid=${data.user.id}`
             );
 
-            const users: User[] = await userListData.json();
+            const resourcesAPI: Resource[] = await userListData.json();
 
-            setUsers(users);
+            setResources(resourcesAPI);
         }
 
-        getUser();
+        getResources();
     }, []);
 
     return (
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
-            <PageLayout title="Users" icon={<UsersIcon />}>
-                <Table users={users} />
+            <PageLayout title="Resources" icon={<BookmarkIcon />}>
+                <ResourceTable users={resources} />
             </PageLayout>
         </div>
     );

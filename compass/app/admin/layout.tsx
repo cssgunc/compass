@@ -42,7 +42,7 @@ export default function RootLayout({
                 console.log(
                     `Accessed admin page but incorrect permissions: ${user.username} ${user.role}`
                 );
-                router.push("/auth/login");
+                router.push("/home");
                 return;
             }
 

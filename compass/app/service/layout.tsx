@@ -27,7 +27,7 @@ export default function RootLayout({
             console.log(data, error);
 
             if (error) {
-                console.log("Accessed admin page but not logged in");
+                console.log("Accessed service page but not logged in");
                 router.push("/auth/login");
                 return;
             }
@@ -37,14 +37,6 @@ export default function RootLayout({
             );
 
             const user: User = await userData.json();
-
-            if (user.role !== Role.ADMIN) {
-                console.log(
-                    `Accessed admin page but incorrect permissions: ${user.username} ${user.role}`
-                );
-                router.push("/auth/login");
-                return;
-            }
 
             setUser(user);
         }

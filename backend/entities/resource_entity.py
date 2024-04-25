@@ -26,7 +26,7 @@ class ResourceEntity(EntityBase):
     # set fields
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
-    name: Mapped[str] = mapped_column(String(32), nullable=False)
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
     summary: Mapped[str] = mapped_column(String(100), nullable=False)
     link: Mapped[str] = mapped_column(String, nullable=False)
     program: Mapped[Program_Enum] = mapped_column(Enum(Program_Enum), nullable=False)

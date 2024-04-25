@@ -22,6 +22,6 @@ entities.EntityBase.metadata.create_all(engine)
 
 with Session(engine) as session:
     user_test_data.insert_test_data(session)
-    service_test_data.insert_fake_data(session)
-    resource_test_data.insert_fake_data(session)
+    service_test_data.insert_test_data(session)
+    resource_test_data.insert_test_data(session)
     session.commit()

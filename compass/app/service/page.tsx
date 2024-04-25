@@ -1,18 +1,18 @@
 "use client";
 
 import { PageLayout } from "@/components/PageLayout";
-import { Table } from "@/components/Table/Index";
-import User from "@/utils/models/User";
+import { ServiceTable } from "@/components/Table/ServiceIndex";
+import Service from "@/utils/models/Service";
 import { createClient } from "@/utils/supabase/client";
 
-import { UsersIcon } from "@heroicons/react/24/solid";
+import { ClipboardIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-    const [users, setUsers] = useState<User[]>([]);
+    const [services, setUsers] = useState<Service[]>([]);
 
     useEffect(() => {
-        async function getUser() {
+        async function getServices() {
             const supabase = createClient();
 
             const { data, error } = await supabase.auth.getUser();
@@ -22,23 +22,22 @@ export default function Page() {
                 return;
             }
 
-            const userListData = await fetch(
-                `${process.env.NEXT_PUBLIC_HOST}/api/user/all?uuid=${data.user.id}`
+            const serviceListData = await fetch(
+                `${process.env.NEXT_PUBLIC_HOST}/api/service/all?uuid=${data.user.id}`
             );
 
-            const users: User[] = await userListData.json();
-
-            setUsers(users);
+            const servicesAPI: Service[] = await serviceListData.json();
+            setUsers(servicesAPI);
         }
 
-        getUser();
+        getServices();
     }, []);
 
     return (
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
-            <PageLayout title="Users" icon={<UsersIcon />}>
-                <Table users={users} />
+            <PageLayout title="Services" icon={<ClipboardIcon />}>
+                <ServiceTable users={services} />
             </PageLayout>
         </div>
     );

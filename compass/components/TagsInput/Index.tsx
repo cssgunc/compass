@@ -6,6 +6,9 @@ import { CreateNewTagAction } from "./CreateNewTagAction";
 
 interface TagsInputProps {
     presetOptions: string[];
+    presetValue: string | string[];
+    setPresetOptions: () => {};
+    getTagColor: () => {};
 }
 
 const TagsInput: React.FC<TagsInputProps> = ({
@@ -34,8 +37,12 @@ const TagsInput: React.FC<TagsInputProps> = ({
         }
     };
 
-    const handleOutsideClick = (event) => {
-        if (dropdown.current && !dropdown.current.contains(event.target)) {
+    // TODO: Fix MouseEvent type and remove the as Node as that is completely wrong
+    const handleOutsideClick = (event: MouseEvent) => {
+        if (
+            dropdown.current &&
+            !dropdown.current.contains(event.target as Node)
+        ) {
             setCellSelected(false);
             // Remove event listener after handling outside click
             window.removeEventListener("click", handleOutsideClick);
@@ -117,7 +124,11 @@ const TagsInput: React.FC<TagsInputProps> = ({
     return (
         <div className="cursor-pointer" onClick={handleClick}>
             {!cellSelected ? (
-                <TagsArray handleDelete={handleDeleteTag} tags={tags} />
+                <TagsArray
+                    active={true}
+                    handleDelete={handleDeleteTag}
+                    tags={tags}
+                />
             ) : (
                 <div ref={dropdown}>
                     <div className="absolute w-64 z-50 ml-1 mt-5">

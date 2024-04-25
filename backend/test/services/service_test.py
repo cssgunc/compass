@@ -46,8 +46,8 @@ def test_get_by_program(service_svc: ServiceService):
 
 
 def test_create(service_svc: ServiceService):
-    service = service_svc.create(user_test_data.admin, service_test_data.service_7)
-    assert service.name == service_test_data.service_7.name
+    service = service_svc.create(user_test_data.admin, service_test_data.service7)
+    assert service.name == service_test_data.service7.name
     assert isinstance(service, Service)
 
 

@@ -1,8 +1,8 @@
 import { Tag } from "./Tag";
 
 export interface Tags {
-    tags: string[];
-    handleDelete: () => {};
+    tags: Set<string>;
+    handleDelete: (tag: string) => void;
     active: boolean;
 }
 

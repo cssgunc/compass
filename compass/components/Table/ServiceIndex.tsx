@@ -32,7 +32,7 @@ import {
 } from "@heroicons/react/24/solid";
 import TagsInput from "../TagsInput/Index";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import Resource from "@/utils/models/Resource";
+import Service from "@/utils/models/Service";
 
 // For search
 const fuzzyFilter = (
@@ -51,9 +51,9 @@ const fuzzyFilter = (
     return itemRank.passed;
 };
 
-// TODO: Rename everything to resources
-export const ResourceTable = ({ users }: { users: Resource[] }) => {
-    const columnHelper = createColumnHelper<Resource>();
+// TODO: Rename everything to service
+export const ServiceTable = ({ users }: { users: Service[] }) => {
+    const columnHelper = createColumnHelper<Service>();
 
     useEffect(() => {
         const sortedUsers = [...users].sort((a, b) =>
@@ -134,20 +134,14 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
                 />
             ),
         }),
-        columnHelper.accessor("link", {
+        columnHelper.accessor("status", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Link
+                    <Bars2Icon className="inline align-top h-4" /> Status
                 </>
             ),
             cell: (info) => (
-                <a
-                    href={info.getValue()}
-                    target={"_blank"}
-                    className="ml-2 text-gray-500 underline hover:text-gray-400"
-                >
-                    {info.getValue()}
-                </a>
+                <span className="ml-2 text-gray-500">{info.getValue()}</span>
             ),
         }),
         columnHelper.accessor("program", {
@@ -157,6 +151,20 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
                 </>
             ),
             cell: (info) => <TagsInput presetValue={info.getValue()} />,
+        }),
+        columnHelper.accessor("requirements", {
+            header: () => (
+                <>
+                    <Bars2Icon className="inline align-top h-4" /> Requirements
+                </>
+            ),
+            cell: (info) => (
+                <TagsInput
+                    presetValue={
+                        info.getValue()[0] !== "" ? info.getValue() : ["N/A"]
+                    }
+                />
+            ),
         }),
 
         columnHelper.accessor("summary", {
@@ -171,7 +179,7 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
         }),
     ];
 
-    const [data, setData] = useState<Resource[]>([...users]);
+    const [data, setData] = useState<Service[]>([...users]);
 
     const addUser = () => {
         setData([...data]);
@@ -194,7 +202,7 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
     // TODO: Sorting
 
     // added this fn for editing rows
-    const handleRowUpdate = (updatedRow: Resource) => {
+    const handleRowUpdate = (updatedRow: Service) => {
         const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
         if (dataIndex !== -1) {
             const updatedData = [...data];
