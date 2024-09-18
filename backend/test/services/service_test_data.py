@@ -86,7 +86,7 @@ new_service = Service(
     program=ProgramTypeEnum.DOMESTIC,
 )
 
-services = [service1, service2, service3, service6, service5, service6]
+services = [service1, service2, service3, service4, service5, service6]
 
 service_1 = Service(
     id=1,
@@ -318,7 +318,7 @@ def reset_table_id_seq(
 
 
 def insert_test_data(session: Session):
-    """Inserts fake organization data into the test session."""
+    """Inserts fake service data into the test session."""
     global services1
 
     # Create entities for test organization data
@@ -336,7 +336,7 @@ def insert_test_data(session: Session):
 
 
 def insert_fake_data(session: Session):
-    """Inserts fake organization data into the test session."""
+    """Inserts fake service data into the test session."""
     global services
 
     # Create entities for test organization data

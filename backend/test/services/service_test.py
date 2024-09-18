@@ -18,7 +18,7 @@ def test_list(service_svc: ServiceService):
 
 def test_get_by_name(service_svc: ServiceService):
     service = service_svc.get_service_by_name("service 1")
-    assert service.name == service_test_data.service_1.name
+    assert service.name == service_test_data.service1.name
     assert isinstance(service, Service)
 
 
