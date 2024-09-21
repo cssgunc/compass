@@ -79,7 +79,7 @@ RUN curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.
 # Set Locale for Functional Autocompletion in zsh
 RUN sudo locale-gen en_US.UTF-8
 
-# Install Database Dependencies
+# Install Backend Dependencies
 COPY backend/requirements.txt /workspace/backend/requirements.txt
 WORKDIR /workspace/backend
 RUN python3 -m pip install -r requirements.txt

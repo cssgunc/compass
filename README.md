@@ -10,6 +10,14 @@
 ## 📁 File Setup
 
 ```
+\backend
+    \api // Define API routes
+    \entities // Define entities in database
+    \models // How objects are represented in Python
+    \script // Scripts for init and demo
+    \services // Main business logic
+    \test // Testing suite
+    
 \compass
     \components // Components organized in folders related to specific pages
     \pages // Store all pages here
@@ -21,24 +29,24 @@
 
 ## 🚀 To Start
 
-Follow these steps to set up your local environment:
+Follow these steps to set up your local environment (Dev Container):
 
 ```
 \\ Clone this repository
 git clone https://github.com/cssgunc/compass.git
-\\ Go into main folder
+
+\\ Create .env file for frontend
 cd compass
-\\ Install dependencies
-npm install
-\\ Run local environment
-npm run dev
+touch .env
+
+\\ Create .env file for backend
+cd ../backend
+touch .env
 ```
 
-Also add following variables inside of a .env file inside of the backend directory
+**Backend .env** Contents:
 
 ```
-\\ .env file contents
-
 POSTGRES_DATABASE=compass
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=admin
@@ -47,18 +55,52 @@ POSTGRES_PORT=5432
 HOST=localhost
 ```
 
-## Backend Starter
+**Frontend (compass) .env** Contents:
 
-- Please open the VS Code Command Palette
+```
+NEXT_PUBLIC_SUPABASE_URL=[ASK_TECH_LEAD]
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[ASK_TECH_LEAD]
+NEXT_PUBLIC_API_HOST=http://localhost:8000
+NEXT_PUBLIC_HOST=http://localhost:3000
+```
+
+## Dev Container Setup
+
+- Please open the VS Code Command Palette (Mac - Cmd+Shift+P and Windows - Ctrl+Shift+P)
 - Run the command **Dev Containers: Rebuild and Reopen in Container**
 - This should open the dev container with the same file directory mounted so any changes in the dev container will be seen in the local repo
+- The dev container is sucessfully opened once you can see file directory getting populated
 
-### In Dev Container
+### In Dev Container Setup
 
-Run this to reset the database and populate it with the approprate tables that reflect the entities folder
+Open a new terminal and run these commands in sequence to setup the dependencies and database
 ```
+cd backend
 python3 -m backend.script.reset_demo
+
+cd ../compass
+npm ci
 ```
+
+## Starting up website and backend
+
+Open a terminal and run these commands:
+
+```
+cd backend
+fastapi dev main.py
+```
+
+Open another terminal and run these commands:
+
+```
+cd compass
+npm run dev
+```
+
+1. Go to [localhost:3000/auth/login](localhost:3000/auth/login)
+2. Login with username: root@compass.com, password: compass123
+3. Explore website
 
 ### Possible Dev Container Errors
 
