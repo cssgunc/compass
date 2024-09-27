@@ -17,7 +17,7 @@
     \script // Scripts for init and demo
     \services // Main business logic
     \test // Testing suite
-    
+
 \compass
     \components // Components organized in folders related to specific pages
     \pages // Store all pages here
@@ -73,13 +73,10 @@ NEXT_PUBLIC_HOST=http://localhost:3000
 
 ### In Dev Container Setup
 
-Open a new terminal and run these commands in sequence to setup the dependencies and database
-```
-cd backend
-python3 -m backend.script.reset_demo
+Open a new terminal and run this script in sequence to setup the dependencies and database
 
-cd ../compass
-npm ci
+```
+./start.sh
 ```
 
 ## Starting up website and backend
