@@ -3,6 +3,12 @@ from ..database import db_session
 from sqlalchemy.orm import Session
 from ..models.tag_model import Tag
 from ..entities.tag_entity import TagEntity
+from ..entities.resource_tag_entity import ResourceTagEntity
+from ..entities.service_tag_entity import ServiceTagEntity
+from .exceptions import ResourceNotFoundException
+from ..models.user_model import User
+from ..models.resource_model import Resource
+from ..models.service_model import Service
 from sqlalchemy import select
 
 
@@ -18,3 +24,99 @@ class TagService:
         entities = self._session.scalars(query).all()
 
         return [entity.to_model() for entity in entities]
+    
+    def get_tag_by_id(self, id:int) -> Tag:
+        """Returns tag based on it's id."""
+
+        tag = self._session.query(TagEntity).filter(TagEntity.id == id).one_or_none()
+        return tag.to_model()
+
+    def create(self, user: User, tag: Tag) -> Tag:
+        """Creates a tag in the database with id and content."""
+
+        # Add user permission check here if needed
+
+        tag_entity = TagEntity.from_model(tag)
+        self._session.add(tag_entity)
+        self._session.commit
+
+        return tag_entity.to_model()
+
+    def delete(self, user: User, id:int) -> None:
+        """Method to delete a tag from the database, along with all connections."""
+
+        tag = (
+            self._session.query(TagEntity)
+            .filter(
+                TagEntity.id == id
+            )
+            .one_or_none()
+        )
+        
+        if tag is None:
+            raise ResourceNotFoundException(f"No tag found with matching id: {id}")
+
+        self._session.delete(tag)
+
+        resource_tags = (
+            self._session.query(ResourceTagEntity)
+            .filter(
+                ResourceTagEntity.tagId == id
+            )
+            .all()
+        )
+
+        for tag in resource_tags:
+            self._session.delete(tag)
+        
+        service_tags = (
+            self._session.query(ServiceTagEntity)
+            .filter(
+                ServiceTagEntity.tagId == id
+            )
+            .all()
+        )
+
+        for tag in service_tags:
+            self._session.delete(tag)
+
+        self._session.commit()
+    
+    def get_tags_for_resource(self, user: User, resource: Resource) -> list[Tag]:
+        """Get tags based on a resource."""
+        tags: list[Tag]
+        resource_tags = (
+            self._session.query(ResourceTagEntity)
+            .filter(
+                ResourceTagEntity.tagId == resource.id
+            )
+            .all()
+        )
+
+        if resource_tags is None:
+            raise ResourceNotFoundException(f"No tags found for resource with id: {resource.id}")
+
+        for tag in resource_tags:
+            tags.append(self.get_tag_by_id(tag.id))
+        
+        return tags
+    
+    def get_tags_for_service(self, user: User, service: Service) -> list[Tag]:
+        """Get tags based on a resource."""
+        tags: list[Tag]
+        service_tags = (
+            self._session.query(ServiceTagEntity)
+            .filter(
+                ServiceTagEntity.tagId == service.id
+            )
+            .all()
+        )
+
+        if service_tags is None:
+            raise ResourceNotFoundException(f"No tags found for service with id: {service.id}")
+
+        for tag in service_tags:
+            tags.append(self.get_tag_by_id(tag.id))
+        
+        return tags
+
