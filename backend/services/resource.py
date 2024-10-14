@@ -14,25 +14,22 @@ class ResourceService:
     def __init__(self, session: Session = Depends(db_session)):
         self._session = session
 
-    def get_resource_by_user(self, subject: User):
+    def get_resource_by_user(self, subject: User) -> list[Resource]:
         """Resource method getting all of the resources that a user has access to based on role"""
         if subject.role != UserTypeEnum.VOLUNTEER:
             query = select(ResourceEntity)
             entities = self._session.scalars(query).all()
-
             return [resource.to_model() for resource in entities]
         else:
             programs = subject.program
             resources = []
             for program in programs:
-                query = select(ResourceEntity).filter(ResourceEntity.program == program)
-                entities = self._session.scalars(query).all()
+                entities = self._session.query(ResourceEntity).where(ResourceEntity.program == program).all()
                 for entity in entities:
-                    resources.append(entity)
+                    resources.append(entity.to_model())
+        return [resource for resource in resources]
 
-            return [resource.to_model() for resource in resources]
-
-    def create(self, user: User, resource: Resource) -> Resource:
+    def create(self, subject: User, resource: Resource) -> Resource:
         """
         Creates a resource based on the input object and adds it to the table if the user has the right permissions.
 
@@ -43,7 +40,8 @@ class ResourceService:
         Returns:
             Resource: Object added to table
         """
-        if resource.role != user.role or resource.group != user.group:
+        # Ask about what the requirements for making a resource are.
+        if resource.role != subject.role or resource.group != subject.group:
             raise PermissionError(
                 "User does not have permission to add resources in this role or group."
             )
@@ -83,7 +81,7 @@ class ResourceService:
 
         return resource.to_model()
 
-    def update(self, user: User, resource: ResourceEntity) -> Resource:
+    def update(self, subject: User, resource: Resource) -> Resource:
         """
         Update the resource if the user has access
 
@@ -97,24 +95,28 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding ID
         """
-        if resource.role != user.role or resource.group != user.group:
+        if resource.role != subject.role or resource.group != subject.group:
             raise PermissionError(
                 "User does not have permission to update this resource."
             )
 
-        obj = self._session.get(ResourceEntity, resource.id) if resource.id else None
+        query = select(ResourceEntity).where(ResourceEntity.id == resource.id)
+        entity = self._session.scalars(query).one_or_none()
 
-        if obj is None:
+        if entity is None:
             raise ResourceNotFoundException(
                 f"No resource found with matching id: {resource.id}"
             )
 
-        obj.update_from_model(resource)  # Assuming an update method exists
+        entity.name = resource.name
+        entity.summary = resource.summary
+        entity.link = resource.link
+        entity.program = resource.program
         self._session.commit()
 
-        return obj.to_model()
+        return entity.to_model()
 
-    def delete(self, user: User, id: int) -> None:
+    def delete(self, subject: User, resource: Resource) -> None:
         """
         Delete resource based on id that the user has access to
 
@@ -125,20 +127,13 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding id
         """
-        resource = (
-            self._session.query(ResourceEntity)
-            .filter(
-                ResourceEntity.id == id,
-                ResourceEntity.role == user.role,
-                ResourceEntity.group == user.group,
-            )
-            .one_or_none()
-        )
+        query = select(ResourceEntity).where(ResourceEntity.id == resource.id)
+        entity = self._session.scalars(query).one_or_none()
 
-        if resource is None:
-            raise ResourceNotFoundException(f"No resource found with matching id: {id}")
+        if entity is None:
+            raise ResourceNotFoundException(f"No resource found with matching id: {resource.id}")
 
-        self._session.delete(resource)
+        self._session.delete(entity)
         self._session.commit()
 
     def get_by_slug(self, user: User, search_string: str) -> list[Resource]:

@@ -23,12 +23,10 @@ class ResourceTagEntity(EntityBase):
 
     # set fields or 'columns' for the user table
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    resourceId: Mapped[int] = mapped_column(ForeignKey("resource.id"))
-    tagId: Mapped[int] = mapped_column(ForeignKey("tag.id"))
-
-    # relationships
-    resource: Mapped["ResourceEntity"] = relationship(back_populates="resourceTags")
-    tag: Mapped["TagEntity"] = relationship(back_populates="resourceTags")
+    resource_id: Mapped[int] = mapped_column(ForeignKey("resource.id"), primary_key=True)
+    tag_id: Mapped[int] = mapped_column(ForeignKey("tag.id", primary_key=True))
+    resource: Mapped["ResourceEntity"] = mapped_column(backpopulates="tags")
+    tag: Mapped["TagEntity"] = mapped_column(backpopulates="resource_tags")
 
     # @classmethod
     # def from_model (cls, model: resource_tag_model) -> Self:
