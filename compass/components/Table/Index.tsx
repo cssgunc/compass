@@ -161,7 +161,7 @@ export const Table = ({ users }: { users: User[] }) => {
                     {info.getValue()}
                 </span>
             ),
-        }),
+        }), 
         columnHelper.accessor("program", {
             header: () => (
                 <>

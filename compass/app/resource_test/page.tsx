@@ -10,12 +10,15 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
     const [resources, setResources] = useState<Resource[]>([]);
-
+    console.log("hello");
+    
     useEffect(() => {
         async function getResources() {
             const supabase = createClient();
 
             const { data, error } = await supabase.auth.getUser();
+
+            console.log(data, error);
 
             if (error) {
                 console.log("Accessed admin page but not logged in");
@@ -30,6 +33,7 @@ export default function Page() {
             
             setResources(resourcesAPI);
         }
+
 
         getResources();
     }, []);

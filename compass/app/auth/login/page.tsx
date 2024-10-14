@@ -21,6 +21,10 @@ export default function Page() {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        console.log("here");
+    },[])
+
+    useEffect(() => {
         const supabase = createClient();
         async function checkUser() {
             const { data } = await supabase.auth.getUser();
