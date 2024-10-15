@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Dispatch, SetStateAction } from "react";
 import "tailwindcss/tailwind.css";
 import { TagsArray } from "./TagsArray";
 import { TagDropdown } from "./TagDropdown";
@@ -7,8 +7,8 @@ import { CreateNewTagAction } from "./CreateNewTagAction";
 interface TagsInputProps {
     presetOptions: string[];
     presetValue: string | string[];
-    setPresetOptions: () => {};
-    getTagColor: () => {};
+    setPresetOptions: Dispatch<SetStateAction<string | string[]>>;
+    getTagColor(tag: string): string;
 }
 
 const TagsInput: React.FC<TagsInputProps> = ({
