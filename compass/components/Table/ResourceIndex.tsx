@@ -61,7 +61,13 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
         );
         setData(sortedUsers);
     }, [users]);
-
+    
+    const [presetOptions, setPresetOptions] = useState([
+        "administrator",
+        "volunteer",
+        "employee",
+    ]);
+    
     const deleteUser = (userId: number) => {
         console.log(data);
         setData((currentData) =>
@@ -87,11 +93,6 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
             return newData;
         });
     };
-    const [presetOptions, setPresetOptions] = useState([
-        "administrator",
-        "volunteer",
-        "employee",
-    ]);
     const [tagColors, setTagColors] = useState(new Map());
 
     const getTagColor = (tag: string) => {
