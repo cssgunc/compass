@@ -16,21 +16,22 @@ from ..models.tag_model import Tag
 
 from typing import Self
 
-
 class TagEntity(EntityBase):
 
-    # set table name
+    #set table name
     __tablename__ = "tag"
 
-    # set fields
+    #set fields
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     content: Mapped[str] = mapped_column(String(100), nullable=False)
-    resource_tags: Mapped[list["ResourceTagEntity"]] = relationship(
-        back_populates="tag"
-    )
-    service_tags: Mapped[list["ServiceTagEntity"]] = relationship(back_populates="tag")
 
+    #relationships
+    resourceTags: Mapped[list["ResourceTagEntity"]] = relationship(back_populates="tag", cascade="all,delete")
+    serviceTags: Mapped[list["ServiceTagEntity"]] = relationship(back_populates="tag", cascade="all,delete")
+
+  
+    
     @classmethod
     def from_model(cls, model: Tag) -> Self:
         """
@@ -41,11 +42,11 @@ class TagEntity(EntityBase):
         Returns:
             self: The entity
         """
-
+            
         return cls(
             id=model.id,
+            created_at=model.created_at,
             content=model.id,
-            created_at=model.created_at
         )
 
     def to_model(self) -> Tag:
@@ -58,6 +59,6 @@ class TagEntity(EntityBase):
 
         return Tag(
             id=self.id,
+            create_at=self.created_at,
             content=self.content,
-            created_at=self.created_at
         )

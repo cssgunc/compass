@@ -23,22 +23,22 @@ openapi_tags = {
 def create(
     subject: User,
     tag: Tag,
-    tag_service: TagService
+    tag_service: TagService=Depends()
 ):
     return tag_service.create(subject, tag)
 
 @api.get("", response_model=List[Tag], tags=["Tag"])
 def get_all(
     subject: User,
-    tag_svc: TagService
+    tag_svc: TagService=Depends()
 ):
     return tag_svc.get_all()
 
 @api.put("", response_model=Tag, tags=["Tag"])
-def delete(
+def update(
     subject: User,
     tag: Tag,
-    tag_svc: TagService
+    tag_svc: TagService=Depends()
 ):
     return tag_svc.delete(subject, tag)
 
@@ -46,6 +46,6 @@ def delete(
 def delete(
     subject: User,
     tag: Tag,
-    tag_svc: TagService
+    tag_svc: TagService=Depends()
 ):
     tag_svc.delete(subject, tag)
