@@ -1,6 +1,4 @@
 // for showcasing to compass
-
-import users from "./users.json";
 import {
     Cell,
     ColumnDef,
@@ -52,131 +50,15 @@ const fuzzyFilter = (
 };
 
 // TODO: Rename everything to resources
-export const ResourceTable = ({ users }: { users: Resource[] }) => {
-    const columnHelper = createColumnHelper<Resource>();
-
+export const TestTable = ({ initialData, columns }: { initialData: Resource[], columns: ColumnDef<any, any>[] }) => {
     useEffect(() => {
-        const sortedUsers = [...users].sort((a, b) =>
+        const sortedData = [...initialData].sort((a, b) =>
             a.visible === b.visible ? 0 : a.visible ? -1 : 1
         );
-        setData(sortedUsers);
-    }, [users]);
-    
-    const [presetOptions, setPresetOptions] = useState([
-        "administrator",
-        "volunteer",
-        "employee",
-    ]);
-    
-    const deleteUser = (userId: number) => {
-        console.log(data);
-        setData((currentData) =>
-            currentData.filter((user) => user.id !== userId)
-        );
-    };
+        setData(sortedData);
+    }, [initialData]);
 
-    const hideUser = (userId: number) => {
-        console.log(`Toggling visibility for user with ID: ${userId}`);
-        setData((currentData) => {
-            const newData = currentData
-                .map((user) => {
-                    if (user.id === userId) {
-                        return { ...user, visible: !user.visible };
-                    }
-                    return user;
-                })
-                .sort((a, b) =>
-                    a.visible === b.visible ? 0 : a.visible ? -1 : 1
-                );
-
-            console.log(newData);
-            return newData;
-        });
-    };
-    const [tagColors, setTagColors] = useState(new Map());
-
-    const getTagColor = (tag: string) => {
-        if (!tagColors.has(tag)) {
-            const colors = [
-                "bg-cyan-100",
-                "bg-blue-100",
-                "bg-green-100",
-                "bg-yellow-100",
-                "bg-purple-100",
-            ];
-            const randomColor =
-                colors[Math.floor(Math.random() * colors.length)];
-            setTagColors(new Map(tagColors).set(tag, randomColor));
-        }
-        return tagColors.get(tag);
-    };
-
-    const columns = [
-        columnHelper.display({
-            id: "options",
-            cell: (props) => (
-                <RowOptionMenu
-                    onDelete={() => {}}
-                    onHide={() => hideUser(props.row.original.id)}
-                />
-            ),
-        }),
-        columnHelper.accessor("name", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Name
-                </>
-            ),
-            cell: (info) => (
-                <RowOpenAction
-                    title={info.getValue()}
-                    rowData={info.row.original}
-                    onRowUpdate={handleRowUpdate}
-                />
-            ),
-        }),
-        columnHelper.accessor("link", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Link
-                </>
-            ),
-            cell: (info) => (
-                <a
-                    href={info.getValue()}
-                    target={"_blank"}
-                    className="ml-2 text-gray-500 underline hover:text-gray-400"
-                >
-                    {info.getValue()}
-                </a>
-            ),
-        }),
-        columnHelper.accessor("program", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Program
-                </>
-            ),
-            cell: (info) => <TagsInput presetValue={info.getValue()} />,
-        }),
-
-        columnHelper.accessor("summary", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Summary
-                </>
-            ),
-            cell: (info) => (
-                <span className="ml-2 text-gray-500">{info.getValue()}</span>
-            ),
-        }),
-    ];
-
-    const [data, setData] = useState<Resource[]>([...users]);
-
-    const addUser = () => {
-        setData([...data]);
-    };
+    const [data, setData] = useState<Resource[]>([...initialData]);
 
     // Searching
     const [query, setQuery] = useState("");
@@ -195,14 +77,7 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
     // TODO: Sorting
 
     // added this fn for editing rows
-    const handleRowUpdate = (updatedRow: Resource) => {
-        const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
-        if (dataIndex !== -1) {
-            const updatedData = [...data];
-            updatedData[dataIndex] = updatedRow;
-            setData(updatedData);
-        }
-    };
+
 
     const table = useReactTable({
         columns,
