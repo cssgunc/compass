@@ -1,34 +1,14 @@
-// for showcasing to compass
-import {
-    Cell,
-    ColumnDef,
-    Row,
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    sortingFns,
-    useReactTable,
-} from "@tanstack/react-table";
+import { Row, ColumnDef, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
 import {
     ChangeEvent,
     useState,
     useEffect,
-    FunctionComponent,
-    useRef,
-    ChangeEventHandler,
     Key,
 } from "react";
-import { RowOptionMenu } from "./RowOptionMenu";
-import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
 import {
-    AtSymbolIcon,
-    Bars2Icon,
-    ArrowDownCircleIcon,
     PlusIcon,
 } from "@heroicons/react/24/solid";
-import TagsInput from "../TagsInput/Index";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import Resource from "@/utils/models/Resource";
 
@@ -49,8 +29,7 @@ const fuzzyFilter = (
     return itemRank.passed;
 };
 
-// TODO: Rename everything to resources
-export const TestTable = ({ initialData, columns }: { initialData: Resource[], columns: ColumnDef<any, any>[] }) => {
+export const Table = ({ initialData, columns }: { initialData: Resource[], columns: ColumnDef<any, any>[] }) => {
     useEffect(() => {
         const sortedData = [...initialData].sort((a, b) =>
             a.visible === b.visible ? 0 : a.visible ? -1 : 1
@@ -75,10 +54,7 @@ export const TestTable = ({ initialData, columns }: { initialData: Resource[], c
     // TODO: Filtering
 
     // TODO: Sorting
-
-    // added this fn for editing rows
-
-
+    
     const table = useReactTable({
         columns,
         data,
