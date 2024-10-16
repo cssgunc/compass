@@ -61,20 +61,21 @@ export default function RootLayout({
                         }
                     </button>
                     {/* sidebar  */}
-                    <div
+                    {/* <div
                         className={`absolute inset-y-0 left-0 transform ${
                             isSidebarOpen
                                 ? "translate-x-0"
                                 : "-translate-x-full"
                         } w-64 transition duration-300 ease-in-out`}
-                    >
+                    > */}
                         <Sidebar
                             setIsSidebarOpen={setIsSidebarOpen}
+                            isSidebarOpen={isSidebarOpen}
                             name={user.username}
                             email={user.email}
                             isAdmin={user.role === Role.ADMIN}
                         />
-                    </div>
+                    { /* </div>*/ }
                     {/* page ui  */}
                     <div
                         className={`flex-1 transition duration-300 ease-in-out ${

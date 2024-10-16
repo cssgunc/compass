@@ -12,6 +12,7 @@ import { UserProfile } from "../resource/UserProfile";
 
 interface SidebarProps {
     setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isSidebarOpen: boolean;
     name: string;
     email: string;
     isAdmin: boolean;
@@ -19,13 +20,16 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({
     setIsSidebarOpen,
+    isSidebarOpen,
     name,
     email,
     isAdmin: admin,
 }) => {
     return (
-        <div className="w-64 h-full border border-gray-200 bg-gray-50 px-4">
-            {/* button to close sidebar  */}
+        <div className={"fixed left-0 w-64 h-full border border-gray-200 bg-gray-50 px-4 "
+            + (isSidebarOpen ? "translate-x-0" : "-translate-x-full opacity-25")
+            + " transition duration-300 ease-out"}>
+        {/* button to close sidebar  */}
             <div className="flex justify-end">
                 <button
                     onClick={() => setIsSidebarOpen(false)}
