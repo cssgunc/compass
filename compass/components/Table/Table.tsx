@@ -11,6 +11,8 @@ import {
 } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import Resource from "@/utils/models/Resource";
+import Service from "@/utils/models/Service";
+import User from "@/utils/models/User"
 
 // For search
 const fuzzyFilter = (
@@ -37,7 +39,39 @@ export const Table = ({ initialData, columns }: { initialData: Resource[], colum
         setData(sortedData);
     }, [initialData]);
 
-    const [data, setData] = useState<Resource[]>([...initialData]);
+    const [data, setData] = useState<(Resource | User | Service)[]>([...initialData]);
+
+    // Data manipulation
+    // TODO: Connect data manipulation methods to the database (deleteResource, hideResource, addResource)
+    const deleteData = (dataId: number) => {
+        console.log(data);
+        setData((currentData) =>
+            currentData.filter((data) => data.id !== dataId)
+        );
+    };
+
+    const hideData = (dataId: number) => {
+        console.log(`Toggling visibility for data with ID: ${dataId}`);
+        setData((currentData) => {
+            const newData = currentData
+                .map((data) => {
+                    if (data.id === dataId) {
+                        return { ...data, visible: !data.visible };
+                    }
+                    return data;
+                })
+                .sort((a, b) =>
+                    a.visible === b.visible ? 0 : a.visible ? -1 : 1
+                );
+
+            console.log(newData);
+            return newData;
+        });
+    };
+
+    const addData = () => {
+        setData([...data]);
+    };
 
     // Searching
     const [query, setQuery] = useState("");
@@ -54,7 +88,7 @@ export const Table = ({ initialData, columns }: { initialData: Resource[], colum
     // TODO: Filtering
 
     // TODO: Sorting
-    
+
     const table = useReactTable({
         columns,
         data,
@@ -113,9 +147,9 @@ export const Table = ({ initialData, columns }: { initialData: Resource[], colum
                 <tbody>
                     {table.getRowModel().rows.map((row) => {
                         // Individual row
-                        const isUserVisible = row.original.visible;
+                        const isDataVisible = row.original.visible;
                         const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${
-                            !isUserVisible ? "bg-gray-200 text-gray-500" : ""
+                            !isDataVisible ? "bg-gray-200 text-gray-500" : ""
                         }`;
                         return (
                             <tr className={rowClassNames} key={row.id}>
@@ -141,7 +175,7 @@ export const Table = ({ initialData, columns }: { initialData: Resource[], colum
                         <td
                             className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50"
                             colSpan={100}
-                            onClick={addUser}
+                            onClick={addData}
                         >
                             <span className="flex ml-1 text-gray-500">
                                 <PlusIcon className="inline h-4 mr-1" />
