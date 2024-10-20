@@ -72,8 +72,7 @@ class ResourceService:
             self._session.query(ResourceEntity)
             .filter(
                 ResourceEntity.id == id,
-                ResourceEntity.role == user.role,
-                ResourceEntity.group == user.group,
+                ResourceEntity.program.in_(user.program),
             )
             .one_or_none()
         )
