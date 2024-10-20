@@ -4,7 +4,12 @@ import pytest
 from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import OperationalError
-from .services import user_test_data, tag_test_data, service_test_data
+from .services import (
+    user_test_data,
+    tag_test_data,
+    service_test_data,
+    resource_test_data,
+)
 
 from ..database import _engine_str
 from ..env import getenv
@@ -57,5 +62,6 @@ def setup_insert_data_fixture(session: Session):
     user_test_data.insert_fake_data(session)
     tag_test_data.insert_fake_data(session)
     service_test_data.insert_fake_data(session)
+    resource_test_data.insert_fake_data(session)
     session.commit()
     yield
