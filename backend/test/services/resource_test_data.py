@@ -50,6 +50,15 @@ resource5 = Resource(
     created_at=datetime(2023, 6, 5, 11, 30, 0),
 )
 
+resource6 = Resource(
+    id=6,
+    name="Resource 6",
+    summary="New Financial Resource",
+    link="https://example.com/resource6",
+    program=ProgramTypeEnum.ECONOMIC,
+    created_at=datetime(2024, 6, 5, 11, 30, 0),
+)
+
 resources = [resource1, resource2, resource3, resource4, resource5]
 
 resource_1 = Resource(

@@ -43,9 +43,9 @@ class ResourceService:
         Returns:
             Resource: Object added to table
         """
-        if resource.role != user.role or resource.group != user.group:
+        if resource.program not in user.program:
             raise PermissionError(
-                "User does not have permission to add resources in this role or group."
+                "User does not have permission to add resources in this program."
             )
 
         resource_entity = ResourceEntity.from_model(resource)
