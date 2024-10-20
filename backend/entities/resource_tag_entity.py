@@ -15,6 +15,8 @@ from datetime import datetime
 # Import self for to model
 from typing import Self
 
+from ..models import ResourceTag
+
 
 class ResourceTagEntity(EntityBase):
 
@@ -30,13 +32,13 @@ class ResourceTagEntity(EntityBase):
     resource: Mapped["ResourceEntity"] = relationship(back_populates="resourceTags")
     tag: Mapped["TagEntity"] = relationship(back_populates="resourceTags")
 
-    # @classmethod
-    # def from_model (cls, model: resource_tag_model) -> Self:
-    #     return cls (
-    #         id = model.id,
-    #         resourceId = model.resourceId,
-    #         tagId = model.tagId,
-    #     )
+    @classmethod
+    def from_model(cls, model: ResourceTag) -> Self:
+        return cls(
+            id=model.id,
+            resourceId=model.resource_id,
+            tagId=model.tag_id,
+        )
 
     # def to_model (self) -> resource_tag_model:
     #     return user_model(

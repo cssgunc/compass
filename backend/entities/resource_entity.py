@@ -64,4 +64,5 @@ class ResourceEntity(EntityBase):
             summary=self.summary,
             link=self.link,
             program=self.program,
+            tags=[tag.tag.to_model() for tag in self.resourceTags],
         )

@@ -4,6 +4,7 @@ from typing import List
 from datetime import datetime
 from typing import Optional
 from .enum_for_models import ProgramTypeEnum
+from .tag_model import Tag
 
 
 class Resource(BaseModel):
@@ -13,3 +14,4 @@ class Resource(BaseModel):
     link: str = Field(..., max_length=150, description="link to the resource")
     program: ProgramTypeEnum
     created_at: Optional[datetime]
+    tags: List[Tag] = []
