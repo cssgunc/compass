@@ -11,7 +11,9 @@ tag2 = Tag(id=2, content="Tag 2", created_at=datetime.now())
 
 tag3 = Tag(id=3, content="Tag 3", created_at=datetime.now())
 
-tagToCreate = Tag(id=4, content="Tag 4", created_at=datetime.now())
+tag_to_create = Tag(id=4, content="Tag 4", created_at=datetime.now())
+
+tag_to_create_no_id = Tag(content="Tag 5", created_at=datetime.now())
 
 tags = [tag1, tag2, tag3]
 
