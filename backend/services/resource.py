@@ -43,7 +43,7 @@ class ResourceService:
         Returns:
             Resource: Object added to table
         """
-        if resource.program not in user.program:
+        if user.role != UserTypeEnum.ADMIN:
             raise PermissionError(
                 "User does not have permission to add resources in this program."
             )
@@ -72,8 +72,7 @@ class ResourceService:
             self._session.query(ResourceEntity)
             .filter(
                 ResourceEntity.id == id,
-                ResourceEntity.role == user.role,
-                ResourceEntity.group == user.group,
+                ResourceEntity.program.in_(user.program),
             )
             .one_or_none()
         )
@@ -97,7 +96,7 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding ID
         """
-        if resource.role != user.role or resource.group != user.group:
+        if user.role != UserTypeEnum.ADMIN:
             raise PermissionError(
                 "User does not have permission to update this resource."
             )
@@ -109,7 +108,11 @@ class ResourceService:
                 f"No resource found with matching id: {resource.id}"
             )
 
-        obj.update_from_model(resource)  # Assuming an update method exists
+        obj.name = resource.name
+        obj.summary = resource.summary
+        obj.link = resource.link
+        obj.program = resource.program
+
         self._session.commit()
 
         return obj.to_model()
@@ -125,12 +128,15 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding id
         """
+        if user.role != UserTypeEnum.ADMIN:
+            raise PermissionError(
+                "User does not have permission to delete this resource."
+            )
+        
         resource = (
             self._session.query(ResourceEntity)
             .filter(
                 ResourceEntity.id == id,
-                ResourceEntity.role == user.role,
-                ResourceEntity.group == user.group,
             )
             .one_or_none()
         )
@@ -156,10 +162,12 @@ class ResourceService:
             ResourceNotFoundException if no resource is found with the corresponding slug
         """
         query = select(ResourceEntity).where(
-            ResourceEntity.title.ilike(f"%{search_string}%"),
-            ResourceEntity.role == user.role,
-            ResourceEntity.group == user.group,
+            ResourceEntity.name.ilike(f"%{search_string}%"),
+            ResourceEntity.program.in_(user.program)
         )
         entities = self._session.scalars(query).all()
+
+        if not entities:
+             raise ResourceNotFoundException(f"No resource found with matching slug: {search_string}")
 
         return [entity.to_model() for entity in entities]
