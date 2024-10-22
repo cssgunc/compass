@@ -12,6 +12,10 @@ from .entity_base import EntityBase
 # Import datetime for created_at type
 from datetime import datetime
 
+from ..models.tag_model import Tag
+
+from typing import Self
+
 class TagEntity(EntityBase):
 
     #set table name
@@ -27,17 +31,17 @@ class TagEntity(EntityBase):
     serviceTags: Mapped[list["ServiceTagEntity"]] = relationship(back_populates="tag", cascade="all,delete")
 
   
-    """
+    
     @classmethod
     def from_model(cls, model: Tag) -> Self:
-        
+        """
         Create a user entity from model
 
         Args: model (User): the model to create the entity from
 
         Returns:
             self: The entity
-        
+        """
             
         return cls(
             id=model.id,
@@ -45,18 +49,17 @@ class TagEntity(EntityBase):
         )
 
     def to_model(self) -> Tag:
-        
+        """
         Create a user model from entity
 
         Returns:
             User: A User model for API usage
-        
+        """
 
         return Tag(
             id=self.id,
-            content=self.id,
+            content=self.content,
         )
 
-    """
 
 

@@ -6,9 +6,7 @@ engine = create_engine(_engine_str(database=""), echo=True)
 """Application-level SQLAlchemy database engine."""
 
 with engine.connect() as connection:
-    connection.execute(
-        text("COMMIT")
-    )
+    connection.execute(text("COMMIT"))
     database = getenv("POSTGRES_DATABASE")
     stmt = text(f"CREATE DATABASE {database}")
     connection.execute(stmt)

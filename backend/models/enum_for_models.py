@@ -1,8 +1,4 @@
-from pydantic import BaseModel, Field
 from enum import Enum
-from typing import List
-from datetime import datetime
-from typing import Optional
 
 
 class ProgramTypeEnum(str, Enum):

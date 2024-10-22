@@ -12,6 +12,7 @@ class User(BaseModel):
     email: str = Field(..., description="The e-mail of the user")
     experience: int = Field(..., description="Years of Experience of the User")
     group: str
-    programtype: List[ProgramTypeEnum]
-    usertype: UserTypeEnum
+    program: List[ProgramTypeEnum]
+    role: UserTypeEnum
     created_at: Optional[datetime]
+    uuid: str | None = None

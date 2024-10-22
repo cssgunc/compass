@@ -4,13 +4,15 @@ import pytest
 from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import OperationalError
+from .services import user_test_data, tag_test_data, service_test_data
 
-from ...database import _engine_str
-from ...env import getenv
-from ... import entities
+from ..database import _engine_str
+from ..env import getenv
+from .. import entities
 
 POSTGRES_DATABASE = f'{getenv("POSTGRES_DATABASE")}_test'
 POSTGRES_USER = getenv("POSTGRES_USER")
+
 
 def reset_database():
     engine = create_engine(_engine_str(database=""))
@@ -48,3 +50,12 @@ def session(test_engine: Engine):
         yield session
     finally:
         session.close()
+
+
+@pytest.fixture(autouse=True)
+def setup_insert_data_fixture(session: Session):
+    user_test_data.insert_fake_data(session)
+    tag_test_data.insert_fake_data(session)
+    service_test_data.insert_fake_data(session)
+    session.commit()
+    yield
