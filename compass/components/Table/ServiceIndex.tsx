@@ -1,5 +1,5 @@
 import { Bars2Icon } from "@heroicons/react/24/solid";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Table } from "@/components/Table/Table";
@@ -12,6 +12,7 @@ export const ServiceTable = ({ services }: { services: Service[] }) => {
     const columnHelper = createColumnHelper<Service>();
     const [data, setData] = useState<DataPoint[]>([...services]);
     
+    // TODO: Update preset options for services
     const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
         "administrator",
         "volunteer",

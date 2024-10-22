@@ -1,16 +1,16 @@
-import { Bars2Icon } from "@heroicons/react/24/solid";
+import { ArrowDownCircleIcon, AtSymbolIcon, Bars2Icon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Table } from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import TagsInput from "@/components/TagsInput/Index";
-import Resource from "@/utils/models/Resource";
+import User from "@/utils/models/User";
 import { DataPoint } from "@/components/Table/Table";
 
-export function ResourceTable({ resources }: { resources: Resource[] }) {
-    const columnHelper = createColumnHelper<Resource>();    
-    const [data, setData] = useState<DataPoint[]>([...resources]);
+export function UserTable({ users }: { users: User[] }) {
+    const columnHelper = createColumnHelper<User>();    
+    const [data, setData] = useState<DataPoint[]>([...users]);
 
     const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
         "administrator",
@@ -27,11 +27,11 @@ export function ResourceTable({ resources }: { resources: Resource[] }) {
         }
     };
 
-    const columns: ColumnDef<Resource, any>[] = [
-        columnHelper.accessor("name", {
+    const columns: ColumnDef<User, any>[] = [
+        columnHelper.accessor("username", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Name
+                    <Bars2Icon className="inline align-top h-4" /> Username
                 </>
             ),
             cell: (info) => (
@@ -42,26 +42,11 @@ export function ResourceTable({ resources }: { resources: Resource[] }) {
                 />
             ),
         }),
-        columnHelper.accessor("link", {
+        columnHelper.accessor("role", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Link
-                </>
-            ),
-            cell: (info) => (
-                <a
-                    href={info.getValue()}
-                    target={"_blank"}
-                    className="ml-2 text-gray-500 underline hover:text-gray-400"
-                >
-                    {info.getValue()}
-                </a>
-            ),
-        }),
-        columnHelper.accessor("program", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Program
+                    <ArrowDownCircleIcon className="inline align-top h-4" />{" "}
+                    Role
                 </>
             ),
             cell: (info) => (
@@ -73,15 +58,33 @@ export function ResourceTable({ resources }: { resources: Resource[] }) {
                 />
             ),
         }),
-
-        columnHelper.accessor("summary", {
+        columnHelper.accessor("email", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Summary
+                    <AtSymbolIcon className="inline align-top h-4" /> Email
                 </>
             ),
             cell: (info) => (
-                <span className="ml-2 text-gray-500">{info.getValue()}</span>
+                <span className="ml-2 text-gray-500 underline hover:text-gray-400">
+                    {info.getValue()}
+                </span>
+            ),
+        }), 
+        columnHelper.accessor("program", {
+            header: () => (
+                <>
+                    <ArrowDownCircleIcon className="inline align-top h-4" />{" "}
+                    Program
+                </>
+            ),
+            // TODO: Setup different tags handler for program
+            cell: (info) => (
+                <TagsInput
+                presetValue={info.getValue()}
+                presetOptions={presetOptions}
+                setPresetOptions={setPresetOptions}
+                getTagColor={getTagColor}
+            />
             ),
         }),
     ];
