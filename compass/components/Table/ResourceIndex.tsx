@@ -112,15 +112,6 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
     };
 
     const columns = [
-        columnHelper.display({
-            id: "options",
-            cell: (props) => (
-                <RowOptionMenu
-                    onDelete={() => {}}
-                    onHide={() => hideUser(props.row.original.id)}
-                />
-            ),
-        }),
         columnHelper.accessor("name", {
             header: () => (
                 <>
@@ -157,7 +148,14 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
                     <Bars2Icon className="inline align-top h-4" /> Program
                 </>
             ),
-            cell: (info) => <TagsInput presetValue={info.getValue()} />,
+            cell: (info) => (
+                <TagsInput
+                    presetValue={info.getValue()}
+                    presetOptions={presetOptions}
+                    setPresetOptions={setPresetOptions}
+                    getTagColor={getTagColor}
+                />
+            ),
         }),
 
         columnHelper.accessor("summary", {

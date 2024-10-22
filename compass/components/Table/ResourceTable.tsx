@@ -1,51 +1,17 @@
 import { PageLayout } from "@/components/PageLayout";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
-import { RowOptionMenu } from "@/components/Table/RowOptionMenu";
 import { Table } from "@/components/Table/Table";
 import TagsInput from "@/components/TagsInput/Index";
 import Resource from "@/utils/models/Resource";
-import { createClient } from "@/utils/supabase/client";
-
 import { Bars2Icon, BookmarkIcon } from "@heroicons/react/24/solid";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { DataPoint } from "@/components/Table/Table";
 
 export function ResourceTable({ resources }: { resources: Resource[] }) {
-    const columnHelper = createColumnHelper<Resource>();
-
-    const [data, setData] = useState<Resource[]>([...resources]);
-
-    // TODO: Connect data manipulation methods to the database (deleteResource, hideResource, addResource)
-    const deleteUser = (userId: number) => {
-        console.log(data);
-        setData((currentData) =>
-            currentData.filter((user) => user.id !== userId)
-        );
-    };
-
-    const hideUser = (userId: number) => {
-        console.log(`Toggling visibility for user with ID: ${userId}`);
-        setData((currentData) => {
-            const newData = currentData
-                .map((user) => {
-                    if (user.id === userId) {
-                        return { ...user, visible: !user.visible };
-                    }
-                    return user;
-                })
-                .sort((a, b) =>
-                    a.visible === b.visible ? 0 : a.visible ? -1 : 1
-                );
-
-            console.log(newData);
-            return newData;
-        });
-    };
-
-    const addUser = () => {
-        setData([...data]);
-    };
-
+    const columnHelper = createColumnHelper<Resource>();    
+    const [data, setData] = useState<DataPoint[]>([...resources]);
+    
     const [presetOptions, setPresetOptions] = useState([
         "administrator",
         "volunteer",
@@ -79,15 +45,6 @@ export function ResourceTable({ resources }: { resources: Resource[] }) {
     };
 
     const columns: ColumnDef<Resource, any>[] = [
-        columnHelper.display({
-            id: "options",
-            cell: (props) => (
-                <RowOptionMenu
-                    onDelete={() => {}}
-                    onHide={() => hideUser(props.row.original.id)}
-                />
-            ),
-        }),
         columnHelper.accessor("name", {
             header: () => (
                 <>
@@ -125,7 +82,12 @@ export function ResourceTable({ resources }: { resources: Resource[] }) {
                 </>
             ),
             cell: (info) => (
-                <TagsInput presetValue={info.getValue()} />
+                <TagsInput
+                    presetValue={info.getValue()}
+                    presetOptions={presetOptions}
+                    setPresetOptions={setPresetOptions}
+                    getTagColor={getTagColor}
+                />
             ),
         }),
 
@@ -145,7 +107,7 @@ export function ResourceTable({ resources }: { resources: Resource[] }) {
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
             <PageLayout title="Resources" icon={<BookmarkIcon />}>
-                <Table initialData={resources} columns={columns}/>
+                <Table data={resources} setData={setData} columns={columns}/>
             </PageLayout>
         </div>
     );

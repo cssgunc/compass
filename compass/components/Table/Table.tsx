@@ -1,18 +1,34 @@
-import { Row, ColumnDef, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
+import { 
+    Row,
+    ColumnDef,
+    useReactTable,
+    getCoreRowModel,
+    flexRender,
+    createColumnHelper
+ } from "@tanstack/react-table";
 import {
     ChangeEvent,
     useState,
     useEffect,
     Key,
+    Dispatch,
+    SetStateAction
 } from "react";
 import { TableAction } from "./TableAction";
-import {
-    PlusIcon,
-} from "@heroicons/react/24/solid";
+import { PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import Resource from "@/utils/models/Resource";
 import Service from "@/utils/models/Service";
-import User from "@/utils/models/User"
+import User from "@/utils/models/User";
+import { RowOptionMenu } from "./RowOptionMenu";
+
+export type DataPoint = Resource | User | Service;
+
+type TableProps = {
+    data: DataPoint[],
+    setData: Dispatch<SetStateAction<DataPoint[]>>
+    columns: ColumnDef<any, any>[] 
+};
 
 // For search
 const fuzzyFilter = (
@@ -31,15 +47,15 @@ const fuzzyFilter = (
     return itemRank.passed;
 };
 
-export const Table = ({ initialData, columns }: { initialData: Resource[], columns: ColumnDef<any, any>[] }) => {
+export const Table = ({ data, columns, setData }: TableProps) => {
+    const columnHelper = createColumnHelper<Resource>();
     useEffect(() => {
-        const sortedData = [...initialData].sort((a, b) =>
+        const sortedData = [...data].sort((a, b) =>
             a.visible === b.visible ? 0 : a.visible ? -1 : 1
         );
         setData(sortedData);
-    }, [initialData]);
+    }, [data, setData]);
 
-    const [data, setData] = useState<(Resource | User | Service)[]>([...initialData]);
 
     // Data manipulation
     // TODO: Connect data manipulation methods to the database (deleteResource, hideResource, addResource)
@@ -72,6 +88,19 @@ export const Table = ({ initialData, columns }: { initialData: Resource[], colum
     const addData = () => {
         setData([...data]);
     };
+
+    // Add data manipulation options to the first column
+    columns.unshift(
+        columnHelper.display({
+            id: "options",
+            cell: (props) => (
+                <RowOptionMenu
+                    onDelete={() => deleteData(props.row.original.id)}
+                    onHide={() => hideData(props.row.original.id)}
+                />
+            ),
+        })
+    )
 
     // Searching
     const [query, setQuery] = useState("");
