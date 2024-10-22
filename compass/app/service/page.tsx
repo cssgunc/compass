@@ -1,7 +1,7 @@
 "use client";
 
 import { PageLayout } from "@/components/PageLayout";
-import { ServiceTable } from "@/components/Table/ServiceIndex";
+import ServiceTable from "@/components/Table/ServiceIndex";
 import Service from "@/utils/models/Service";
 import { createClient } from "@/utils/supabase/client";
 
@@ -37,7 +37,7 @@ export default function Page() {
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
             <PageLayout title="Services" icon={<ClipboardIcon />}>
-                <ServiceTable users={services} />
+                <ServiceTable services={services} />
             </PageLayout>
         </div>
     );

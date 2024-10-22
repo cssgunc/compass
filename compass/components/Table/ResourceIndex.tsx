@@ -8,7 +8,7 @@ import TagsInput from "@/components/TagsInput/Index";
 import Resource from "@/utils/models/Resource";
 import { DataPoint } from "@/components/Table/Table";
 
-export function ResourceTable({ resources }: { resources: Resource[] }) {
+export default function ResourceTable({ resources }: { resources: Resource[] }) {
     const columnHelper = createColumnHelper<Resource>();    
     const [data, setData] = useState<DataPoint[]>([...resources]);
 

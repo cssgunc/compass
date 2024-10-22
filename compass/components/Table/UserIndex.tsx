@@ -8,7 +8,7 @@ import TagsInput from "@/components/TagsInput/Index";
 import User from "@/utils/models/User";
 import { DataPoint } from "@/components/Table/Table";
 
-export function UserTable({ users }: { users: User[] }) {
+export default function UserTable({ users }: { users: User[] }) {
     const columnHelper = createColumnHelper<User>();    
     const [data, setData] = useState<DataPoint[]>([...users]);
 
