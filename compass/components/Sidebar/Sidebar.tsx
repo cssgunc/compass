@@ -31,21 +31,24 @@ const Sidebar: React.FC<SidebarProps> = ({
             {/* Button to open the sidebar. */}
             <button
                 onClick={() => setIsSidebarOpen(true)}
-                className={`fixed z-20 p-2 text-gray-500 hover:text-gray-800 left-0`}
+                className={
+                    "fixed z-20 p-2 text-gray-500 hover:text-gray-800 left-0"
+                }
                 aria-label={"Open sidebar"}
             >
                 {!isSidebarOpen && (
                     <ChevronDoubleRightIcon className="h-5 w-5" />
                 )}
             </button>
+
             {/* The sidebar itself. */}
             <div
                 className={
                     "fixed left-0 w-64 h-full border border-gray-200 bg-gray-50 px-4 " +
                     (isSidebarOpen
-                        ? "translate-x-0"
-                        : "-translate-x-full opacity-25") +
-                    " transition duration-300 ease-in-out"
+                        ? "translate-x-0" // Open
+                        : "-translate-x-full opacity-25") + // Closed
+                    " transition duration-300 ease-out" // More animation properties
                 }
             >
                 {/* Button to close sidebar  */}
@@ -58,6 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         <ChevronDoubleLeftIcon className="h-5 w-5" />
                     </button>
                 </div>
+
                 <div className="flex flex-col space-y-8">
                     {/* user + logout button  */}
                     <div className="flex items-center p-4 space-x-2 border border-gray-200 rounded-md ">
