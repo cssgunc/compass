@@ -8,7 +8,7 @@ import TagsInput from "@/components/TagsInput/Index";
 import Service from "@/utils/models/Service";
 import { DataPoint } from "@/components/Table/Table";
 
-export const ServiceTable = ({ services }: { services: Service[] }) => {
+export default function ServiceTable({ services }: { services: Service[] }) {
     const columnHelper = createColumnHelper<Service>();
     const [data, setData] = useState<DataPoint[]>([...services]);
     
