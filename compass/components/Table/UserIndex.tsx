@@ -8,6 +8,10 @@ import TagsInput from "@/components/TagsInput/Index";
 import User from "@/utils/models/User";
 import { DataPoint } from "@/components/Table/Table";
 
+/**
+ * Table componenet used for displaying users
+ * @param props.users List of users to be displayed by the table
+ */
 export default function UserTable({ users }: { users: User[] }) {
     const columnHelper = createColumnHelper<User>();    
     const [data, setData] = useState<DataPoint[]>([...users]);
