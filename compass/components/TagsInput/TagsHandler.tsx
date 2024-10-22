@@ -1,5 +1,13 @@
 import { useState } from 'react';
 
+/**
+ * Custom hook used to handle the state of tag options and colors
+ * @param initialOptions Initial value for preset options
+ * @returns An object with three fields intended to be passed into a `TagsInput` component:
+ *  - `presetOptions` - the current state of tag options
+ *  - `setPresetOptions` - the state setter for presetOptions
+ *  - `getTagColor` - function that retrieves the color for the given tag
+ */
 export default function useTagsHandler(initialOptions: string[]) {
     const [presetOptions, setPresetOptions] = useState(initialOptions);
     const [tagColors, setTagColors] = useState(new Map<string, string>());
