@@ -1,13 +1,12 @@
-import { PageLayout } from "@/components/PageLayout";
-import { RowOpenAction } from "@/components/Table/RowOpenAction";
+import { Bars2Icon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import useTagsHandler from "@/components/TagsInput/TagsHandler";
+import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Table } from "@/components/Table/Table";
+import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import TagsInput from "@/components/TagsInput/Index";
 import Resource from "@/utils/models/Resource";
-import { Bars2Icon, BookmarkIcon } from "@heroicons/react/24/solid";
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { useState } from "react";
 import { DataPoint } from "@/components/Table/Table";
-import useTagsHandler from "@/components/TagsInput/TagsHandler";
 
 export function ResourceTable({ resources }: { resources: Resource[] }) {
     const columnHelper = createColumnHelper<Resource>();    
@@ -87,12 +86,5 @@ export function ResourceTable({ resources }: { resources: Resource[] }) {
         }),
     ];
 
-    return (
-        <div className="min-h-screen flex flex-col">
-            {/* icon + title  */}
-            <PageLayout title="Resources" icon={<BookmarkIcon />}>
-                <Table data={resources} setData={setData} columns={columns}/>
-            </PageLayout>
-        </div>
-    );
+    return <Table data={data} setData={setData} columns={columns}/>
 }
