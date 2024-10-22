@@ -18,8 +18,8 @@ export function ResourceTable({ resources }: { resources: Resource[] }) {
         "volunteer",
         "employee",
     ])
-    
-    const handleRowUpdate = (updatedRow: Resource) => {
+
+    const handleRowUpdate = (updatedRow: DataPoint) => {
         const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
         if (dataIndex !== -1) {
             const updatedData = [...data];
