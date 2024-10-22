@@ -7,34 +7,18 @@ import { Bars2Icon, BookmarkIcon } from "@heroicons/react/24/solid";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { useState } from "react";
 import { DataPoint } from "@/components/Table/Table";
+import useTagsHandler from "@/components/TagsInput/TagsHandler";
 
 export function ResourceTable({ resources }: { resources: Resource[] }) {
     const columnHelper = createColumnHelper<Resource>();    
     const [data, setData] = useState<DataPoint[]>([...resources]);
-    
-    const [presetOptions, setPresetOptions] = useState([
+
+    const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
         "administrator",
         "volunteer",
         "employee",
-    ]);
-    const [tagColors, setTagColors] = useState(new Map());
-
-    const getTagColor = (tag: string) => {
-        if (!tagColors.has(tag)) {
-            const colors = [
-                "bg-cyan-100",
-                "bg-blue-100",
-                "bg-green-100",
-                "bg-yellow-100",
-                "bg-purple-100",
-            ];
-            const randomColor =
-                colors[Math.floor(Math.random() * colors.length)];
-            setTagColors(new Map(tagColors).set(tag, randomColor));
-        }
-        return tagColors.get(tag);
-    };
-
+    ])
+    
     const handleRowUpdate = (updatedRow: Resource) => {
         const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
         if (dataIndex !== -1) {
