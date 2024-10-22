@@ -7,7 +7,7 @@ import { CreateNewTagAction } from "./CreateNewTagAction";
 interface TagsInputProps {
     presetOptions: string[];
     presetValue: string | string[];
-    setPresetOptions: Dispatch<SetStateAction<string | string[]>>;
+    setPresetOptions: Dispatch<SetStateAction<string[]>>;
     getTagColor(tag: string): string;
 }
 
