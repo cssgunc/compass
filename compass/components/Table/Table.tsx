@@ -47,7 +47,13 @@ const fuzzyFilter = (
     return itemRank.passed;
 };
 
-export const Table = ({ data, columns, setData }: TableProps) => {
+/**
+ * General componenet that holds shared functionality for any data table component
+ * @param props.data List of data, managed through state, to be held in the table
+ * @param props.setData State setter to be used for data manipulation methods
+ * @param props.columns Column definitions made with Tanstack columnHelper
+ */
+export const Table = ({ data, setData, columns }: TableProps) => {
     const columnHelper = createColumnHelper<Resource>();
     useEffect(() => {
         const sortedData = [...data].sort((a, b) =>
