@@ -1,10 +1,17 @@
 import Drawer from "@/components/Drawer/Drawer";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
+import { DataPoint } from "@/components/Table/Table";
 
-export const RowOpenAction = ({ title, rowData, onRowUpdate }) => {
+type RowOpenActionProps = {
+    title: string,
+    rowData: DataPoint,
+    onRowUpdate: (updatedRow: DataPoint) => void;
+}
+
+export const RowOpenAction = ({ title, rowData, onRowUpdate }: RowOpenActionProps) => {
     const [pageContent, setPageContent] = useState("");
 
-    const handleDrawerContentChange = (newContent) => {
+    const handleDrawerContentChange = (newContent: string) => {
         setPageContent(newContent);
     };
 
