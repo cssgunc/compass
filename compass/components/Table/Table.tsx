@@ -54,16 +54,14 @@ export default function Table<T extends DataPoint>({ data, setData, columns }: T
     const columnHelper = createColumnHelper<T>();
     
     // For sorting
-    const sortData = (prevData: T[]) => (
-        prevData.sort((a, b) =>
-            a.visible === b.visible 
-            ? 0 
-            : a.visible ? -1 : 1
-        )
+    const visibilitySort = (a: T, b: T) => (
+        a.visible === b.visible 
+        ? 0 
+        : a.visible ? -1 : 1
     )
 
     useEffect(() => {
-        setData(prevData => sortData(prevData))
+        setData(prevData => prevData.sort(visibilitySort))
     }, [setData]);
 
     // Data manipulation
@@ -74,20 +72,17 @@ export default function Table<T extends DataPoint>({ data, setData, columns }: T
             currentData.filter((data) => data.id !== dataId)
         );
     };
-
+    
     const hideData = (dataId: number) => {
         console.log(`Toggling visibility for data with ID: ${dataId}`);
-        setData((currentData) => {
+        setData(currentData => {
             const newData = currentData
-                .map((data) => {
-                    if (data.id === dataId) {
-                        return { ...data, visible: !data.visible };
-                    }
-                    return data;
-                })
-                .sort((a, b) =>
-                    a.visible === b.visible ? 0 : a.visible ? -1 : 1
-                );
+                .map(data => (
+                    data.id === dataId
+                    ? { ...data, visible: !data.visible }
+                    : data
+                ))
+                .sort(visibilitySort);
 
             console.log(newData);
             return newData;
