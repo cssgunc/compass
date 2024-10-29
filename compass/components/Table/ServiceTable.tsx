@@ -27,16 +27,6 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
         "employee",
     ])
 
-    const handleRowUpdate = (updatedRow: Service) => {
-        setData(prevData => (
-            prevData.map(row => (
-                row.id === updatedRow.id
-                ? updatedRow
-                : row
-            ))
-        ))
-    };
-
     const columns: ColumnDef<Service, any>[] = [
         columnHelper.accessor("name", {
             header: () => (
@@ -48,7 +38,7 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
                 <RowOpenAction
                     title={info.getValue()}
                     rowData={info.row.original}
-                    onRowUpdate={handleRowUpdate}
+                    setData={setData}
                 />
             ),
         }),
@@ -106,5 +96,5 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
         }),
     ];
 
-    return <Table<Service> data={data} setData={setData} columns={columns} />
+    return <Table data={data} setData={setData} columns={columns} />
 };

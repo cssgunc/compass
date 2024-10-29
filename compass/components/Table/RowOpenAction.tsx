@@ -1,14 +1,14 @@
 import Drawer from "@/components/Drawer/Drawer";
-import { useState } from "react";
-import { DataPoint } from "@/components/Table/Table";
+import DataPoint from "@/utils/models/DataPoint";
+import { Dispatch, SetStateAction, useState } from "react";
 
-type RowOpenActionProps = {
+type RowOpenActionProps<T extends DataPoint> = {
     title: string,
-    rowData: DataPoint,
-    onRowUpdate: (updatedRow: DataPoint) => void;
+    rowData: T,
+    setData: Dispatch<SetStateAction<T[]>>
 }
 
-export const RowOpenAction = ({ title, rowData, onRowUpdate }: RowOpenActionProps) => {
+export function RowOpenAction<T extends DataPoint>({ title, rowData, setData }: RowOpenActionProps<T>) {
     const [pageContent, setPageContent] = useState("");
 
     const handleDrawerContentChange = (newContent: string) => {
@@ -25,7 +25,7 @@ export const RowOpenAction = ({ title, rowData, onRowUpdate }: RowOpenActionProp
                     editableContent={pageContent}
                     rowContent={rowData}
                     onSave={handleDrawerContentChange}
-                    onRowUpdate={onRowUpdate}
+                    setData={setData}
                 >
                     {pageContent}
                 </Drawer>
