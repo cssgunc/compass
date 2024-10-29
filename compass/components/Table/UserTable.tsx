@@ -1,20 +1,23 @@
 import { ArrowDownCircleIcon, AtSymbolIcon, Bars2Icon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { Table } from "@/components/Table/Table";
+import Table from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import TagsInput from "@/components/TagsInput/Index";
 import User from "@/utils/models/User";
-import { DataPoint } from "@/components/Table/Table";
+
+type UserTableProps = {
+    data: User[],
+    setData: Dispatch<SetStateAction<User[]>>
+}
 
 /**
  * Table componenet used for displaying users
  * @param props.users List of users to be displayed by the table
  */
-export default function UserTable({ users }: { users: User[] }) {
+export default function UserTable({ data, setData }: UserTableProps ) {
     const columnHelper = createColumnHelper<User>();
-    const [data, setData] = useState<DataPoint[]>([...users]);
 
     const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
         "administrator",
@@ -22,7 +25,7 @@ export default function UserTable({ users }: { users: User[] }) {
         "employee",
     ])
 
-    const handleRowUpdate = (updatedRow: DataPoint) => {
+    const handleRowUpdate = (updatedRow: User) => {
         const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
         if (dataIndex !== -1) {
             const updatedData = [...data];
@@ -93,5 +96,5 @@ export default function UserTable({ users }: { users: User[] }) {
         }),
     ];
 
-    return <Table data={data} setData={setData} columns={columns}/>
+    return <Table<User> data={data} setData={setData} columns={columns}/>
 }

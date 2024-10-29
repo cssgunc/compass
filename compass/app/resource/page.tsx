@@ -2,7 +2,7 @@
 
 import { PageLayout } from "@/components/PageLayout";
 import Resource from "@/utils/models/Resource";
-import ResourceTable from "@/components/Table/ResourceIndex";
+import ResourceTable from "@/components/Table/ResourceTable";
 import { createClient } from "@/utils/supabase/client";
 
 import { BookmarkIcon } from "@heroicons/react/24/solid";

@@ -1,20 +1,24 @@
 import { Bars2Icon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { Table } from "@/components/Table/Table";
+import Table from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import TagsInput from "@/components/TagsInput/Index";
 import Service from "@/utils/models/Service";
-import { DataPoint } from "@/components/Table/Table";
+import DataPoint from "@/utils/models/DataPoint";
+
+type ServiceTableProps = {
+    data: Service[],
+    setData: Dispatch<SetStateAction<Service[]>>
+}
 
 /**
  * Table componenet used for displaying services
  * @param props.services List of services to be displayed by the table
  */
-export default function ServiceTable({ services }: { services: Service[] }) {
+export default function ServiceTable({ data, setData }: ServiceTableProps ) {
     const columnHelper = createColumnHelper<Service>();
-    const [data, setData] = useState<DataPoint[]>([...services]);
     
     // TODO: Update preset options for services
     const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
@@ -23,7 +27,7 @@ export default function ServiceTable({ services }: { services: Service[] }) {
         "employee",
     ])
 
-    const handleRowUpdate = (updatedRow: DataPoint) => {
+    const handleRowUpdate = (updatedRow: Service) => {
         const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
         if (dataIndex !== -1) {
             const updatedData = [...data];
@@ -101,5 +105,5 @@ export default function ServiceTable({ services }: { services: Service[] }) {
         }),
     ];
 
-    return <Table data={data} setData={setData} columns={columns} />
+    return <Table<Service> data={data} setData={setData} columns={columns} />
 };
