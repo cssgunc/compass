@@ -28,12 +28,13 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
     ])
 
     const handleRowUpdate = (updatedRow: Service) => {
-        const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
-        if (dataIndex !== -1) {
-            const updatedData = [...data];
-            updatedData[dataIndex] = updatedRow;
-            setData(updatedData);
-        }
+        setData(prevData => (
+            prevData.map(row => (
+                row.id === updatedRow.id
+                ? updatedRow
+                : row
+            ))
+        ))
     };
 
     const columns: ColumnDef<Service, any>[] = [

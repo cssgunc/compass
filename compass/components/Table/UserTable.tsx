@@ -28,12 +28,13 @@ export default function UserTable({ data, setData }: UserTableProps ) {
     ])
 
     const handleRowUpdate = (updatedRow: User) => {
-        const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
-        if (dataIndex !== -1) {
-            const updatedData = [...data];
-            updatedData[dataIndex] = updatedRow;
-            setData(updatedData);
-        }
+        setData(prevData => (
+            prevData.map(row => (
+                row.id === updatedRow.id
+                ? updatedRow
+                : row
+            ))
+        ))
     };
 
     const columns: ColumnDef<User, any>[] = [
