@@ -22,7 +22,7 @@ import {
     Key,
 } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
-import { RowOpenAction } from "./RowOpenAction";
+import { ResourceRowOpenAction } from "./ResourceRowOpenAction";
 import { TableAction } from "./TableAction";
 import {
     AtSymbolIcon,
@@ -127,7 +127,7 @@ export const ResourceTable = ({ users }: { users: Resource[] }) => {
                 </>
             ),
             cell: (info) => (
-                <RowOpenAction
+                <ResourceRowOpenAction
                     title={info.getValue()}
                     rowData={info.row.original}
                     onRowUpdate={handleRowUpdate}

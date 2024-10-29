@@ -22,7 +22,7 @@ import {
     Key,
 } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
-import { RowOpenAction } from "./RowOpenAction";
+import { ServiceRowOpenAction } from "./ServiceRowOpenAction";
 import { TableAction } from "./TableAction";
 import {
     AtSymbolIcon,
@@ -127,7 +127,7 @@ export const ServiceTable = ({ users }: { users: Service[] }) => {
                 </>
             ),
             cell: (info) => (
-                <RowOpenAction
+                <ServiceRowOpenAction
                     title={info.getValue()}
                     rowData={info.row.original}
                     onRowUpdate={handleRowUpdate}

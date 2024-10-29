@@ -169,7 +169,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                     <td>
                                         <UserIcon className="h-4 w-4" />
                                     </td>
-                                    <td className="w-32">Username</td>
+                                    <td className="w-32">Test</td>
                                 </div>
                                 <td className="w-3/4 w-3/4 p-2 pl-0">
                                     <input

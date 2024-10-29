@@ -1,7 +1,7 @@
-import Drawer from "@/components/Drawer/Drawer";
+import ResourceDrawer from "@/components/ResourceDrawer/page";
 import { ChangeEvent, useState } from "react";
 
-export const RowOpenAction = ({ title, rowData, onRowUpdate }) => {
+export const ResourceRowOpenAction = ({ title, rowData, onRowUpdate }) => {
     const [pageContent, setPageContent] = useState("");
 
     const handleDrawerContentChange = (newContent) => {
@@ -13,7 +13,7 @@ export const RowOpenAction = ({ title, rowData, onRowUpdate }) => {
             {title}
             <span>
                 {/* Added OnRowUpdate to drawer */}
-                <Drawer
+                <ResourceDrawer
                     title="My Drawer Title"
                     editableContent={pageContent}
                     rowContent={rowData}
@@ -21,7 +21,7 @@ export const RowOpenAction = ({ title, rowData, onRowUpdate }) => {
                     onRowUpdate={onRowUpdate}
                 >
                     {pageContent}
-                </Drawer>
+                </ResourceDrawer>
             </span>
         </div>
     );

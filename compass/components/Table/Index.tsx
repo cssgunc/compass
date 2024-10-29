@@ -22,7 +22,7 @@ import {
     Key,
 } from "react";
 import { RowOptionMenu } from "./RowOptionMenu";
-import { RowOpenAction } from "./RowOpenAction";
+import { RowOpenAction } from "./ResourceRowOpenAction";
 import { TableAction } from "./TableAction";
 import {
     AtSymbolIcon,
