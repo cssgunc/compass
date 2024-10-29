@@ -14,7 +14,8 @@ type UserTableProps = {
 
 /**
  * Table componenet used for displaying users
- * @param props.users List of users to be displayed by the table
+ * @param props.data Stateful list of users to be displayed by the table
+ * @param props.setData State setter for the list of users
  */
 export default function UserTable({ data, setData }: UserTableProps ) {
     const columnHelper = createColumnHelper<User>();
@@ -24,16 +25,6 @@ export default function UserTable({ data, setData }: UserTableProps ) {
         "volunteer",
         "employee",
     ])
-
-    const handleRowUpdate = (updatedRow: User) => {
-        setData(prevData => (
-            prevData.map(row => (
-                row.id === updatedRow.id
-                ? updatedRow
-                : row
-            ))
-        ))
-    };
 
     const columns: ColumnDef<User, any>[] = [
         columnHelper.accessor("username", {

@@ -14,7 +14,8 @@ type ResourceTableProps = {
 
 /**
  * Table componenet used for displaying resources
- * @param props.resources List of resources to be displayed by the table
+ * @param props.data Stateful list of resources to be displayed by the table
+ * @param props.setData State setter for the list of resources
  */
 export default function ResourceTable({ data, setData }: ResourceTableProps ) {
     const columnHelper = createColumnHelper<Resource>();    
