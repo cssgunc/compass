@@ -1,5 +1,3 @@
-import DataPoint from "./DataPoint";
-
 export enum Program {
     ECONOMIC = "ECONOMIC",
     DOMESTIC = "DOMESTIC",
@@ -12,7 +10,7 @@ export enum Role {
     VOLUNTEER = "VOLUNTEER",
 }
 
-export default interface User extends DataPoint {
+export default interface User {
     id: number;
     uuid: string;
     username: string;

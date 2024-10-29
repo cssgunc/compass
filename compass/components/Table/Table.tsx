@@ -17,8 +17,8 @@ import {
 import { TableAction } from "./TableAction";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import DataPoint from "@/utils/models/DataPoint";
 import { RowOptionMenu } from "./RowOptionMenu";
+import DataPoint from "@/utils/models/DataPoint";
 
 type TableProps<T extends DataPoint> = {
     data: T[],
