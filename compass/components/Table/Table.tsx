@@ -54,17 +54,17 @@ const fuzzyFilter = (
  * @param props.columns Column definitions made with Tanstack columnHelper
  */
 export const Table = ({ data, setData, columns }: TableProps) => {
-    const columnHelper = createColumnHelper<Resource>();
+    const columnHelper = createColumnHelper<DataPoint>();
     useEffect(() => {
         const sortedData = [...data].sort((a, b) =>
             a.visible === b.visible ? 0 : a.visible ? -1 : 1
         );
-        setData(sortedData);
+        setData(sortedData); 
     }, [data, setData]);
 
 
     // Data manipulation
-    // TODO: Connect data manipulation methods to the database (deleteResource, hideResource, addResource)
+    // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
     const deleteData = (dataId: number) => {
         console.log(data);
         setData((currentData) =>

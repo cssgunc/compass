@@ -13,7 +13,7 @@ import { DataPoint } from "@/components/Table/Table";
  * @param props.users List of users to be displayed by the table
  */
 export default function UserTable({ users }: { users: User[] }) {
-    const columnHelper = createColumnHelper<User>();    
+    const columnHelper = createColumnHelper<User>();
     const [data, setData] = useState<DataPoint[]>([...users]);
 
     const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
