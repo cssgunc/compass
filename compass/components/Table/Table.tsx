@@ -26,7 +26,7 @@ type TableProps<T extends DataPoint> = {
     columns: ColumnDef<T, any>[]
 };
 
-// For search
+/** Fuzzy search function */
 const fuzzyFilter = (
     row: Row<any>,
     columnId: string,
@@ -52,18 +52,19 @@ const fuzzyFilter = (
 export default function Table<T extends DataPoint>({ data, setData, columns }: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
     
-    // For sorting
+    /** Sorting function based on visibility */
     const visibilitySort = (a: T, b: T) => (
         a.visible === b.visible 
         ? 0 
         : a.visible ? -1 : 1
     )
 
+    // Sort data on load
     useEffect(() => {
         setData(prevData => prevData.sort(visibilitySort))
     }, [setData]);
 
-    // Data manipulation
+    // Data manipulation methods
     // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
     const deleteData = (dataId: number) => {
         console.log(data);
@@ -121,6 +122,7 @@ export default function Table<T extends DataPoint>({ data, setData, columns }: T
 
     // TODO: Sorting
 
+    // Define Tanstack table
     const table = useReactTable({
         columns,
         data,

@@ -20,6 +20,7 @@ type ServiceTableProps = {
 export default function ServiceTable({ data, setData }: ServiceTableProps ) {
     const columnHelper = createColumnHelper<Service>();
     
+    // Set up tag handling
     const programProps = useTagsHandler([
         "community",
         "domestic",
@@ -37,6 +38,7 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
         'initial assessment',
     ])
 
+    // Define Tanstack columns
     const columns: ColumnDef<Service, any>[] = [
         columnHelper.accessor("name", {
             header: () => (

@@ -20,12 +20,14 @@ type ResourceTableProps = {
 export default function ResourceTable({ data, setData }: ResourceTableProps ) {
     const columnHelper = createColumnHelper<Resource>();    
 
+    // Set up tag handling
     const programProps = useTagsHandler([
         "community",
         "domestic",
         "economic",
     ])
 
+    // Define Tanstack columns
     const columns: ColumnDef<Resource, any>[] = [
         columnHelper.accessor("name", {
             header: () => (
