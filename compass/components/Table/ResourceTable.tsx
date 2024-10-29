@@ -20,11 +20,10 @@ type ResourceTableProps = {
 export default function ResourceTable({ data, setData }: ResourceTableProps ) {
     const columnHelper = createColumnHelper<Resource>();    
 
-    // TODO: Update preset options for resources
-    const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
-        "administrator",
-        "volunteer",
-        "employee",
+    const programProps = useTagsHandler([
+        "community",
+        "domestic",
+        "economic",
     ])
 
     const columns: ColumnDef<Resource, any>[] = [
@@ -67,9 +66,7 @@ export default function ResourceTable({ data, setData }: ResourceTableProps ) {
             cell: (info) => (
                 <TagsInput
                     presetValue={info.getValue()}
-                    presetOptions={presetOptions}
-                    setPresetOptions={setPresetOptions}
-                    getTagColor={getTagColor}
+                    {...programProps}
                 />
             ),
         }),
