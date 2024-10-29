@@ -43,7 +43,6 @@ const fuzzyFilter = (
     return itemRank.passed;
 };
 
-
 /**
  * General componenet that holds shared functionality for any data table component
  * @param props.data Stateful list of data to be held in the table
