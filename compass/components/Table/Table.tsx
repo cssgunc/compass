@@ -43,19 +43,27 @@ const fuzzyFilter = (
     return itemRank.passed;
 };
 
+
 /**
  * General componenet that holds shared functionality for any data table component
  * @param props.data Stateful list of data to be held in the table
  * @param props.setData State setter for the list of data
  * @param props.columns Column definitions made with Tanstack columnHelper
- */
+*/
 export default function Table<T extends DataPoint>({ data, setData, columns }: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
+    
+    // For sorting
+    const sortData = (prevData: T[]) => (
+        prevData.sort((a, b) =>
+            a.visible === b.visible 
+            ? 0 
+            : a.visible ? -1 : 1
+        )
+    )
 
     useEffect(() => {
-        setData(prevData => prevData.sort((a, b) =>
-            a.visible === b.visible ? 0 : a.visible ? -1 : 1
-        ))
+        setData(prevData => sortData(prevData))
     }, [setData]);
 
     // Data manipulation
