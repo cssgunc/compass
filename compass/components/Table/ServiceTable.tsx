@@ -6,7 +6,6 @@ import Table from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import TagsInput from "@/components/TagsInput/Index";
 import Service from "@/utils/models/Service";
-import DataPoint from "@/utils/models/DataPoint";
 
 type ServiceTableProps = {
     data: Service[],
