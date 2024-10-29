@@ -19,7 +19,6 @@ export function RowOpenAction<T extends DataPoint>({ title, rowData, setData }: 
         <div className="font-semibold group flex flex-row items-center justify-between pr-2">
             {title}
             <span>
-                {/* Added OnRowUpdate to drawer */}
                 <Drawer
                     title="My Drawer Title"
                     editableContent={pageContent}

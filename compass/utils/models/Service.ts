@@ -1,7 +1,6 @@
 import { Program } from "./User";
-import DataPoint from "./DataPoint";
 
-export default interface Service extends DataPoint {
+export default interface Service {
     id: number;
     created_at: Date;
     name: string;
