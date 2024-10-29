@@ -20,11 +20,21 @@ type ServiceTableProps = {
 export default function ServiceTable({ data, setData }: ServiceTableProps ) {
     const columnHelper = createColumnHelper<Service>();
     
-    // TODO: Update preset options for services
-    const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
-        "administrator",
-        "volunteer",
-        "employee",
+    const programProps = useTagsHandler([
+        "community",
+        "domestic",
+        "economic",
+    ])
+
+    // TODO: Dynamically or statically get full list of preset requirement tag options
+    const requirementProps = useTagsHandler([
+        'anonymous',
+        'confidential',
+        'referral required',
+        'safety assessment',
+        'intake required',
+        'income eligibility',
+        'initial assessment',
     ])
 
     const columns: ColumnDef<Service, any>[] = [
@@ -61,9 +71,7 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
             cell: (info) => (
                 <TagsInput 
                     presetValue={info.getValue()} 
-                    presetOptions={presetOptions} 
-                    setPresetOptions={setPresetOptions} 
-                    getTagColor={getTagColor}                 
+                    {...programProps}               
                 />
             ),
         }),
@@ -77,9 +85,7 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
                 // TODO: Setup different tag handler for requirements
                 <TagsInput
                     presetValue={info.getValue()[0] !== "" ? info.getValue() : ["N/A"]}
-                    presetOptions={presetOptions}
-                    setPresetOptions={setPresetOptions} 
-                    getTagColor={getTagColor} 
+                    {...requirementProps}
                 />
             ),
         }),

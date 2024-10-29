@@ -19,13 +19,19 @@ type UserTableProps = {
  */
 export default function UserTable({ data, setData }: UserTableProps ) {
     const columnHelper = createColumnHelper<User>();
-
-    const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
+    
+    const roleProps = useTagsHandler([
         "administrator",
         "volunteer",
         "employee",
     ])
-
+    
+    const programProps = useTagsHandler([
+        "community",
+        "domestic",
+        "economic",
+    ])
+    
     const columns: ColumnDef<User, any>[] = [
         columnHelper.accessor("username", {
             header: () => (
@@ -51,9 +57,7 @@ export default function UserTable({ data, setData }: UserTableProps ) {
             cell: (info) => (
                 <TagsInput
                     presetValue={info.getValue()}
-                    presetOptions={presetOptions}
-                    setPresetOptions={setPresetOptions}
-                    getTagColor={getTagColor}
+                    {...roleProps}
                 />
             ),
         }),
@@ -76,14 +80,11 @@ export default function UserTable({ data, setData }: UserTableProps ) {
                     Program
                 </>
             ),
-            // TODO: Setup different tags handler for program
             cell: (info) => (
                 <TagsInput
-                presetValue={info.getValue()}
-                presetOptions={presetOptions}
-                setPresetOptions={setPresetOptions}
-                getTagColor={getTagColor}
-            />
+                    presetValue={info.getValue()}
+                    {...programProps}
+                />
             ),
         }),
     ];
