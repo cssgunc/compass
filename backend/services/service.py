@@ -27,37 +27,24 @@ class ServiceService:
             return [service.to_model() for service in entities]
         else:
             programs = subject.program
-            resources = []
+            services = []
             for program in programs:
                 entities = self._session.query(ServiceEntity).where(ServiceEntity.program == program).all()
                 for entity in entities:
-                    resources.append(entity.to_model())
-        return [service for service in resources]
+                    services.append(entity.to_model())
+        return [service for service in services]
 
-    def get_service_by_program(self, program: ProgramTypeEnum) -> list[Service]:
-        """Service method getting services belonging to a particular program."""
-        query = select(ServiceEntity).filter(ServiceEntity.program == program)
-        entities = self._session.scalars(query)
-
-        return [entity.to_model() for entity in entities]
-
-    def get_service_by_id(self, id: int) -> Service:
+    def get_service_by_name(self, name: str, subject: User) -> Service:
         """Service method getting services by id."""
-        query = select(ServiceEntity).filter(ServiceEntity.id == id)
+        query = select(ServiceEntity).where(
+            and_(
+                ServiceEntity.name == name, ServiceEntity.program.in_(subject.program)
+            )
+        )
         entity = self._session.scalars(query).one_or_none()
 
         if entity is None:
-            raise ServiceNotFoundException(f"Service with id: {id} does not exist")
-
-        return entity.to_model()
-
-    def get_service_by_name(self, name: str) -> Service:
-        """Service method getting services by id."""
-        query = select(ServiceEntity).filter(ServiceEntity.name == name)
-        entity = self._session.scalars(query).one_or_none()
-
-        if entity is None:
-            raise ServiceNotFoundException(f"Service with name: {name} does not exist")
+            raise ServiceNotFoundException(f"Service with name: {name} does not exist or program has not been assigned")
 
         return entity.to_model()
 

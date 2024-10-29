@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.gzip import GZipMiddleware
 
 
-
 from .api import user, health, service, resource, tag
 
 description = """

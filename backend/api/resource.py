@@ -19,25 +19,38 @@ openapi_tags = {
 # TODO: Create custom exceptions
 @api.post("", response_model=Resource, tags=["Resource"])
 def create(
-    subject: User, resource: Resource, resource_svc: ResourceService = Depends()
+    uuid: str, resource: Resource, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
 ):
+    subject = user_svc.get_user_by_uuid(uuid)
     return resource_svc.create(subject, resource)
 
 
 @api.get("", response_model=List[Resource], tags=["Resource"])
-def get_all(subject: User, resource_svc: ResourceService = Depends()):
+def get_all(
+    uuid: str, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
+):
+    subject = user_svc.get_user_by_uuid(uuid)
     return resource_svc.get_resource_by_user(subject)
+
+@api.get("/{name}", response_model=Resource, tags=["Resource"])
+def get_by_name(
+    name:str, uuid:str, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
+):
+    subject = user_svc.get_user_by_uuid(uuid)
+    return resource_svc.get_resource_by_name(name, subject)
 
 
 @api.put("", response_model=Resource, tags=["Resource"])
 def update(
-    subject: User, resource: Resource, resource_svc: ResourceService = Depends()
+    uuid: str, resource: Resource, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
 ):
+    subject = user_svc.get_user_by_uuid(uuid)
     return resource_svc.update(subject, resource)
 
 
 @api.delete("", response_model=None, tags=["Resource"])
 def delete(
-    subject: User, resource: Resource, resource_svc: ResourceService = Depends()
+    uuid: str, resource: Resource, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
 ):
+    subject = user_svc.get_user_by_uuid(uuid)
     resource_svc.delete(subject, resource)
