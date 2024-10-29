@@ -45,8 +45,8 @@ const fuzzyFilter = (
 
 /**
  * General componenet that holds shared functionality for any data table component
- * @param props.data List of data, managed through state, to be held in the table
- * @param props.setData State setter to be used for data manipulation methods
+ * @param props.data Stateful list of data to be held in the table
+ * @param props.setData State setter for the list of data
  * @param props.columns Column definitions made with Tanstack columnHelper
  */
 export default function Table<T extends DataPoint>({ data, setData, columns }: TableProps<T>) {

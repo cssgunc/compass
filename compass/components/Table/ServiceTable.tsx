@@ -15,7 +15,8 @@ type ServiceTableProps = {
 
 /**
  * Table componenet used for displaying services
- * @param props.services List of services to be displayed by the table
+ * @param props.data Stateful list of services to be displayed by the table
+ * @param props.setData State setter for the list of services
  */
 export default function ServiceTable({ data, setData }: ServiceTableProps ) {
     const columnHelper = createColumnHelper<Service>();
