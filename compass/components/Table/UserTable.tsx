@@ -12,8 +12,6 @@ type UserTableProps = {
     setData: Dispatch<SetStateAction<User[]>>
 }
 
-//TODO: Remove dependecy on `data`. Only `setData` is needed. Do for others as well
-
 /**
  * Table componenet used for displaying users
  * @param props.users List of users to be displayed by the table
@@ -48,7 +46,7 @@ export default function UserTable({ data, setData }: UserTableProps ) {
                 <RowOpenAction
                     title={info.getValue()}
                     rowData={info.row.original}
-                    onRowUpdate={handleRowUpdate}
+                    setData={setData}
                 />
             ),
         }),

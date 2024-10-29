@@ -26,16 +26,6 @@ export default function ResourceTable({ data, setData }: ResourceTableProps ) {
         "employee",
     ])
 
-    const handleRowUpdate = (updatedRow: Resource) => {
-        setData(prevData => (
-            prevData.map(row => (
-                row.id === updatedRow.id
-                ? updatedRow
-                : row
-            ))
-        ))
-    };
-
     const columns: ColumnDef<Resource, any>[] = [
         columnHelper.accessor("name", {
             header: () => (
@@ -47,7 +37,7 @@ export default function ResourceTable({ data, setData }: ResourceTableProps ) {
                 <RowOpenAction
                     title={info.getValue()}
                     rowData={info.row.original}
-                    onRowUpdate={handleRowUpdate}
+                    setData={setData}
                 />
             ),
         }),
