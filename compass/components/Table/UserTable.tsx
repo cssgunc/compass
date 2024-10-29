@@ -20,6 +20,7 @@ type UserTableProps = {
 export default function UserTable({ data, setData }: UserTableProps ) {
     const columnHelper = createColumnHelper<User>();
     
+    // Set up tag handling
     const roleProps = useTagsHandler([
         "administrator",
         "volunteer",
@@ -32,6 +33,7 @@ export default function UserTable({ data, setData }: UserTableProps ) {
         "economic",
     ])
     
+    // Define Tanstack columns
     const columns: ColumnDef<User, any>[] = [
         columnHelper.accessor("username", {
             header: () => (
