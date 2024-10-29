@@ -1,20 +1,23 @@
 import { Bars2Icon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { Table } from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
+import Table from "@/components/Table/Table";
 import TagsInput from "@/components/TagsInput/Index";
 import Resource from "@/utils/models/Resource";
-import { DataPoint } from "@/components/Table/Table";
+
+type ResourceTableProps = {
+    data: Resource[],
+    setData: Dispatch<SetStateAction<Resource[]>>
+}
 
 /**
  * Table componenet used for displaying resources
  * @param props.resources List of resources to be displayed by the table
  */
-export default function ResourceTable({ resources }: { resources: Resource[] }) {
+export default function ResourceTable({ data, setData }: ResourceTableProps ) {
     const columnHelper = createColumnHelper<Resource>();    
-    const [data, setData] = useState<DataPoint[]>([...resources]);
 
     // TODO: Update preset options for resources
     const { presetOptions, setPresetOptions, getTagColor } = useTagsHandler([
@@ -23,7 +26,7 @@ export default function ResourceTable({ resources }: { resources: Resource[] }) 
         "employee",
     ])
 
-    const handleRowUpdate = (updatedRow: DataPoint) => {
+    const handleRowUpdate = (updatedRow: Resource) => {
         const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
         if (dataIndex !== -1) {
             const updatedData = [...data];

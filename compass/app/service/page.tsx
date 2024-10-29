@@ -1,7 +1,7 @@
 "use client";
 
 import { PageLayout } from "@/components/PageLayout";
-import ServiceTable from "@/components/Table/ServiceIndex";
+import ServiceTable from "@/components/Table/ServiceTable";
 import Service from "@/utils/models/Service";
 import { createClient } from "@/utils/supabase/client";
 

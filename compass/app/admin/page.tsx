@@ -1,7 +1,7 @@
 "use client";
 
 import { PageLayout } from "@/components/PageLayout";
-import { Table } from "@/components/Table/Index"  
+import UserTable from "@/components/Table/UserTable";
 import User from "@/utils/models/User";
 import { createClient } from "@/utils/supabase/client";
 
@@ -38,7 +38,7 @@ export default function Page() {
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
             <PageLayout title="Users" icon={<UsersIcon />}>
-                <Table users={users} />
+                <UserTable data={users} setData={setUsers} />
             </PageLayout>
         </div>
     );

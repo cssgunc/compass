@@ -17,17 +17,13 @@ import {
 import { TableAction } from "./TableAction";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import Resource from "@/utils/models/Resource";
-import Service from "@/utils/models/Service";
-import User from "@/utils/models/User";
+import DataPoint from "@/utils/models/DataPoint";
 import { RowOptionMenu } from "./RowOptionMenu";
 
-export type DataPoint = Resource | User | Service;
-
-type TableProps = {
-    data: DataPoint[],
-    setData: Dispatch<SetStateAction<DataPoint[]>>
-    columns: ColumnDef<any, any>[] 
+type TableProps<T extends DataPoint> = {
+    data: T[],
+    setData: Dispatch<SetStateAction<T[]>>,
+    columns: ColumnDef<T, any>[]
 };
 
 // For search
@@ -53,15 +49,14 @@ const fuzzyFilter = (
  * @param props.setData State setter to be used for data manipulation methods
  * @param props.columns Column definitions made with Tanstack columnHelper
  */
-export const Table = ({ data, setData, columns }: TableProps) => {
-    const columnHelper = createColumnHelper<DataPoint>();
-    useEffect(() => {
-        const sortedData = [...data].sort((a, b) =>
-            a.visible === b.visible ? 0 : a.visible ? -1 : 1
-        );
-        setData(sortedData); 
-    }, [data, setData]);
+export default function Table<T extends DataPoint>({ data, setData, columns }: TableProps<T>) {
+    const columnHelper = createColumnHelper<T>();
 
+    useEffect(() => {
+        setData(prevData => prevData.sort((a, b) =>
+            a.visible === b.visible ? 0 : a.visible ? -1 : 1
+        ))
+    }, [setData]);
 
     // Data manipulation
     // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
