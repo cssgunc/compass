@@ -23,3 +23,7 @@ class ServiceNotFoundException(Exception):
 
 class ProgramNotAssignedException(Exception):
     """Exception for when the user does not have correct access for requested services."""
+
+
+class TagNotFoundException(Exception):
+    """Exception for when the user does not have correct access for requested services."""
