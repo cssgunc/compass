@@ -9,7 +9,7 @@ import { ClipboardIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-    const [services, setUsers] = useState<Service[]>([]);
+    const [services, setServices] = useState<Service[]>([]);
 
     useEffect(() => {
         async function getServices() {
@@ -27,7 +27,7 @@ export default function Page() {
             );
 
             const servicesAPI: Service[] = await serviceListData.json();
-            setUsers(servicesAPI);
+            setServices(servicesAPI);
         }
 
         getServices();
@@ -37,7 +37,7 @@ export default function Page() {
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
             <PageLayout title="Services" icon={<ClipboardIcon />}>
-                <ServiceTable services={services} />
+                <ServiceTable data={services} setData={setServices} />
             </PageLayout>
         </div>
     );

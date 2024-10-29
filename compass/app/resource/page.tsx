@@ -38,7 +38,7 @@ export default function Page() {
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
             <PageLayout title="Resources" icon={<BookmarkIcon />}>
-                <ResourceTable resources={resources} />
+                <ResourceTable data={resources} setData={setResources} />
             </PageLayout>
         </div>
     );
