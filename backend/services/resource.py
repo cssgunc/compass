@@ -155,6 +155,6 @@ class ResourceService:
         entities = self._session.scalars(query).all()
 
         if not entities:
-             raise ResourceNotFoundException(f"No resource found with matching slug: {search_string}")
+            return []
 
         return [entity.to_model() for entity in entities]

@@ -106,14 +106,14 @@ def test_get_by_slug(resource_svc: ResourceService):
 def test_get_by_slug_not_found(resource_svc: ResourceService):
     """ Test getting a resource that does not exist """
     slug = "Not Found"
-    with pytest.raises(ResourceNotFoundException):
-        resources = resource_svc.get_by_slug(user_test_data.admin, slug)
-        pytest.fail()
+    resources = resource_svc.get_by_slug(user_test_data.admin, slug)
+    assert len(resources) == 0
+    assert resources == []
 
 
 def test_get_by_slug_no_permission(resource_svc: ResourceService):
     """ Test getting a resource the user does not have access to """
     slug = "Resource 2"
-    with pytest.raises(ResourceNotFoundException):
-        resources = resource_svc.get_by_slug(user_test_data.employee, slug)
-        pytest.fail()
+    resources = resource_svc.get_by_slug(user_test_data.employee, slug)
+    assert len(resources) == 0
+    assert resources == []
