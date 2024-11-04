@@ -35,17 +35,15 @@ class ResourceService:
     def create(self, user: User, resource: Resource) -> Resource:
         """
         Creates a resource based on the input object and adds it to the table if the user has the right permissions.
-
         Parameters:
             user: a valid User model representing the currently logged in User
             resource: Resource object to add to table
-
         Returns:
             Resource: Object added to table
         """
-        if resource.role != user.role or resource.group != user.group:
+        if user.role != UserTypeEnum.ADMIN:
             raise PermissionError(
-                "User does not have permission to add resources in this role or group."
+                "User does not have permission to add resources in this program."
             )
 
         resource_entity = ResourceEntity.from_model(resource)
@@ -57,14 +55,11 @@ class ResourceService:
     def get_by_id(self, user: User, id: int) -> Resource:
         """
         Gets a resource based on the resource id that the user has access to
-
         Parameters:
             user: a valid User model representing the currently logged in User
             id: int, the id of the resource
-
         Returns:
             Resource
-
         Raises:
             ResourceNotFoundException: If no resource is found with id
         """
@@ -72,8 +67,7 @@ class ResourceService:
             self._session.query(ResourceEntity)
             .filter(
                 ResourceEntity.id == id,
-                ResourceEntity.role == user.role,
-                ResourceEntity.group == user.group,
+                ResourceEntity.program.in_(user.program),
             )
             .one_or_none()
         )
@@ -86,18 +80,15 @@ class ResourceService:
     def update(self, user: User, resource: ResourceEntity) -> Resource:
         """
         Update the resource if the user has access
-
         Parameters:
             user: a valid User model representing the currently logged in User
             resource (ResourceEntity): Resource to update
-
         Returns:
             Resource: Updated resource object
-
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding ID
         """
-        if resource.role != user.role or resource.group != user.group:
+        if user.role != UserTypeEnum.ADMIN:
             raise PermissionError(
                 "User does not have permission to update this resource."
             )
@@ -109,7 +100,11 @@ class ResourceService:
                 f"No resource found with matching id: {resource.id}"
             )
 
-        obj.update_from_model(resource)  # Assuming an update method exists
+        obj.name = resource.name
+        obj.summary = resource.summary
+        obj.link = resource.link
+        obj.program = resource.program
+
         self._session.commit()
 
         return obj.to_model()
@@ -117,20 +112,21 @@ class ResourceService:
     def delete(self, user: User, id: int) -> None:
         """
         Delete resource based on id that the user has access to
-
         Parameters:
             user: a valid User model representing the currently logged in User
             id: int, a unique resource id
-
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding id
         """
+        if user.role != UserTypeEnum.ADMIN:
+            raise PermissionError(
+                "User does not have permission to delete this resource."
+            )
+
         resource = (
             self._session.query(ResourceEntity)
             .filter(
                 ResourceEntity.id == id,
-                ResourceEntity.role == user.role,
-                ResourceEntity.group == user.group,
             )
             .one_or_none()
         )
@@ -144,22 +140,21 @@ class ResourceService:
     def get_by_slug(self, user: User, search_string: str) -> list[Resource]:
         """
         Get a list of resources given a search string that the user has access to
-
         Parameters:
             user: a valid User model representing the currently logged in User
             search_string: a string to search resources by
-
         Returns:
             list[Resource]: list of resources relating to the string
-
         Raises:
             ResourceNotFoundException if no resource is found with the corresponding slug
         """
         query = select(ResourceEntity).where(
-            ResourceEntity.title.ilike(f"%{search_string}%"),
-            ResourceEntity.role == user.role,
-            ResourceEntity.group == user.group,
+            ResourceEntity.name.ilike(f"%{search_string}%"),
+            ResourceEntity.program.in_(user.program)
         )
         entities = self._session.scalars(query).all()
+
+        if not entities:
+            return []
 
         return [entity.to_model() for entity in entities]
