@@ -1,10 +1,17 @@
 import Drawer from "@/components/Drawer/Drawer";
-import { ChangeEvent, useState } from "react";
+import DataPoint from "@/utils/models/DataPoint";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export const RowOpenAction = ({ title, rowData, onRowUpdate }) => {
+type RowOpenActionProps<T extends DataPoint> = {
+    title: string,
+    rowData: T,
+    setData: Dispatch<SetStateAction<T[]>>
+}
+
+export function RowOpenAction<T extends DataPoint>({ title, rowData, setData }: RowOpenActionProps<T>) {
     const [pageContent, setPageContent] = useState("");
 
-    const handleDrawerContentChange = (newContent) => {
+    const handleDrawerContentChange = (newContent: string) => {
         setPageContent(newContent);
     };
 
@@ -12,13 +19,12 @@ export const RowOpenAction = ({ title, rowData, onRowUpdate }) => {
         <div className="font-semibold group flex flex-row items-center justify-between pr-2">
             {title}
             <span>
-                {/* Added OnRowUpdate to drawer */}
                 <Drawer
                     title="My Drawer Title"
                     editableContent={pageContent}
                     rowContent={rowData}
                     onSave={handleDrawerContentChange}
-                    onRowUpdate={onRowUpdate}
+                    setData={setData}
                 >
                     {pageContent}
                 </Drawer>

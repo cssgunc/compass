@@ -1,8 +1,8 @@
 "use client";
 
 import { PageLayout } from "@/components/PageLayout";
-import { ResourceTable } from "@/components/Table/ResourceIndex";
 import Resource from "@/utils/models/Resource";
+import ResourceTable from "@/components/Table/ResourceTable";
 import { createClient } from "@/utils/supabase/client";
 
 import { BookmarkIcon } from "@heroicons/react/24/solid";
@@ -27,7 +27,7 @@ export default function Page() {
             );
 
             const resourcesAPI: Resource[] = await userListData.json();
-
+            
             setResources(resourcesAPI);
         }
 
@@ -38,7 +38,7 @@ export default function Page() {
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
             <PageLayout title="Resources" icon={<BookmarkIcon />}>
-                <ResourceTable users={resources} />
+                <ResourceTable data={resources} setData={setResources} />
             </PageLayout>
         </div>
     );
