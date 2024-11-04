@@ -50,11 +50,9 @@ class ResourceService:
     def create(self, subject: User, resource: Resource) -> Resource:
         """
         Creates a resource based on the input object and adds it to the table if the user has the right permissions.
-
         Parameters:
             user: a valid User model representing the currently logged in User
             resource: Resource object to add to table
-
         Returns:
             Resource: Object added to table
         """
@@ -70,14 +68,11 @@ class ResourceService:
     def update(self, subject: User, resource: Resource) -> Resource:
         """
         Update the resource if the user has access
-
         Parameters:
             user: a valid User model representing the currently logged in User
             resource (ResourceEntity): Resource to update
-
         Returns:
             Resource: Updated resource object
-
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding ID
         """
@@ -101,11 +96,9 @@ class ResourceService:
     def delete(self, subject: User, resource: Resource) -> None:
         """
         Delete resource based on id that the user has access to
-
         Parameters:
             user: a valid User model representing the currently logged in User
             id: int, a unique resource id
-
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding id
         """
@@ -121,3 +114,25 @@ class ResourceService:
             )
         self._session.delete(entity)
         self._session.commit()
+
+    def get_by_slug(self, user: User, search_string: str) -> list[Resource]:
+        """
+        Get a list of resources given a search string that the user has access to
+        Parameters:
+            user: a valid User model representing the currently logged in User
+            search_string: a string to search resources by
+        Returns:
+            list[Resource]: list of resources relating to the string
+        Raises:
+            ResourceNotFoundException if no resource is found with the corresponding slug
+        """
+        query = select(ResourceEntity).where(
+            ResourceEntity.name.ilike(f"%{search_string}%"),
+            ResourceEntity.program.in_(user.program),
+        )
+        entities = self._session.scalars(query).all()
+
+        if not entities:
+            return []
+
+        return [entity.to_model() for entity in entities]
