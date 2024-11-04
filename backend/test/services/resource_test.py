@@ -60,11 +60,18 @@ def test_update(resource_svc: ResourceService):
     """ Test updating a resource by an admin """
     updated_resource = resource_test_data.resource5_new
     resource = resource_svc.update(user_test_data.admin, updated_resource)
+    db_resource = resource_svc.get_by_id(user_test_data.admin, resource.id)
     assert resource.id == updated_resource.id
     assert resource.name == updated_resource.name
     assert resource.summary == updated_resource.summary
     assert resource.link == updated_resource.link
     assert resource.program == updated_resource.program
+    assert db_resource.id == updated_resource.id
+    assert db_resource.name == updated_resource.name
+    assert db_resource.summary == updated_resource.summary
+    assert db_resource.link == updated_resource.link
+    assert db_resource.program == updated_resource.program
+
 
 def test_update_no_permission(resource_svc: ResourceService):
     """ Test updating a resource without permission """
