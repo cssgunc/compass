@@ -99,7 +99,7 @@ const ResourceDrawer: FunctionComponent<DrawerProps> = ({ rowContent }) => {
                                         href={rowContent.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-blue-600 underline hover:text-blue-800"
+                                        className="text-gray-500 underline hover:text-gray-700"
                                     >
                                         {rowContent.link}
                                     </a>

@@ -95,14 +95,9 @@ const ServiceDrawer: FunctionComponent<DrawerProps> = ({ rowContent }) => {
                                     <td className="w-32">Status</td>
                                 </div>
                                 <td className="w-3/4 hover:bg-gray-50">
-                                    <a
-                                        href={rowContent.status}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-600 underline hover:text-blue-800"
-                                    >
+                                    <span className="text-gray-500">
                                         {rowContent.status}
-                                    </a>
+                                    </span>
                                 </td>
                             </tr>
                             <tr className="w-full text-xs items-center flex flex-row justify-between">
@@ -130,8 +125,15 @@ const ServiceDrawer: FunctionComponent<DrawerProps> = ({ rowContent }) => {
                                     </td>
                                     <td className="w-32">Requirements</td>
                                 </div>
-                                <td className="w-3/4 p-2 pl-0">
-                                    {rowContent.requirements}
+                                <td className="w-3/4 hover:bg-gray-50">
+                                    <TagsInput
+                                        presetValue={rowContent.requirements}
+                                        presetOptions={[
+                                            "mandatory",
+                                            "optional",
+                                            "preferred",
+                                        ]} // Example options
+                                    />
                                 </td>
                             </tr>
                             <tr className="w-full text-xs items-center flex flex-row justify-between">
