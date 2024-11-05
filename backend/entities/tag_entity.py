@@ -28,11 +28,11 @@ class TagEntity(EntityBase):
     content: Mapped[str] = mapped_column(String(100), nullable=False)
 
     # relationships
-    resourceTags: Mapped[list["ResourceTagEntity"]] = relationship(
-        back_populates="tag", cascade="all,delete"
+    resource: Mapped[list["ResourceTagEntity"]] = relationship(
+        back_populates="tag", cascade="all,delete", overlaps="tag"
     )
-    serviceTags: Mapped[list["ServiceTagEntity"]] = relationship(
-        back_populates="tag", cascade="all,delete"
+    service: Mapped[list["ServiceTagEntity"]] = relationship(
+        back_populates="tag", cascade="all,delete", overlaps="tag"
     )
 
     @classmethod
@@ -59,7 +59,4 @@ class TagEntity(EntityBase):
             User: A User model for API usage
         """
 
-        return Tag(
-            id=self.id,
-            content=self.content,
-        )
+        return Tag(id=self.id, content=self.content, created_at=self.created_at)

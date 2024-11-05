@@ -4,6 +4,7 @@ from typing import List
 from datetime import datetime
 from typing import Optional
 from .enum_for_models import ProgramTypeEnum
+from .tag_model import Tag
 
 
 class Service(BaseModel):
@@ -14,3 +15,4 @@ class Service(BaseModel):
     summary: str
     requirements: List[str]
     program: ProgramTypeEnum
+    tags: List[Tag] = []

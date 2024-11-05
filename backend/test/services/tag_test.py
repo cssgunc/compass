@@ -2,8 +2,8 @@
 
 # PyTest
 import pytest
-from ...services import TagService, ResourceService
-from .fixtures import tag_svc, resource_svc
+from ...services import TagService, ResourceService, ServiceService
+from .fixtures import tag_svc, resource_svc, service_svc
 from .tag_test_data import tag_to_create, tag_to_create_no_id, tags
 from .user_test_data import admin
 
@@ -42,3 +42,15 @@ def test_resource_tag_creation(tag_svc: TagService, resource_svc: ResourceServic
     assert len(resource.tags) == 0
     assert len(updated_resource.tags) == 1
     assert resource.id == updated_resource.id
+
+
+def test_service_tag_creation(tag_svc: TagService, service_svc: ServiceService):
+    """Test creation and attachment of service tag"""
+
+    service = service_svc.get_service_by_user(admin)[0]
+    tag_svc.add_tag_service(admin, tags[0], service)
+    updated_service = service_svc.get_service_by_id(service.id)
+
+    assert len(service.tags) == 0
+    assert len(updated_service.tags) == 1
+    assert service.id == updated_service.id

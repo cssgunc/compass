@@ -63,6 +63,25 @@ def insert_fake_data(session: Session):
     session.commit()
 
 
+def insert_test_data(session: Session):
+    """Inserts test organization data into the test session."""
+
+    global tags
+
+    # Create entities for test organization data
+    entities = []
+    for tag in tags:
+        entity = TagEntity.from_model(tag)
+        session.add(entity)
+        entities.append(entity)
+
+    # Reset table IDs to prevent ID conflicts
+    reset_table_id_seq(session, TagEntity, TagEntity.id, len(tags) + 1)
+
+    # Commit all changes
+    session.commit()
+
+
 @pytest.fixture(autouse=True)
 def fake_data_fixture(session: Session):
     """Insert fake data the session automatically when test is run.

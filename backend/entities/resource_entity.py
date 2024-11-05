@@ -31,8 +31,8 @@ class ResourceEntity(EntityBase):
     link: Mapped[str] = mapped_column(String, nullable=False)
     program: Mapped[Program_Enum] = mapped_column(Enum(Program_Enum), nullable=False)
     # relationships
-    resourceTags: Mapped[list["ResourceTagEntity"]] = relationship(
-        back_populates="resource", cascade="all,delete"
+    resource_tags: Mapped[list["ResourceTagEntity"]] = relationship(
+        back_populates="resource", cascade="all,delete-orphan"
     )
 
     @classmethod
@@ -64,5 +64,5 @@ class ResourceEntity(EntityBase):
             summary=self.summary,
             link=self.link,
             program=self.program,
-            tags=[tag.tag.to_model() for tag in self.resourceTags],
+            tags=[tag_entity.tag.to_model() for tag_entity in self.resource_tags],
         )

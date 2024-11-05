@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 
 from ...entities import ServiceEntity
 from ...models.enum_for_models import ProgramTypeEnum
-from ...models.service_model import Service
+from ...models import Service, Tag
+from .tag_test_data import tags
 
 service1 = Service(
     id=1,
@@ -95,6 +96,7 @@ service_1 = Service(
     summary="24/7 support for individuals in crisis",
     requirements=["Anonymous", "Confidential"],
     program=ProgramTypeEnum.DOMESTIC,
+    tags=[tags[0], tags[1]],
 )
 
 service_2 = Service(

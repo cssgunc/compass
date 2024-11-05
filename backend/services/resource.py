@@ -1,4 +1,6 @@
 from fastapi import Depends
+
+from backend.services.tag import TagService
 from ..database import db_session
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -6,13 +8,18 @@ from ..models.resource_model import Resource
 from ..entities.resource_entity import ResourceEntity
 from ..models.user_model import User, UserTypeEnum
 
-from .exceptions import ResourceNotFoundException
+from .exceptions import ProgramNotAssignedException, ResourceNotFoundException
 
 
 class ResourceService:
 
-    def __init__(self, session: Session = Depends(db_session)):
+    def __init__(
+        self,
+        session: Session = Depends(db_session),
+        tag_service: TagService = Depends(),
+    ):
         self._session = session
+        self._tag_service = tag_service
 
     def get_resource_by_user(self, subject: User):
         """Resource method getting all of the resources that a user has access to based on role"""
@@ -43,15 +50,22 @@ class ResourceService:
         Returns:
             Resource: Object added to table
         """
-        if resource.role != user.role or resource.group != user.group:
-            raise PermissionError(
-                "User does not have permission to add resources in this role or group."
+        if user.role != UserTypeEnum.ADMIN:
+            raise ProgramNotAssignedException(
+                f"User is not {UserTypeEnum.ADMIN}, cannot update resource"
             )
 
         resource_entity = ResourceEntity.from_model(resource)
         self._session.add(resource_entity)
-        self._session.commit()
+        self._session.flush()
 
+        for tag in resource.tags:
+            tag_entity = self._tag_service.get_or_create_tag(tag.content)
+            self._tag_service.add_tag_resource(
+                user, tag_entity, ResourceEntity.to_model(resource_entity)
+            )
+
+        self._session.commit()
         return resource_entity.to_model()
 
     def get_by_id(self, user: User, id: int) -> Resource:
@@ -96,22 +110,38 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding ID
         """
-        if resource.role != user.role or resource.group != user.group:
-            raise PermissionError(
-                "User does not have permission to update this resource."
+        if user.role != UserTypeEnum.ADMIN:
+            raise ProgramNotAssignedException(
+                f"User is not {UserTypeEnum.ADMIN}, cannot update service"
             )
 
-        obj = self._session.get(ResourceEntity, resource.id) if resource.id else None
+        resource_entity = (
+            self._session.query(ResourceEntity)
+            .filter(ResourceEntity.id == resource.id)
+            .one_or_none()
+        )
 
-        if obj is None:
+        self._tag_service.delete_all_tags_service(resource)
+
+        if resource_entity is None:
             raise ResourceNotFoundException(
-                f"No resource found with matching id: {resource.id}"
+                "The resource you are searching for does not exist."
             )
 
-        obj.update_from_model(resource)  # Assuming an update method exists
-        self._session.commit()
+        resource_entity.name = resource.name
+        resource_entity.status = resource.status
+        resource_entity.summary = resource.summary
+        resource_entity.requirements = resource.requirements
+        resource_entity.program = resource.program
 
-        return obj.to_model()
+        for tag in resource.tags:
+            tag_entity = self._tag_service.get_or_create_tag(tag.content)
+            self._tag_service.add_tag_service(
+                user, tag_entity, ResourceEntity.to_model(resource_entity)
+            )
+
+        self._session.commit()
+        return resource_entity.to_model()
 
     def delete(self, user: User, id: int) -> None:
         """
