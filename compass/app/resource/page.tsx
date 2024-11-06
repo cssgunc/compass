@@ -27,7 +27,7 @@ export default function Page() {
             );
 
             const resourcesAPI: Resource[] = await userListData.json();
-            
+
             setResources(resourcesAPI);
         }
 

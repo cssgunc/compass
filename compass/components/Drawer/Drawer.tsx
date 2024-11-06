@@ -45,13 +45,11 @@ const Drawer: FunctionComponent<DrawerProps> = ({
     const [tempRowContent, setTempRowContent] = useState(rowContent);
 
     const onRowUpdate = (updatedRow: any) => {
-        setData((prevData: any) => (
-            prevData.map((row: any) => (
-                row.id === updatedRow.id
-                ? updatedRow
-                : row
-            ))
-        ))
+        setData((prevData: any) =>
+            prevData.map((row: any) =>
+                row.id === updatedRow.id ? updatedRow : row
+            )
+        );
     };
 
     const handleTempRowContentChange = (e) => {

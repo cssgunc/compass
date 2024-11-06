@@ -8,7 +8,7 @@ from .enum_for_models import ProgramTypeEnum
 
 class Service(BaseModel):
     id: int | None = None
-    created_at: datetime | None = None
+    created_at: datetime | None = datetime.now()
     name: str
     status: str
     summary: str

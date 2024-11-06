@@ -1,4 +1,8 @@
-import { ArrowDownCircleIcon, AtSymbolIcon, Bars2Icon } from "@heroicons/react/24/solid";
+import {
+    ArrowDownCircleIcon,
+    AtSymbolIcon,
+    Bars2Icon,
+} from "@heroicons/react/24/solid";
 import { Dispatch, SetStateAction } from "react";
 import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
@@ -8,31 +12,27 @@ import TagsInput from "@/components/TagsInput/Index";
 import User from "@/utils/models/User";
 
 type UserTableProps = {
-    data: User[],
-    setData: Dispatch<SetStateAction<User[]>>
-}
+    data: User[];
+    setData: Dispatch<SetStateAction<User[]>>;
+};
 
 /**
  * Table componenet used for displaying users
  * @param props.data Stateful list of users to be displayed by the table
  * @param props.setData State setter for the list of users
  */
-export default function UserTable({ data, setData }: UserTableProps ) {
+export default function UserTable({ data, setData }: UserTableProps) {
     const columnHelper = createColumnHelper<User>();
-    
+
     // Set up tag handling
     const roleProps = useTagsHandler([
         "administrator",
         "volunteer",
         "employee",
-    ])
-    
-    const programProps = useTagsHandler([
-        "community",
-        "domestic",
-        "economic",
-    ])
-    
+    ]);
+
+    const programProps = useTagsHandler(["community", "domestic", "economic"]);
+
     // Define Tanstack columns
     const columns: ColumnDef<User, any>[] = [
         columnHelper.accessor("username", {
@@ -57,10 +57,7 @@ export default function UserTable({ data, setData }: UserTableProps ) {
                 </>
             ),
             cell: (info) => (
-                <TagsInput
-                    presetValue={info.getValue()}
-                    {...roleProps}
-                />
+                <TagsInput presetValue={info.getValue()} {...roleProps} />
             ),
         }),
         columnHelper.accessor("email", {
@@ -74,7 +71,7 @@ export default function UserTable({ data, setData }: UserTableProps ) {
                     {info.getValue()}
                 </span>
             ),
-        }), 
+        }),
         columnHelper.accessor("program", {
             header: () => (
                 <>
@@ -83,13 +80,10 @@ export default function UserTable({ data, setData }: UserTableProps ) {
                 </>
             ),
             cell: (info) => (
-                <TagsInput
-                    presetValue={info.getValue()}
-                    {...programProps}
-                />
+                <TagsInput presetValue={info.getValue()} {...programProps} />
             ),
         }),
     ];
 
-    return <Table<User> data={data} setData={setData} columns={columns}/>
+    return <Table<User> data={data} setData={setData} columns={columns} />;
 }

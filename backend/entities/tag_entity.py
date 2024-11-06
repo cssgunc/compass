@@ -45,6 +45,7 @@ class TagEntity(EntityBase):
             
         return cls(
             id=model.id,
+            created_at=model.created_at,
             content=model.id,
         )
 
@@ -58,8 +59,6 @@ class TagEntity(EntityBase):
 
         return Tag(
             id=self.id,
+            create_at=self.created_at,
             content=self.content,
         )
-
-
-

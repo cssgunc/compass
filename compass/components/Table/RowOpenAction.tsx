@@ -3,12 +3,16 @@ import DataPoint from "@/utils/models/DataPoint";
 import { Dispatch, SetStateAction, useState } from "react";
 
 type RowOpenActionProps<T extends DataPoint> = {
-    title: string,
-    rowData: T,
-    setData: Dispatch<SetStateAction<T[]>>
-}
+    title: string;
+    rowData: T;
+    setData: Dispatch<SetStateAction<T[]>>;
+};
 
-export function RowOpenAction<T extends DataPoint>({ title, rowData, setData }: RowOpenActionProps<T>) {
+export function RowOpenAction<T extends DataPoint>({
+    title,
+    rowData,
+    setData,
+}: RowOpenActionProps<T>) {
     const [pageContent, setPageContent] = useState("");
 
     const handleDrawerContentChange = (newContent: string) => {
@@ -31,4 +35,4 @@ export function RowOpenAction<T extends DataPoint>({ title, rowData, setData }: 
             </span>
         </div>
     );
-};
+}

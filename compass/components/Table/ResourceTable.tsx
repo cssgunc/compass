@@ -8,24 +8,20 @@ import TagsInput from "@/components/TagsInput/Index";
 import Resource from "@/utils/models/Resource";
 
 type ResourceTableProps = {
-    data: Resource[],
-    setData: Dispatch<SetStateAction<Resource[]>>
-}
+    data: Resource[];
+    setData: Dispatch<SetStateAction<Resource[]>>;
+};
 
 /**
  * Table componenet used for displaying resources
  * @param props.data Stateful list of resources to be displayed by the table
  * @param props.setData State setter for the list of resources
  */
-export default function ResourceTable({ data, setData }: ResourceTableProps ) {
-    const columnHelper = createColumnHelper<Resource>();    
+export default function ResourceTable({ data, setData }: ResourceTableProps) {
+    const columnHelper = createColumnHelper<Resource>();
 
     // Set up tag handling
-    const programProps = useTagsHandler([
-        "community",
-        "domestic",
-        "economic",
-    ])
+    const programProps = useTagsHandler(["community", "domestic", "economic"]);
 
     // Define Tanstack columns
     const columns: ColumnDef<Resource, any>[] = [
@@ -66,10 +62,7 @@ export default function ResourceTable({ data, setData }: ResourceTableProps ) {
                 </>
             ),
             cell: (info) => (
-                <TagsInput
-                    presetValue={info.getValue()}
-                    {...programProps}
-                />
+                <TagsInput presetValue={info.getValue()} {...programProps} />
             ),
         }),
 
@@ -85,5 +78,5 @@ export default function ResourceTable({ data, setData }: ResourceTableProps ) {
         }),
     ];
 
-    return <Table data={data} setData={setData} columns={columns}/>
+    return <Table data={data} setData={setData} columns={columns} />;
 }

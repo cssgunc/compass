@@ -23,3 +23,4 @@ class ServiceTagEntity(EntityBase):
     # relationships
     service: Mapped["ServiceEntity"] = relationship(back_populates="serviceTags")
     tag: Mapped["TagEntity"] = relationship(back_populates="serviceTags")
+    

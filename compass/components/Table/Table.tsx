@@ -1,18 +1,18 @@
-import { 
+import {
     Row,
     ColumnDef,
     useReactTable,
     getCoreRowModel,
     flexRender,
-    createColumnHelper
- } from "@tanstack/react-table";
+    createColumnHelper,
+} from "@tanstack/react-table";
 import {
     ChangeEvent,
     useState,
     useEffect,
     Key,
     Dispatch,
-    SetStateAction
+    SetStateAction,
 } from "react";
 import { TableAction } from "./TableAction";
 import { PlusIcon } from "@heroicons/react/24/solid";
@@ -21,9 +21,9 @@ import { RowOptionMenu } from "./RowOptionMenu";
 import DataPoint from "@/utils/models/DataPoint";
 
 type TableProps<T extends DataPoint> = {
-    data: T[],
-    setData: Dispatch<SetStateAction<T[]>>,
-    columns: ColumnDef<T, any>[]
+    data: T[];
+    setData: Dispatch<SetStateAction<T[]>>;
+    columns: ColumnDef<T, any>[];
 };
 
 /** Fuzzy search function */
@@ -48,20 +48,21 @@ const fuzzyFilter = (
  * @param props.data Stateful list of data to be held in the table
  * @param props.setData State setter for the list of data
  * @param props.columns Column definitions made with Tanstack columnHelper
-*/
-export default function Table<T extends DataPoint>({ data, setData, columns }: TableProps<T>) {
+ */
+export default function Table<T extends DataPoint>({
+    data,
+    setData,
+    columns,
+}: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
-    
+
     /** Sorting function based on visibility */
-    const visibilitySort = (a: T, b: T) => (
-        a.visible === b.visible 
-        ? 0 
-        : a.visible ? -1 : 1
-    )
+    const visibilitySort = (a: T, b: T) =>
+        a.visible === b.visible ? 0 : a.visible ? -1 : 1;
 
     // Sort data on load
     useEffect(() => {
-        setData(prevData => prevData.sort(visibilitySort))
+        setData((prevData) => prevData.sort(visibilitySort));
     }, [setData]);
 
     // Data manipulation methods
@@ -72,16 +73,16 @@ export default function Table<T extends DataPoint>({ data, setData, columns }: T
             currentData.filter((data) => data.id !== dataId)
         );
     };
-    
+
     const hideData = (dataId: number) => {
         console.log(`Toggling visibility for data with ID: ${dataId}`);
-        setData(currentData => {
+        setData((currentData) => {
             const newData = currentData
-                .map(data => (
+                .map((data) =>
                     data.id === dataId
-                    ? { ...data, visible: !data.visible }
-                    : data
-                ))
+                        ? { ...data, visible: !data.visible }
+                        : data
+                )
                 .sort(visibilitySort);
 
             console.log(newData);
@@ -104,7 +105,7 @@ export default function Table<T extends DataPoint>({ data, setData, columns }: T
                 />
             ),
         })
-    )
+    );
 
     // Searching
     const [query, setQuery] = useState("");
@@ -221,4 +222,4 @@ export default function Table<T extends DataPoint>({ data, setData, columns }: T
             </table>
         </div>
     );
-};
+}

@@ -8,35 +8,31 @@ import TagsInput from "@/components/TagsInput/Index";
 import Service from "@/utils/models/Service";
 
 type ServiceTableProps = {
-    data: Service[],
-    setData: Dispatch<SetStateAction<Service[]>>
-}
+    data: Service[];
+    setData: Dispatch<SetStateAction<Service[]>>;
+};
 
 /**
  * Table componenet used for displaying services
  * @param props.data Stateful list of services to be displayed by the table
  * @param props.setData State setter for the list of services
  */
-export default function ServiceTable({ data, setData }: ServiceTableProps ) {
+export default function ServiceTable({ data, setData }: ServiceTableProps) {
     const columnHelper = createColumnHelper<Service>();
-    
+
     // Set up tag handling
-    const programProps = useTagsHandler([
-        "community",
-        "domestic",
-        "economic",
-    ])
+    const programProps = useTagsHandler(["community", "domestic", "economic"]);
 
     // TODO: Dynamically or statically get full list of preset requirement tag options
     const requirementProps = useTagsHandler([
-        'anonymous',
-        'confidential',
-        'referral required',
-        'safety assessment',
-        'intake required',
-        'income eligibility',
-        'initial assessment',
-    ])
+        "anonymous",
+        "confidential",
+        "referral required",
+        "safety assessment",
+        "intake required",
+        "income eligibility",
+        "initial assessment",
+    ]);
 
     // Define Tanstack columns
     const columns: ColumnDef<Service, any>[] = [
@@ -71,10 +67,7 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
                 </>
             ),
             cell: (info) => (
-                <TagsInput 
-                    presetValue={info.getValue()} 
-                    {...programProps}               
-                />
+                <TagsInput presetValue={info.getValue()} {...programProps} />
             ),
         }),
         columnHelper.accessor("requirements", {
@@ -86,7 +79,9 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
             cell: (info) => (
                 // TODO: Setup different tag handler for requirements
                 <TagsInput
-                    presetValue={info.getValue()[0] !== "" ? info.getValue() : ["N/A"]}
+                    presetValue={
+                        info.getValue()[0] !== "" ? info.getValue() : ["N/A"]
+                    }
                     {...requirementProps}
                 />
             ),
@@ -104,5 +99,5 @@ export default function ServiceTable({ data, setData }: ServiceTableProps ) {
         }),
     ];
 
-    return <Table data={data} setData={setData} columns={columns} />
-};
+    return <Table data={data} setData={setData} columns={columns} />;
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 /**
  * Custom hook used to handle the state of tag options and colors
@@ -31,5 +31,5 @@ export default function useTagsHandler(initialOptions: string[]) {
         return tagColors.get(tag) as string;
     };
 
-    return { presetOptions, setPresetOptions, getTagColor }
+    return { presetOptions, setPresetOptions, getTagColor };
 }
