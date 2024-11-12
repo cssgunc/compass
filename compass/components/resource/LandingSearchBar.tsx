@@ -15,7 +15,10 @@ import React, {
     useEffect,
 } from "react";
 import Image from "next/image";
-import { FilterBox } from "../FilterBox";
+import { SearchResult } from "./SearchResult";
+
+// TODO: Actually implement search.
+import sampleResults from "./sample_results.json";
 
 export const LandingSearchBar: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -111,7 +114,12 @@ export const LandingSearchBar: React.FC = () => {
             </div>
 
             {/* search results, for now since it's empty this is the default screen  */}
-            <div className="flex flex-col pt-16 space-y-2 justify-center items-center">
+            <div
+                className={
+                    "flex flex-col pt-16 space-y-2 justify-center items-center" +
+                    (searchTerm.length > 0 ? " hidden" : "")
+                }
+            >
                 <Image
                     alt="Landing illustration"
                     src="/landing_illustration.png"
@@ -122,6 +130,22 @@ export const LandingSearchBar: React.FC = () => {
                     Need to find something? Use the search bar above to get your
                     results.
                 </p>
+            </div>
+
+            <div
+                className={
+                    "p-1 flex flex-col gap-1 mt-2" +
+                    (searchTerm.length > 0 ? "" : " hidden")
+                }
+            >
+                {sampleResults.map((result, i) => (
+                    <SearchResult
+                        key={i}
+                        type={result.type}
+                        name={result.name}
+                        description={result.description}
+                    />
+                ))}
             </div>
         </div>
     );
@@ -147,6 +171,7 @@ const useFilterPillDropdown = (
     }, [ref, setShowDropdown]);
 };
 
+// Props for the filter pill...
 interface FilterPillProps {
     icon: React.ForwardRefExoticComponent<
         Omit<React.SVGProps<SVGSVGElement>, "ref">
@@ -158,6 +183,7 @@ interface FilterPillProps {
     setSelectedOptions: React.Dispatch<SetStateAction<boolean[]>>;
 }
 
+// The filter pill (visible when filter button active, contains dropdown)
 const FilterPill: React.FC<FilterPillProps> = ({
     icon,
     name,
