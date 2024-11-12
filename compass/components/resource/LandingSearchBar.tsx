@@ -218,6 +218,7 @@ const FilterPill: React.FC<FilterPillProps> = ({
 
     return (
         <div
+            ref={dropdownRef}
             className={
                 "border rounded-2xl w-max px-2 py-0.5 text-sm mr-2 relative " +
                 (isActive
@@ -248,7 +249,6 @@ const FilterPill: React.FC<FilterPillProps> = ({
 
             {/* The filter option selection dropdown */}
             <div
-                ref={dropdownRef}
                 className={
                     "absolute top-full mt-0.5 left-0 border border-gray-200 bg-white shadow-lg rounded-md p-1.5 w-48 " +
                     (showDropdown ? "flex flex-col" : "hidden")
