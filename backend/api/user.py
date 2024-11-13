@@ -21,7 +21,7 @@ def get_all(user_id: str, user_svc: UserService = Depends()):
 
     if subject.role != UserTypeEnum.ADMIN:
         raise Exception(f"Insufficient permissions for user {subject.uuid}")
-
+    # create_bearer_token(user_id)
     return user_svc.all()
 
 
