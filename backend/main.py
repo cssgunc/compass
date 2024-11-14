@@ -4,7 +4,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 
 
 
-from .api import user, health, service, resource, tag
+from .api import user, health, service, resource, tag, authentication
 
 description = """
 Welcome to the **COMPASS** RESTful Application Programming Interface.
@@ -30,6 +30,7 @@ feature_apis = [user, health, service, resource, tag]
 for feature_api in feature_apis:
     app.include_router(feature_api.api)
 
+app.include_router(authentication.auth_router)
 
 # Add application-wide exception handling middleware for commonly encountered API Exceptions
 @app.exception_handler(Exception)
