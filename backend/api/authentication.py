@@ -50,7 +50,7 @@ def registered_user(
         )
 
 @auth_router.post("/api/authentication", tags=["Authentication"])
-def login(user_id: str, user_service: UserService = Depends()):
+def return_bearer_token(user_id: str, user_service: UserService = Depends()):
     user = user_service.get_user_by_id(user_id)
     if not user:
         raise HTTPException(
@@ -62,5 +62,5 @@ def login(user_id: str, user_service: UserService = Depends()):
     return {"access_token": access_token}
 
 @auth_router.get("/api/authentication", tags=["Authentication"])
-def userGet(user_service: UserService = Depends()):
+def get_user_id(user_service: UserService = Depends()):
     return user_service.all()

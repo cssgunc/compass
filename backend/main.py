@@ -19,7 +19,8 @@ app = FastAPI(
         health.openapi_tags,
         service.openapi_tags,
         resource.openapi_tags,
-        tag.openapi_tags
+        tag.openapi_tags,
+        authentication.openapi_tags
     ],
 )
 
