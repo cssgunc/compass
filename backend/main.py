@@ -26,12 +26,10 @@ app = FastAPI(
 
 app.add_middleware(GZipMiddleware)
 
-feature_apis = [user, health, service, resource, tag]
+feature_apis = [user, health, service, resource, tag, authentication]
 
 for feature_api in feature_apis:
     app.include_router(feature_api.api)
-
-app.include_router(authentication.auth_router)
 
 # Add application-wide exception handling middleware for commonly encountered API Exceptions
 @app.exception_handler(Exception)
