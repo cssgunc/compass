@@ -1,40 +1,32 @@
-// for showcasing to compass
-
-import users from "./users.json";
 import {
-    Cell,
-    ColumnDef,
     Row,
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    sortingFns,
+    ColumnDef,
     useReactTable,
+    getCoreRowModel,
+    flexRender,
+    createColumnHelper,
 } from "@tanstack/react-table";
 import {
     ChangeEvent,
     useState,
     useEffect,
-    FunctionComponent,
-    useRef,
-    ChangeEventHandler,
     Key,
+    Dispatch,
+    SetStateAction,
 } from "react";
-import { RowOptionMenu } from "./RowOptionMenu";
-import { RowOpenAction } from "./RowOpenAction";
 import { TableAction } from "./TableAction";
-import {
-    AtSymbolIcon,
-    Bars2Icon,
-    ArrowDownCircleIcon,
-    PlusIcon,
-} from "@heroicons/react/24/solid";
-import TagsInput from "../TagsInput/Index";
+import { PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
-import Service from "@/utils/models/Service";
+import { RowOptionMenu } from "./RowOptionMenu";
+import DataPoint from "@/utils/models/DataPoint";
 
-// For search
+type TableProps<T extends DataPoint> = {
+    data: T[];
+    setData: Dispatch<SetStateAction<T[]>>;
+    columns: ColumnDef<T, any>[];
+};
+
+/** Fuzzy search function */
 const fuzzyFilter = (
     row: Row<any>,
     columnId: string,
@@ -51,139 +43,69 @@ const fuzzyFilter = (
     return itemRank.passed;
 };
 
-// TODO: Rename everything to service
-export const ServiceTable = ({ users }: { users: Service[] }) => {
-    const columnHelper = createColumnHelper<Service>();
+/**
+ * General componenet that holds shared functionality for any data table component
+ * @param props.data Stateful list of data to be held in the table
+ * @param props.setData State setter for the list of data
+ * @param props.columns Column definitions made with Tanstack columnHelper
+ */
+export default function Table<T extends DataPoint>({
+    data,
+    setData,
+    columns,
+}: TableProps<T>) {
+    const columnHelper = createColumnHelper<T>();
 
+    /** Sorting function based on visibility */
+    const visibilitySort = (a: T, b: T) =>
+        a.visible === b.visible ? 0 : a.visible ? -1 : 1;
+
+    // Sort data on load
     useEffect(() => {
-        const sortedUsers = [...users].sort((a, b) =>
-            a.visible === b.visible ? 0 : a.visible ? -1 : 1
-        );
-        setData(sortedUsers);
-    }, [users]);
+        setData((prevData) => prevData.sort(visibilitySort));
+    }, [setData]);
 
-    const deleteUser = (userId: number) => {
+    // Data manipulation methods
+    // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
+    const deleteData = (dataId: number) => {
         console.log(data);
         setData((currentData) =>
-            currentData.filter((user) => user.id !== userId)
+            currentData.filter((data) => data.id !== dataId)
         );
     };
 
-    const hideUser = (userId: number) => {
-        console.log(`Toggling visibility for user with ID: ${userId}`);
+    const hideData = (dataId: number) => {
+        console.log(`Toggling visibility for data with ID: ${dataId}`);
         setData((currentData) => {
             const newData = currentData
-                .map((user) => {
-                    if (user.id === userId) {
-                        return { ...user, visible: !user.visible };
-                    }
-                    return user;
-                })
-                .sort((a, b) =>
-                    a.visible === b.visible ? 0 : a.visible ? -1 : 1
-                );
+                .map((data) =>
+                    data.id === dataId
+                        ? { ...data, visible: !data.visible }
+                        : data
+                )
+                .sort(visibilitySort);
 
             console.log(newData);
             return newData;
         });
     };
-    const [presetOptions, setPresetOptions] = useState([
-        "administrator",
-        "volunteer",
-        "employee",
-    ]);
-    const [tagColors, setTagColors] = useState(new Map());
 
-    const getTagColor = (tag: string) => {
-        if (!tagColors.has(tag)) {
-            const colors = [
-                "bg-cyan-100",
-                "bg-blue-100",
-                "bg-green-100",
-                "bg-yellow-100",
-                "bg-purple-100",
-            ];
-            const randomColor =
-                colors[Math.floor(Math.random() * colors.length)];
-            setTagColors(new Map(tagColors).set(tag, randomColor));
-        }
-        return tagColors.get(tag);
+    const addData = () => {
+        setData([...data]);
     };
 
-    const columns = [
+    // Add data manipulation options to the first column
+    columns.unshift(
         columnHelper.display({
             id: "options",
             cell: (props) => (
                 <RowOptionMenu
-                    onDelete={() => {}}
-                    onHide={() => hideUser(props.row.original.id)}
+                    onDelete={() => deleteData(props.row.original.id)}
+                    onHide={() => hideData(props.row.original.id)}
                 />
             ),
-        }),
-        columnHelper.accessor("name", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Name
-                </>
-            ),
-            cell: (info) => (
-                <RowOpenAction
-                    title={info.getValue()}
-                    rowData={info.row.original}
-                    onRowUpdate={handleRowUpdate}
-                />
-            ),
-        }),
-        columnHelper.accessor("status", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Status
-                </>
-            ),
-            cell: (info) => (
-                <span className="ml-2 text-gray-500">{info.getValue()}</span>
-            ),
-        }),
-        columnHelper.accessor("program", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Program
-                </>
-            ),
-            cell: (info) => <TagsInput presetValue={info.getValue()} />,
-        }),
-        columnHelper.accessor("requirements", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Requirements
-                </>
-            ),
-            cell: (info) => (
-                <TagsInput
-                    presetValue={
-                        info.getValue()[0] !== "" ? info.getValue() : ["N/A"]
-                    }
-                />
-            ),
-        }),
-
-        columnHelper.accessor("summary", {
-            header: () => (
-                <>
-                    <Bars2Icon className="inline align-top h-4" /> Summary
-                </>
-            ),
-            cell: (info) => (
-                <span className="ml-2 text-gray-500">{info.getValue()}</span>
-            ),
-        }),
-    ];
-
-    const [data, setData] = useState<Service[]>([...users]);
-
-    const addUser = () => {
-        setData([...data]);
-    };
+        })
+    );
 
     // Searching
     const [query, setQuery] = useState("");
@@ -201,16 +123,7 @@ export const ServiceTable = ({ users }: { users: Service[] }) => {
 
     // TODO: Sorting
 
-    // added this fn for editing rows
-    const handleRowUpdate = (updatedRow: Service) => {
-        const dataIndex = data.findIndex((row) => row.id === updatedRow.id);
-        if (dataIndex !== -1) {
-            const updatedData = [...data];
-            updatedData[dataIndex] = updatedRow;
-            setData(updatedData);
-        }
-    };
-
+    // Define Tanstack table
     const table = useReactTable({
         columns,
         data,
@@ -269,9 +182,9 @@ export const ServiceTable = ({ users }: { users: Service[] }) => {
                 <tbody>
                     {table.getRowModel().rows.map((row) => {
                         // Individual row
-                        const isUserVisible = row.original.visible;
+                        const isDataVisible = row.original.visible;
                         const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${
-                            !isUserVisible ? "bg-gray-200 text-gray-500" : ""
+                            !isDataVisible ? "bg-gray-200 text-gray-500" : ""
                         }`;
                         return (
                             <tr className={rowClassNames} key={row.id}>
@@ -297,7 +210,7 @@ export const ServiceTable = ({ users }: { users: Service[] }) => {
                         <td
                             className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50"
                             colSpan={100}
-                            onClick={addUser}
+                            onClick={addData}
                         >
                             <span className="flex ml-1 text-gray-500">
                                 <PlusIcon className="inline h-4 mr-1" />
@@ -309,4 +222,4 @@ export const ServiceTable = ({ users }: { users: Service[] }) => {
             </table>
         </div>
     );
-};
+}

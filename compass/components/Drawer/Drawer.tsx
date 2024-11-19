@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode } from "react";
+import { Dispatch, FunctionComponent, ReactNode, SetStateAction } from "react";
 import React, { useState } from "react";
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/solid";
 import {
@@ -23,7 +23,7 @@ type DrawerProps = {
     editableContent?: any;
     onSave?: (content: any) => void;
     rowContent?: any;
-    onRowUpdate?: (content: any) => void;
+    setData: Dispatch<SetStateAction<any>>;
 };
 
 interface EditContent {
@@ -37,12 +37,20 @@ const Drawer: FunctionComponent<DrawerProps> = ({
     onSave,
     editableContent,
     rowContent,
-    onRowUpdate,
+    setData,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isFull, setIsFull] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
     const [tempRowContent, setTempRowContent] = useState(rowContent);
+
+    const onRowUpdate = (updatedRow: any) => {
+        setData((prevData: any) =>
+            prevData.map((row: any) =>
+                row.id === updatedRow.id ? updatedRow : row
+            )
+        );
+    };
 
     const handleTempRowContentChange = (e) => {
         const { name, value } = e.target;

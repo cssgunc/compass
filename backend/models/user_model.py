@@ -14,5 +14,5 @@ class User(BaseModel):
     group: str
     program: List[ProgramTypeEnum]
     role: UserTypeEnum
-    created_at: Optional[datetime]
+    created_at: Optional[datetime] = datetime.now()
     uuid: str | None = None

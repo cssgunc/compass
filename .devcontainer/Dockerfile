@@ -47,9 +47,6 @@ RUN mkdir -p /etc/apt/keyrings \
     && npm install -g npm@latest \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Angular CLI Globally
-RUN npm install -g @angular/cli
-
 # Use a non-root user per https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
 ARG USERNAME=vscode
 ARG USER_UID=1000

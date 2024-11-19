@@ -10,4 +10,4 @@ class Tag(BaseModel):
     content: str = Field(
         ..., max_length=600, description="content associated with the tag"
     )
-    created_at: datetime | None = None
+    created_at: datetime | None = datetime.now()
