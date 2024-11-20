@@ -6,7 +6,7 @@ from backend.entities.tag_entity import TagEntity
 
 from ..database import db_session
 from sqlalchemy.orm import Session
-from sqlalchemy import func, select, and_, func, or_, exists, or_
+from sqlalchemy import func, select, and_, func, or_, exists, or_, any_
 
 from backend.models.service_model import Service
 from backend.models.user_model import User
@@ -16,7 +16,7 @@ from backend.services.exceptions import (
     ServiceNotFoundException,
     ProgramNotAssignedException,
 )
-from . import TagService
+from backend.services.tag import TagService
 from ..models import Tag
 
 
@@ -56,14 +56,26 @@ class ServiceService:
             raise ServiceNotFoundException(f"Service with name: {name} does not exist")
 
         service = entity.to_model()
-        # service.tags.extend(TagService.get_tags_for_service(TagService, service))
         return service
+
+    def get_service_by_slug(self, search_str: str) -> List[Service]:
+        """Service method getting services by slug."""
+        query = select(ServiceEntity).filter(
+            or_(
+                ServiceEntity.name.ilike(f"%{search_str}%"),
+                ServiceEntity.status.ilike(f"%{search_str}%"),
+                ServiceEntity.summary.ilike(f"%{search_str}%"),
+                any_(ServiceEntity.requirements).ilike(f"%{search_str}%"),
+            )
+        )
+        entity = self._session.scalars(query).all()
+
+        return [service.to_model() for service in entity]
 
     def get_service_by_user(self, subject: User):
         """Service method getting all of the services that a user has access to based on role"""
         if subject.role != UserTypeEnum.VOLUNTEER:
-            query = select(ServiceEntity)
-            entities = self._session.scalars(query).all()
+            entities = self._session.query(ServiceEntity).all()
 
             return [service.to_model() for service in entities]
         else:
@@ -84,8 +96,7 @@ class ServiceService:
                 f"User is not {UserTypeEnum.ADMIN} or {UserTypeEnum.VOLUNTEER}, cannot get all"
             )
 
-        query = select(ServiceEntity)
-        entities = self._session.scalars(query).all()
+        entities = self._session.query(ServiceEntity).all()
         services = [service.to_model() for service in entities]
         return services
 
@@ -157,9 +168,21 @@ class ServiceService:
             raise ServiceNotFoundException(
                 "The service you are searching for does not exist."
             )
-        self._tag_service.delete_all_tags_service(service_entity.to_model())
+        if self._tag_service.get_tags_for_service(service).count(Tag) != 0:
+            self._tag_service.delete_all_tags_service(service)
+
         self._session.delete(service_entity)
         self._session.commit()
+
+    def get_service_by_tag_id(self, tag_id: int) -> List[Service]:
+        service_ids = self._tag_service.get_all_services_by_tagid(tag_id)
+        services = []
+        for id in service_ids:
+            services.append(self.get_service_by_id(id))
+        return services
+
+    """
+    Can be used, but both methods are achieved by update.
 
     def add_tag(self, subject: User, service: Service, tag: Tag):
         service = self.get_service_by_id(service.id)
@@ -167,17 +190,7 @@ class ServiceService:
         self._tag_service.add_tag_service(subject, service.id, tag.id)
 
     def remove_tag(self, subject: User, service: Service, tag: Tag) -> None:
-        service_tag = (
-            self._session.query(ServiceTagEntity)
-            .filter(
-                ServiceTagEntity.serviceId == service.id,
-                ServiceTagEntity.tagId == tag.id,
-            )
-            .one_or_none()
-        )
-        if service_tag is None:
-            raise Exception(
-                f"No tag with id {tag.id} found for service with id {service.id}."
-            )
-        self._session.delete(service_tag)
-        self._session.commit()
+        serviceEntity = self.get_service_by_id(service.id)
+        tagEntity = self._tag_service.get_tag_by_id(tag.id)
+        self._tag_service.delete_tag_service(subject, tagEntity, serviceEntity)
+    """

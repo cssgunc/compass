@@ -13,18 +13,12 @@ def user_svc(session: Session):
 
 
 @pytest.fixture()
-def tag_svc(session: Session):
-    """This fixture is used to test the TagService class"""
-    return TagService(session)
-
-
-@pytest.fixture()
-def service_svc(session: Session):
+def service_svc(session: Session, tag_svc: TagService):
     """This fixture is used to test the ServiceService class"""
-    return ServiceService(session)
+    return ServiceService(session, tag_svc)
 
 
 @pytest.fixture()
-def resource_svc(session: Session):
+def resource_svc(session: Session, tag_svc: TagService):
     """This fixutre is used to test the ResourceService class"""
-    return ResourceService(session)
+    return ResourceService(session, tag_svc)

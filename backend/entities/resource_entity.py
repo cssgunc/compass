@@ -49,7 +49,6 @@ class ResourceEntity(EntityBase):
 
         return cls(
             id=model.id,
-            created_at=model.created_at,
             name=model.name,
             summary=model.summary,
             link=model.link,

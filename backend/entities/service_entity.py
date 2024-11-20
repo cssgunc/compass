@@ -50,6 +50,7 @@ class ServiceEntity(EntityBase):
             summary=self.summary,
             requirements=self.requirements,
             program=self.program,
+            created_at=self.created_at,
             tags=[tag.tag.to_model() for tag in self.service_tags],
         )
 

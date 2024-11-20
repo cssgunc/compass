@@ -16,7 +16,7 @@ openapi_tags = {
 # TODO: Enable authorization by passing user uuid to API
 # TODO: Create custom exceptions
 @api.get("", response_model=List[Resource], tags=["Resource"])
-def get_all(
+def get_all_resources(
     user_id: str,
     resource_svc: ResourceService = Depends(),
     user_svc: UserService = Depends(),
@@ -27,7 +27,7 @@ def get_all(
 
 
 @api.get("/{id}", response_model=Resource, tags=["Resource"])
-def get_by_id(
+def get__resource_by_id(
     user_id: str,
     id: int,
     resource_svc: ResourceService = Depends(),
@@ -38,8 +38,8 @@ def get_by_id(
     return resource
 
 
-@api.post("/", response_model=Resource, tags=["Resource"])
-def create_service(
+@api.post("", response_model=Resource, tags=["Resource"])
+def create_resource(
     user_id: str,
     resource: Resource,
     resource_svc: ResourceService = Depends(),
@@ -50,8 +50,8 @@ def create_service(
     return new_resource
 
 
-@api.put("/{resource_id}", response_model=Resource, tags=["Resource"])
-def update_service(
+@api.put("/{id}", response_model=Resource, tags=["Resource"])
+def update_resource(
     resource_id: int,
     user_id: str,
     resource: Resource,
@@ -65,8 +65,8 @@ def update_service(
     return updated_resource
 
 
-@api.delete("/{resource_id}", response_model=Resource, tags=["Resource"])
-def delete_service_tag_by_id(
+@api.delete("/{id}", response_model=Resource, tags=["Resource"])
+def delete_resource_tag_by_id(
     resource_id: int,
     tag_id: int,
     user_id: str,
@@ -79,3 +79,32 @@ def delete_service_tag_by_id(
 
     resource_svc.remove_tag(subject, resource, tag)
     return resource_svc.get_resource_by_id(resource_id)
+
+
+@api.delete("/{resource_id}", tags=["Resource"])
+def delete_resource_by_id(
+    resource_id: int,
+    user_id: str,
+    resource_svc: ResourceService = Depends(),
+    user_svc: UserService = Depends(),
+):
+    subject = user_svc.get_user_by_uuid(user_id)
+    resource = resource_svc.get_by_id(resource_id)
+    resource_svc.delete(subject, resource)
+    return
+
+
+@api.get("/search/", response_model=List[Resource], tags=["Resource"])
+def get_service_by_slug(
+    slug: str,
+    user_id: str,
+    resource_svc: ResourceService = Depends(),
+    user_svc: UserService = Depends(),
+):
+    subject = user_svc.get_user_by_uuid(user_id)
+    return resource_svc.get_by_slug(subject, slug)
+
+
+@api.get("/tag/{tag_id}", response_model=List[Resource], tags=["Resource"])
+def get_resources_by_tag(tag_id: int, resource_svc: ResourceService = Depends()):
+    return resource_svc.get_by_tag_id(tag_id)

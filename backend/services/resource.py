@@ -1,12 +1,13 @@
+from typing import List
 from fastapi import Depends
 
 from backend.services.tag import TagService
 from ..database import db_session
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 from ..models.resource_model import Resource
 from ..entities.resource_entity import ResourceEntity
-from ..models.user_model import User, UserTypeEnum
+from ..models.user_model import User, UserTypeEnum, ProgramTypeEnum
 
 from .exceptions import ProgramNotAssignedException, ResourceNotFoundException
 
@@ -129,21 +130,20 @@ class ResourceService:
             )
 
         resource_entity.name = resource.name
-        resource_entity.status = resource.status
         resource_entity.summary = resource.summary
-        resource_entity.requirements = resource.requirements
         resource_entity.program = resource.program
+        resource_entity.link = resource.link
 
         for tag in resource.tags:
             tag_entity = self._tag_service.get_or_create_tag(tag.content)
-            self._tag_service.add_tag_service(
+            self._tag_service.add_tag_resource(
                 user, tag_entity, ResourceEntity.to_model(resource_entity)
             )
 
         self._session.commit()
         return resource_entity.to_model()
 
-    def delete(self, user: User, id: int) -> None:
+    def delete(self, user: User, resource: Resource) -> None:
         """
         Delete resource based on id that the user has access to
 
@@ -154,12 +154,17 @@ class ResourceService:
         Raises:
             ResourceNotFoundException: If no resource is found with the corresponding id
         """
+
+        if user.role != UserTypeEnum.ADMIN:
+            raise ProgramNotAssignedException(
+                f"User is not {UserTypeEnum.ADMIN}, cannot delete service"
+            )
+
         resource = (
             self._session.query(ResourceEntity)
             .filter(
-                ResourceEntity.id == id,
-                ResourceEntity.role == user.role,
-                ResourceEntity.group == user.group,
+                ResourceEntity.id == resource.id,
+                ResourceEntity.program.in_(user.program),
             )
             .one_or_none()
         )
@@ -184,11 +189,30 @@ class ResourceService:
         Raises:
             ResourceNotFoundException if no resource is found with the corresponding slug
         """
-        query = select(ResourceEntity).where(
-            ResourceEntity.title.ilike(f"%{search_string}%"),
-            ResourceEntity.role == user.role,
-            ResourceEntity.group == user.group,
+        query = select(ResourceEntity).filter(
+            and_(
+                ResourceEntity.program.in_(user.program),
+                or_(
+                    ResourceEntity.name.ilike(f"%{search_string}%"),
+                    ResourceEntity.summary.ilike(f"%{search_string}%"),
+                ),
+            )
         )
         entities = self._session.scalars(query).all()
 
         return [entity.to_model() for entity in entities]
+
+    def get_by_program(self, user: User, program: ProgramTypeEnum):
+        if not user.program.__contains__(program):
+            raise ProgramNotAssignedException
+
+        query = select(ResourceEntity).where(ResourceEntity.program == program)
+        entities = self._session.scalars(query).all()
+        return [entity.to_model() for entity in entities]
+
+    def get_by_tag_id(self, tag_id: int) -> List[Resource]:
+        resource_ids = self._tag_service.get_all_resources_by_tagid(tag_id)
+        resources = []
+        for id in resource_ids:
+            resources.append(self.get_by_id(id))
+        return resources

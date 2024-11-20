@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from ...entities import ServiceEntity
 from ...models.enum_for_models import ProgramTypeEnum
 from ...models import Service, Tag
-from .tag_test_data import tags
+from .tag_test_data import *
 
 service1 = Service(
     id=1,
@@ -13,6 +13,7 @@ service1 = Service(
     summary="presentation educating community on domestic violence",
     requirements=[""],
     program=ProgramTypeEnum.COMMUNITY,
+    tags=[tag1],
 )
 
 service2 = Service(
@@ -22,6 +23,17 @@ service2 = Service(
     summary="service finding safe places to stay",
     requirements=[""],
     program=ProgramTypeEnum.DOMESTIC,
+    tags=[tag1, tag2],
+)
+
+service2_update = Service(
+    id=2,
+    name="service 2",
+    status="closed",
+    summary="service finding safe places to stay",
+    requirements=[""],
+    program=ProgramTypeEnum.DOMESTIC,
+    tags=[tag1, tag_to_create],
 )
 
 service3 = Service(
@@ -31,6 +43,7 @@ service3 = Service(
     summary="",
     requirements=[""],
     program=ProgramTypeEnum.DOMESTIC,
+    tags=[tags[0], tags[1], tags[2]],
 )
 
 service4 = Service(
@@ -40,6 +53,7 @@ service4 = Service(
     summary="community event",
     requirements=[""],
     program=ProgramTypeEnum.COMMUNITY,
+    tags=[Tag(content="Tag 4"), Tag(content="Tag 1")],
 )
 
 service5 = Service(
@@ -49,6 +63,7 @@ service5 = Service(
     summary="talk circle for victims of domestic violence",
     requirements=["18+"],
     program=ProgramTypeEnum.COMMUNITY,
+    tags=[Tag(content="Tag 5")],
 )
 
 service6 = Service(
@@ -58,6 +73,7 @@ service6 = Service(
     summary="program offering economic assistance",
     requirements=[""],
     program=ProgramTypeEnum.ECONOMIC,
+    tags=[Tag(content="Tag 6")],
 )
 
 service_6_edit = Service(
@@ -76,6 +92,7 @@ service7 = Service(
     summary="insert generic description",
     requirements=[""],
     program=ProgramTypeEnum.ECONOMIC,
+    tags=[Tag(content="Tag 7")],
 )
 
 new_service = Service(

@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import Depends
 
 from backend.models.enum_for_models import UserTypeEnum
@@ -7,7 +8,6 @@ from sqlalchemy import select
 from ..entities import TagEntity, ResourceTagEntity, ServiceTagEntity
 from ..models import User, Resource, Service, Tag, ResourceTag, ServiceTag
 from .exceptions import ProgramNotAssignedException, ResourceNotFoundException
-from datetime import datetime
 
 
 class TagService:
@@ -140,6 +140,30 @@ class TagService:
             self._session.rollback()  # Rollback in case of error
             raise Exception("Failed to add tag to resource") from e
 
+    def delete_tag_resource(self, user: User, tag: Tag, resource: Resource) -> None:
+        """Deletes a tag from a service"""
+
+        existing_tag = (
+            self._session.query(ResourceTagEntity)
+            .filter(
+                ResourceTagEntity.tagId == tag.id,
+                ResourceTagEntity.resourceId == resource.id,
+            )
+            .first()
+        )
+
+        if existing_tag == None:
+            raise Exception(
+                f"Tag with id {tag.id} does not exist for resource with id {resource.id}."
+            )
+
+        try:
+            self._session.delete(existing_tag)
+            self._session.commit()
+        except Exception as e:
+            self._session.rollback()  # Rollback in case of error
+            raise Exception("Failed to delete tag to service") from e
+
     def add_tag_service(self, user: User, tag: Tag, service: Service) -> None:
         """Adds a tag to a service"""
 
@@ -168,15 +192,41 @@ class TagService:
             self._session.rollback()  # Rollback in case of error
             raise Exception("Failed to add tag to service") from e
 
+    def delete_tag_service(self, user: User, tag: Tag, service: Service) -> None:
+        """Deletes a tag from a service"""
+
+        existing_tag = (
+            self._session.query(ServiceTagEntity)
+            .filter(
+                ServiceTagEntity.tagId == tag.id,
+                ServiceTagEntity.serviceId == service.id,
+            )
+            .first()
+        )
+
+        if existing_tag == None:
+            raise Exception(
+                f"Tag with id {tag.id} does not exist for service with id {service.id}."
+            )
+
+        try:
+            self._session.delete(existing_tag)
+            self._session.commit()
+        except Exception as e:
+            self._session.rollback()  # Rollback in case of error
+            raise Exception("Failed to delete tag to service") from e
+
     def delete_all_tags_service(self, service: Service) -> None:
         """Deletes all service tags for a service"""
 
-        service_tags = self._session.query(ServiceTagEntity).filter(
-            ServiceTagEntity.serviceId == service.id
+        service_tags = (
+            self._session.query(ServiceTagEntity)
+            .filter(ServiceTagEntity.serviceId == service.id)
+            .all()
         )
 
-        if service_tags.count() == 0:
-            raise ResourceNotFoundException
+        if service_tags.count(ServiceTagEntity) == 0:
+            return
 
         service_tags.delete(synchronize_session=False)
         self._session.commit()
@@ -184,12 +234,14 @@ class TagService:
     def delete_all_tags_resource(self, resource: Resource) -> None:
         """Deletes all resource tags for a resource"""
 
-        resource_tags = self._session.query(ResourceTagEntity).filter(
-            ResourceTagEntity.resourceId == resource.id
+        resource_tags = (
+            self._session.query(ResourceTagEntity)
+            .filter(ResourceTagEntity.resourceId == resource.id)
+            .all()
         )
 
         if resource_tags.count() == 0:
-            raise ResourceNotFoundException
+            return
 
         resource_tags.delete(synchronize_session=False)
         self._session.commit()
@@ -213,3 +265,21 @@ class TagService:
         except Exception as e:
             self._session.rollback()
             raise Exception(f"Failed to create tag with content: {tag.content}") from e
+
+    def get_all_services_by_tagid(self, tagId: int) -> List[int]:
+        services = (
+            self._session.query(ServiceTagEntity)
+            .filter(ServiceTagEntity.tagId == tagId)
+            .all()
+        )
+
+        return [service.serviceId for service in services]
+
+    def get_all_resources_by_tagid(self, tagId: int) -> List[int]:
+        resources = (
+            self._session.query(ResourceTagEntity)
+            .filter(ResourceTagEntity.tagId == tagId)
+            .all()
+        )
+
+        return [resource.resourceId for resource in resources]

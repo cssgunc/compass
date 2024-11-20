@@ -1,4 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
+from pytest import Session
+
+from backend.database import db_session
 from ..services import ServiceService, UserService, TagService
 from ..models import Service, Tag
 
@@ -16,18 +19,17 @@ openapi_tags = {
 # TODO: Enable authorization by passing user uuid to API
 # TODO: Create custom exceptions
 @api.get("", response_model=List[Service], tags=["Service"])
-def get_all(
+def get_all_services(
     user_id: str,
     service_svc: ServiceService = Depends(),
     user_svc: UserService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(user_id)
-
     return service_svc.get_service_by_user(subject)
 
 
 @api.get("/{id}", response_model=Service, tags=["Service"])
-def get_by_id(
+def get_service_by_id(
     user_id: str,
     id: int,
     service_svc: ServiceService = Depends(),
@@ -38,7 +40,7 @@ def get_by_id(
     return service
 
 
-@api.post("/", response_model=Service, tags=["Service"])
+@api.post("", response_model=Service, tags=["Service"])
 def create_service(
     user_id: str,
     service: Service,
@@ -65,7 +67,7 @@ def update_service(
     return updated_service
 
 
-@api.delete("/{service_id}", response_model=Service, tags=["Service"])
+@api.delete("/{service_id}/{tag_id}", response_model=Service, tags=["Service"])
 def delete_service_tag_by_id(
     service_id: int,
     tag_id: int,
@@ -79,3 +81,29 @@ def delete_service_tag_by_id(
 
     service_svc.remove_tag(subject, service, tag)
     return service_svc.get_service_by_id(service_id)
+
+
+@api.delete("/{service_id}", tags=["Service"])
+def delete_service_by_id(
+    service_id: int,
+    user_id: str,
+    service_svc: ServiceService = Depends(),
+    user_svc: UserService = Depends(),
+):
+    subject = user_svc.get_user_by_uuid(user_id)
+    service = service_svc.get_service_by_id(service_id)
+    service_svc.delete(subject, service)
+    return
+
+
+@api.get("/search/", response_model=List[Service], tags=["Service"])
+def get_service_by_slug(
+    slug: str,
+    service_svc: ServiceService = Depends(),
+):
+    return service_svc.get_service_by_slug(slug)
+
+
+@api.get("/tag/{tag_id}", response_model=List[Service], tags=["Service"])
+def get_services_by_tag(tag_id: int, service_svc: ServiceService = Depends()):
+    return service_svc.get_service_by_tag_id(tag_id)

@@ -13,5 +13,5 @@ class Resource(BaseModel):
     summary: str = Field(..., max_length=300, description="The summary of the resource")
     link: str = Field(..., max_length=150, description="link to the resource")
     program: ProgramTypeEnum
-    created_at: Optional[datetime]
+    created_at: datetime | None = None
     tags: List[Tag] = []

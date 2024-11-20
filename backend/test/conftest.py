@@ -14,6 +14,7 @@ from .services import (
 from ..database import _engine_str
 from ..env import getenv
 from .. import entities
+from ..services import TagService
 
 POSTGRES_DATABASE = f'{getenv("POSTGRES_DATABASE")}_test'
 POSTGRES_USER = getenv("POSTGRES_USER")
@@ -65,3 +66,9 @@ def setup_insert_data_fixture(session: Session):
     resource_test_data.insert_fake_data(session)
     session.commit()
     yield
+
+
+@pytest.fixture()
+def tag_svc(session: Session):
+    """This fixture is used to test the TagService class"""
+    return TagService(session)

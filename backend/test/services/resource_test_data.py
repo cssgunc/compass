@@ -4,6 +4,7 @@ from datetime import datetime
 from ...entities import ResourceEntity
 from ...models.enum_for_models import ProgramTypeEnum
 from ...models.resource_model import Resource
+from .tag_test_data import *
 
 resource1 = Resource(
     id=1,
@@ -20,7 +21,16 @@ resource2 = Resource(
     summary="Legal assistance resources",
     link="https://example.com/resource2",
     program=ProgramTypeEnum.COMMUNITY,
-    created_at=datetime(2023, 6, 2, 12, 30, 0),
+    tags=[tag1, tag2],
+)
+
+resource2_edit_tags = Resource(
+    id=2,
+    name="Resource 2",
+    summary="Legal assistance resources",
+    link="https://example.com/resource2",
+    program=ProgramTypeEnum.COMMUNITY,
+    tags=[tag2],
 )
 
 resource3 = Resource(
@@ -41,6 +51,15 @@ resource4 = Resource(
     created_at=datetime(2023, 6, 4, 9, 15, 0),
 )
 
+resource4_edit = Resource(
+    id=4,
+    name="Resource 4 edited",
+    summary="Counseling and support groups",
+    link="https://example.com/resource4",
+    program=ProgramTypeEnum.DOMESTIC,
+    created_at=datetime(2023, 6, 4, 9, 15, 0),
+)
+
 resource5 = Resource(
     id=5,
     name="Resource 5",
@@ -48,6 +67,13 @@ resource5 = Resource(
     link="https://example.com/resource5",
     program=ProgramTypeEnum.DOMESTIC,
     created_at=datetime(2023, 6, 5, 11, 30, 0),
+)
+
+resource_to_create = Resource(
+    name="Created Resource",
+    summary="Resource Test Create",
+    link="https://example.com/",
+    program=ProgramTypeEnum.COMMUNITY,
 )
 
 resources = [resource1, resource2, resource3, resource4, resource5]

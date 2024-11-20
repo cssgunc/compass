@@ -1,3 +1,4 @@
+from backend.models.tag_model import Tag
 from backend.models.user_model import User
 from backend.entities.service_entity import ServiceEntity
 from ...models.enum_for_models import ProgramTypeEnum
@@ -5,6 +6,7 @@ from backend.services.service import ServiceService
 from backend.services.exceptions import ServiceNotFoundException
 from . import service_test_data
 from . import user_test_data
+from . import tag_test_data
 from .fixtures import service_svc, user_svc
 from backend.models.service_model import Service
 import pytest
@@ -58,6 +60,11 @@ def test_update(service_svc: ServiceService):
     assert isinstance(service, Service)
 
 
+def test_update_with_tags(service_svc: ServiceService):
+    service = service_svc.update(user_test_data.admin, service_test_data.service2)
+    assert len(service.tags) == 2
+
+
 def test_update_not_found(service_svc: ServiceService):
     with pytest.raises(ServiceNotFoundException):
         service = service_svc.update(
@@ -72,7 +79,37 @@ def test_delete(service_svc: ServiceService):
     assert len(services) == len(service_test_data.services) - 1
 
 
-"""def test_delete_not_found(service_svc: ServiceService):
+def test_delete_not_found(service_svc: ServiceService):
     with pytest.raises(ServiceNotFoundException):
         service_svc.delete(user_test_data.admin, service_test_data.service_10)
-        pytest.fail()"""
+        pytest.fail()
+
+
+def test_create_service_with_tags(service_svc: ServiceService):
+    service = Service(
+        name="test service",
+        status="open",
+        summary="summary",
+        requirements=["18 years or older"],
+        program=ProgramTypeEnum.COMMUNITY,
+        tags=[Tag(content="service tag")],
+    )
+    service_entity = service_svc.create(user_test_data.admin, service)
+    assert len(service_entity.tags) == 1
+
+
+def test_update_tags_for_service(service_svc: ServiceService):
+    serviceEntity = service_svc.update(
+        user_test_data.admin, service_test_data.service2_update
+    )
+    assert len(serviceEntity.tags) == 2
+
+
+def test_get_service_by_slug(service_svc: ServiceService):
+    services = service_svc.get_service_by_slug("service 1")
+    assert services[0].id == service_test_data.service1.id
+
+
+def test_get_service_by_requirements_slug(service_svc: ServiceService):
+    services = service_svc.get_service_by_slug("safe places to stay")
+    assert services[0].id == service_test_data.service2.id
