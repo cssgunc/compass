@@ -19,6 +19,8 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { RowOptionMenu } from "./RowOptionMenu";
 import DataPoint from "@/utils/models/DataPoint";
+import { NewDrawerButton } from "./NewDrawerButton";
+import ResourceInputDrawer from "../Drawer/ResourceInputDrawer";
 
 type TableProps<T extends DataPoint> = {
     data: T[];
@@ -55,6 +57,9 @@ export default function Table<T extends DataPoint>({
     columns,
 }: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
+
+    /** Handle input drawer visibility  */
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     /** Sorting function based on visibility */
     const visibilitySort = (a: T, b: T) =>
@@ -148,6 +153,7 @@ export default function Table<T extends DataPoint>({
         return rowData;
     };
 
+
     return (
         <div className="flex flex-col">
             <div className="flex flex-row justify-end">
@@ -210,16 +216,25 @@ export default function Table<T extends DataPoint>({
                         <td
                             className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50"
                             colSpan={100}
-                            onClick={addData}
                         >
-                            <span className="flex ml-1 text-gray-500">
-                                <PlusIcon className="inline h-4 mr-1" />
-                                New
-                            </span>
+                            <button
+                                className="text-gray-500 hover:text-gray-700 font-medium border border-gray-200 bg-white shadow-sm hover:bg-gray-50 p-2 rounded-md"
+                                onClick={() => setIsDrawerOpen(true)} // Opens the drawer
+                            >
+                                + New
+                            </button>
                         </td>
                     </tr>
                 </tfoot>
             </table>
+            {/* Slide-in ResourceInputDrawer */}
+            <ResourceInputDrawer
+                    isOpen={isDrawerOpen}
+                    setIsOpen={setIsDrawerOpen}
+                    setData={setData}
+            />
+            
+
         </div>
     );
 }
