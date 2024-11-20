@@ -2,10 +2,10 @@ import { Bars2Icon } from "@heroicons/react/24/solid";
 import { Dispatch, SetStateAction, useState } from "react";
 import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import Table from "@/components/Table/Table";
 import TagsInput from "@/components/TagsInput/Index";
 import Resource from "@/utils/models/Resource";
+import ResourceRowOpenAction from "./NewRowOpenAction";
 
 type ResourceTableProps = {
     data: Resource[];
@@ -32,7 +32,7 @@ export default function ResourceTable({ data, setData }: ResourceTableProps) {
                 </>
             ),
             cell: (info) => (
-                <RowOpenAction
+                <ResourceRowOpenAction
                     title={info.getValue()}
                     rowData={info.row.original}
                     setData={setData}

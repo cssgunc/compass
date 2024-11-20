@@ -104,7 +104,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 icon={<BookOpenIcon />}
                                 text="Training Manuals"
                                 active={true}
-                                redirect="/training-manuals"
+                                redirect="/training-manual"
                             />
                         </nav>
                     </div>
