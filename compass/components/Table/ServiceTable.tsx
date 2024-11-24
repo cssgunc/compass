@@ -78,12 +78,12 @@ export default function ServiceTable({ data, setData }: ServiceTableProps) {
             ),
             cell: (info) => (
                 // TODO: Setup different tag handler for requirements
-                <TagsInput
+                (<TagsInput
                     presetValue={
                         info.getValue()[0] !== "" ? info.getValue() : ["N/A"]
                     }
                     {...requirementProps}
-                />
+                />)
             ),
         }),
 
