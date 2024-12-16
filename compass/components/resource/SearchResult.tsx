@@ -23,8 +23,8 @@ export const SearchResult: React.FC<SearchResultProps> = ({
         type === "resource"
             ? BookmarkIcon
             : type === "service"
-            ? ClipboardIcon
-            : QuestionMarkCircleIcon; // Unknown type
+              ? ClipboardIcon
+              : QuestionMarkCircleIcon; // Unknown type
 
     return (
         <div className="flex justify-between items-center w-full p-2 rounded-md hover:bg-purple-100 cursor-pointer group">
