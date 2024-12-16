@@ -5,6 +5,7 @@ interface SidebarItemProps {
     text: string;
     active: boolean;
     redirect: string;
+    onClick: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const SidebarItem: React.FC<SidebarItemProps> = ({
@@ -12,9 +13,11 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
     text,
     active,
     redirect,
+    onClick,
 }) => {
     return (
         <Link
+            onClick={() => onClick(true)}
             href={redirect}
             className={
                 active

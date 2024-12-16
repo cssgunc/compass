@@ -15,8 +15,7 @@ export default function RootLayout({
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [user, setUser] = useState<User>();
     const router = useRouter();
-    const [loading, setLoading] = useState(true); 
-
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function getUser() {

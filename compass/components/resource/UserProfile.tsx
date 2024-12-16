@@ -11,9 +11,8 @@ const handleClick = async (
     event: React.MouseEvent<HTMLButtonElement>,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-    setLoading(true);  // Set loading to true
+    setLoading(true);
     await signOut();
-    setLoading(false);  // Reset loading after sign-out completes
 };
 
 export const UserProfile = ({ name, email, setLoading }: UserProfileProps) => {

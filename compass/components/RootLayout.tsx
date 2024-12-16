@@ -33,7 +33,7 @@ export default function RootLayout({
             );
 
             const user: User = await userData.json();
-            setUser(user);  // Set user data after fetching
+            setUser(user); // Set user data after fetching
         }
 
         getUser();

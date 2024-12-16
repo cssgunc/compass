@@ -9,7 +9,7 @@ import {
     LockClosedIcon,
 } from "@heroicons/react/24/solid";
 import { SidebarItem } from "./SidebarItem";
-import styles from "./LoadingIcon.module.css"
+import styles from "./LoadingIcon.module.css";
 import { UserProfile } from "../resource/UserProfile";
 import LoadingIcon from "./LoadingIcon";
 
@@ -67,16 +67,20 @@ const Sidebar: React.FC<SidebarProps> = ({
                     </button>
                 </div>
 
-                   {/* Loading indicator*/}
-                   {isLoading && (
+                {/* Loading indicator*/}
+                {isLoading && (
                     <div className="fixed top-2 left-2">
-                        <LoadingIcon/>{/* Spinner */}
+                        <LoadingIcon />
                     </div>
                 )}
 
                 <div className="flex flex-col space-y-8">
                     <div className="flex items-center p-4 space-x-2 border rounded-md">
-                        <UserProfile name={name} email={email} setLoading={setIsLoading} />
+                        <UserProfile
+                            name={name}
+                            email={email}
+                            setLoading={setIsLoading}
+                        />
                     </div>
 
                     {/* navigation menu  */}
@@ -91,6 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                     text="Admin"
                                     active={true}
                                     redirect="/admin"
+                                    onClick={setIsLoading}
                                 />
                             )}
 
@@ -99,24 +104,28 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 text="Home"
                                 active={true}
                                 redirect="/home"
+                                onClick={setIsLoading}
                             />
                             <SidebarItem
                                 icon={<BookmarkIcon />}
                                 text="Resources"
                                 active={true}
                                 redirect="/resource"
+                                onClick={setIsLoading}
                             />
                             <SidebarItem
                                 icon={<ClipboardIcon />}
                                 text="Services"
                                 active={true}
                                 redirect="/service"
+                                onClick={setIsLoading}
                             />
                             <SidebarItem
                                 icon={<BookOpenIcon />}
                                 text="Training Manuals"
                                 active={true}
                                 redirect="/training-manuals"
+                                onClick={setIsLoading}
                             />
                         </nav>
                     </div>
