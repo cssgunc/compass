@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     HomeIcon,
     ChevronDoubleLeftIcon,
@@ -9,7 +9,9 @@ import {
     LockClosedIcon,
 } from "@heroicons/react/24/solid";
 import { SidebarItem } from "./SidebarItem";
+import styles from "./LoadingIcon.module.css";
 import { UserProfile } from "../resource/UserProfile";
+import LoadingIcon from "./LoadingIcon";
 
 interface SidebarProps {
     setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,6 +19,7 @@ interface SidebarProps {
     name: string;
     email: string;
     isAdmin: boolean;
+    loading: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -25,7 +28,9 @@ const Sidebar: React.FC<SidebarProps> = ({
     name,
     email,
     isAdmin: admin,
+    loading,
 }) => {
+    const [isLoading, setIsLoading] = useState(false);
     return (
         <>
             {/* Button to open the sidebar. */}
@@ -62,11 +67,22 @@ const Sidebar: React.FC<SidebarProps> = ({
                     </button>
                 </div>
 
-                <div className="flex flex-col space-y-8">
-                    {/* user + logout button  */}
-                    <div className="flex items-center p-4 space-x-2 border border-gray-200 rounded-md ">
-                        <UserProfile name={name} email={email} />
+                {/* Loading indicator*/}
+                {isLoading && (
+                    <div className="fixed top-2 left-2">
+                        <LoadingIcon />
                     </div>
+                )}
+
+                <div className="flex flex-col space-y-8">
+                    <div className="flex items-center p-4 space-x-2 border rounded-md">
+                        <UserProfile
+                            name={name}
+                            email={email}
+                            setLoading={setIsLoading}
+                        />
+                    </div>
+
                     {/* navigation menu  */}
                     <div className="flex flex-col space-y-2">
                         <h4 className="text-xs font-semibold text-gray-500">
@@ -79,6 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                     text="Admin"
                                     active={true}
                                     redirect="/admin"
+                                    onClick={setIsLoading}
                                 />
                             )}
 
@@ -87,24 +104,28 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 text="Home"
                                 active={true}
                                 redirect="/home"
+                                onClick={setIsLoading}
                             />
                             <SidebarItem
                                 icon={<BookmarkIcon />}
                                 text="Resources"
                                 active={true}
                                 redirect="/resource"
+                                onClick={setIsLoading}
                             />
                             <SidebarItem
                                 icon={<ClipboardIcon />}
                                 text="Services"
                                 active={true}
                                 redirect="/service"
+                                onClick={setIsLoading}
                             />
                             <SidebarItem
                                 icon={<BookOpenIcon />}
                                 text="Training Manuals"
                                 active={true}
                                 redirect="/training-manuals"
+                                onClick={setIsLoading}
                             />
                         </nav>
                     </div>

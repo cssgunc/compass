@@ -1,0 +1,19 @@
+/* components/LoadingIcon.module.css */
+.loader {
+    width: 24px; /* Larger for better visibility */
+    height: 24px;
+    border: 4px solid #5b21b6; /* Primary color */
+    border-top: 4px solid #ffffff; /* Contrasting color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* Smooth continuous spin */
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg); /* Start position */
+    }
+    100% {
+        transform: rotate(360deg); /* Full rotation */
+    }
+}

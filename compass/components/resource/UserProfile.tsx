@@ -1,15 +1,21 @@
+import { useState } from "react";
 import { signOut } from "@/app/auth/actions";
 
 interface UserProfileProps {
     name: string;
     email: string;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+const handleClick = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+    setLoading(true);
     await signOut();
 };
 
-export const UserProfile = ({ name, email }: UserProfileProps) => {
+export const UserProfile = ({ name, email, setLoading }: UserProfileProps) => {
     return (
         <div className="flex flex-col items-start space-y-2">
             <div className="flex flex-col">
@@ -19,7 +25,7 @@ export const UserProfile = ({ name, email }: UserProfileProps) => {
                 <span className="text-xs text-gray-500">{email}</span>
             </div>
             <button
-                onClick={handleClick}
+                onClick={(event) => handleClick(event, setLoading)}
                 className="text-red-600 font-semibold text-xs hover:underline mt-1"
             >
                 Sign out
