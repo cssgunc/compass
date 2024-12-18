@@ -137,7 +137,6 @@ const Drawer: FunctionComponent<DrawerProps> = ({
             >
                 Open
             </button>
-            <div className={drawerClassName}></div>
             <div className={drawerClassName}>
                 <div className="flex items-center justify-between p-4">
                     <div className="flex flex-row items-center justify-between space-x-2">
@@ -173,13 +172,11 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                     <table className="p-4">
                         <tbody className="items-center">
                             <tr className="w-full text-xs items-center flex flex-row justify-between">
-                                <div className="flex flex-row space-x-2 text-gray-500 items-center">
-                                    <td>
-                                        <UserIcon className="h-4 w-4" />
-                                    </td>
-                                    <td className="w-32">Username</td>
-                                </div>
-                                <td className="w-3/4 w-3/4 p-2 pl-0">
+                                <td className="flex flex-row space-x-2 text-gray-500 items-center">
+                                    <UserIcon className="h-4 w-4" />
+                                    <span className="w-32">Username</span>
+                                </td>
+                                <td className="w-3/4 p-2 pl-0">
                                     <input
                                         type="text"
                                         name="username"
@@ -191,29 +188,24 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                 </td>
                             </tr>
                             <tr className="w-full text-xs items-center flex flex-row justify-between">
-                                <div className="flex flex-row space-x-2 text-gray-500 items-center">
-                                    <td>
-                                        <ListBulletIcon className="h-4 w-4" />
-                                    </td>
-                                    <td className="w-32">Role</td>
-                                </div>
+                                <td className="flex flex-row space-x-2 text-gray-500 items-center">
+                                    <ListBulletIcon className="h-4 w-4" />
+                                </td>
+                                <td className="w-32">Role</td>
                                 <td className="w-3/4 hover:bg-gray-50">
                                     <TagsInput
                                         presetValue={tempRowContent.role}
                                         presetOptions={presetOptions}
                                         setPresetOptions={setPresetOptions}
                                         getTagColor={getTagColor}
-                                        setTagColors={setTagColors}
                                     />
                                 </td>
                             </tr>
                             <tr className="w-full text-xs items-center flex flex-row justify-between">
-                                <div className="flex flex-row space-x-2 text-gray-500 items-center">
-                                    <td>
-                                        <EnvelopeIcon className="h-4 w-4" />
-                                    </td>
-                                    <td className="w-32">Email</td>
-                                </div>
+                                <td className="flex flex-row space-x-2 text-gray-500 items-center">
+                                    <EnvelopeIcon className="h-4 w-4" />
+                                </td>
+                                <td className="w-32">Email</td>
                                 <td className="w-3/4 p-2 pl-0">
                                     <input
                                         type="text"
@@ -226,12 +218,10 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                 </td>
                             </tr>
                             <tr className="w-full text-xs items-center flex flex-row justify-between">
-                                <div className="flex flex-row space-x-2 text-gray-500 items-center">
-                                    <td>
-                                        <ListBulletIcon className="h-4 w-4" />
-                                    </td>
-                                    <td className="w-32">Type of Program</td>
-                                </div>
+                                <td className="flex flex-row space-x-2 text-gray-500 items-center">
+                                    <ListBulletIcon className="h-4 w-4" />
+                                </td>
+                                <td className="w-32">Type of Program</td>
                                 <td className="w-3/4 hover:bg-gray-50">
                                     {/* {rowContent.program} */}
                                     <TagsInput
@@ -239,7 +229,6 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                         presetOptions={rolePresetOptions}
                                         setPresetOptions={setRolePresetOptions}
                                         getTagColor={getTagColor}
-                                        setTagColors={setTagColors}
                                     />
                                 </td>
                             </tr>
