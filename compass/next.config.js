@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ["notioly.com"],
-    },
-    experimental: {
-        serverActions: true,
+        remotePatterns: [
+            {
+                hostname: "notioly.com",
+            },
+        ],
     },
 };
 
