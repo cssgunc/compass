@@ -9,7 +9,6 @@ import {
     LockClosedIcon,
 } from "@heroicons/react/24/solid";
 import { SidebarItem } from "./SidebarItem";
-import styles from "./LoadingIcon.module.css";
 import { UserProfile } from "../resource/UserProfile";
 import LoadingIcon from "./LoadingIcon";
 
@@ -19,7 +18,6 @@ interface SidebarProps {
     name: string;
     email: string;
     isAdmin: boolean;
-    loading: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -28,7 +26,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     name,
     email,
     isAdmin: admin,
-    loading,
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     return (

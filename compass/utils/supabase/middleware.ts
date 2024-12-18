@@ -1,5 +1,7 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { User } from "@supabase/supabase-js";
+import { NextRequest, NextResponse } from "next/server";
+import { Role } from "../models/User";
 
 export async function updateSession(request: NextRequest) {
     let response = NextResponse.next({
@@ -54,7 +56,50 @@ export async function updateSession(request: NextRequest) {
         }
     );
 
-    await supabase.auth.getUser();
+    const { data, error } = await supabase.auth.getUser();
+
+    const authenticatedRoutes = ["/admin", "/resource", "/home", "/service"];
+    const pathname = request.nextUrl.pathname;
+
+    for (const route of authenticatedRoutes) {
+        if (error && pathname.startsWith(route)) {
+            console.log("redirected");
+            return NextResponse.redirect(
+                new URL(
+                    "/auth/login",
+                    request.nextUrl.protocol + "//" + request.nextUrl.host
+                )
+            );
+        }
+    }
+
+    if (pathname.startsWith("/admin") && data.user) {
+        // After the previous checks we can assume the user is not empty
+        const userData = await fetch(
+            `${process.env.NEXT_PUBLIC_HOST}/api/user?uuid=${data.user.id}`
+        );
+
+        const user: User = await userData.json();
+
+        if (user.role !== Role.ADMIN) {
+            console.log("redirected as not admin");
+            return NextResponse.redirect(
+                new URL(
+                    "/home",
+                    request.nextUrl.protocol + "//" + request.nextUrl.host
+                )
+            );
+        }
+    }
+
+    if (data.user && pathname.startsWith("/auth/login")) {
+        return NextResponse.redirect(
+            new URL(
+                "/home",
+                request.nextUrl.protocol + "//" + request.nextUrl.host
+            )
+        );
+    }
 
     return response;
 }

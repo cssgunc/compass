@@ -15,7 +15,6 @@ export default function RootLayout({
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [user, setUser] = useState<User>();
     const router = useRouter();
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function getUser() {
@@ -36,7 +35,6 @@ export default function RootLayout({
             );
 
             setUser(await userData.json());
-            setLoading(false);
         }
 
         getUser();
@@ -52,7 +50,6 @@ export default function RootLayout({
                         setIsSidebarOpen={setIsSidebarOpen}
                         isSidebarOpen={isSidebarOpen}
                         isAdmin={user.role === Role.ADMIN}
-                        loading={loading}
                     />
                     <div
                         className={`flex-1 transition duration-300 ease-in-out ${

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface SidebarItemProps {
     icon: React.ReactElement;
@@ -15,9 +16,13 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
     redirect,
     onClick,
 }) => {
+    const pathname = usePathname();
+
     return (
         <Link
-            onClick={() => onClick(true)}
+            onClick={() =>
+                pathname.startsWith(redirect) ? onClick(false) : onClick(true)
+            }
             href={redirect}
             className={
                 active

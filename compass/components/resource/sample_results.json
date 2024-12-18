@@ -1,32 +1,32 @@
 [
-	{
-		"type": "resource",
-		"name": "example name",
-		"description": "example description"
-	},
-	{
-		"type": "service",
-		"name": "example name",
-		"description": "example description"
-	},
-	{
-		"type": "resource",
-		"name": "National Domestic Violence Hotline",
-		"description": "24/7 confidential support for victims of domestic violence"
-	},
-	{
-		"type": "resource",
-		"name": "Legal Aid Society",
-		"description": "Free legal assistance for low-income individuals"
-	},
-	{
-		"type": "service",
-		"name": "Crisis Hotline",
-		"description": "24/7 support for individuals in crisis"
-	},
-	{
-		"type": "unknown",
-		"name": "unknown thing with a really long name",
-		"description": "and let's also type out a really long description to see how it handles overflow and all that anyways"
-	}
+    {
+        "type": "resource",
+        "name": "example name",
+        "description": "example description"
+    },
+    {
+        "type": "service",
+        "name": "example name",
+        "description": "example description"
+    },
+    {
+        "type": "resource",
+        "name": "National Domestic Violence Hotline",
+        "description": "24/7 confidential support for victims of domestic violence"
+    },
+    {
+        "type": "resource",
+        "name": "Legal Aid Society",
+        "description": "Free legal assistance for low-income individuals"
+    },
+    {
+        "type": "service",
+        "name": "Crisis Hotline",
+        "description": "24/7 support for individuals in crisis"
+    },
+    {
+        "type": "unknown",
+        "name": "unknown thing with a really long name",
+        "description": "and let's also type out a really long description to see how it handles overflow and all that anyways"
+    }
 ]
