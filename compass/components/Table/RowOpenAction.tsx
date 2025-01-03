@@ -1,37 +1,37 @@
-import Drawer from "@/components/Drawer/Drawer";
+import Drawer, { Details } from "@/components/Drawer/Drawer";
 import DataPoint from "@/utils/models/DataPoint";
+import {
+    EnvelopeIcon,
+    ListBulletIcon,
+    UserIcon,
+} from "@heroicons/react/24/solid";
 import { Dispatch, SetStateAction, useState } from "react";
 
 type RowOpenActionProps<T extends DataPoint> = {
     title: string;
+    titleKey: string;
     rowData: T;
     setData: Dispatch<SetStateAction<T[]>>;
+    details: Details[];
 };
 
 export function RowOpenAction<T extends DataPoint>({
     title,
+    titleKey,
     rowData,
     setData,
+    details,
 }: RowOpenActionProps<T>) {
-    const [pageContent, setPageContent] = useState("");
-
-    const handleDrawerContentChange = (newContent: string) => {
-        setPageContent(newContent);
-    };
-
     return (
         <div className="font-semibold group flex flex-row items-center justify-between pr-2">
             {title}
             <span>
                 <Drawer
-                    title="My Drawer Title"
-                    editableContent={pageContent}
+                    titleKey={titleKey}
                     rowContent={rowData}
-                    onSave={handleDrawerContentChange}
-                    setData={setData}
-                >
-                    {pageContent}
-                </Drawer>
+                    details={details}
+                    setRowContent={setData}
+                />
             </span>
         </div>
     );

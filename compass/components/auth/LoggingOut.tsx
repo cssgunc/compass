@@ -11,6 +11,8 @@ const LoggingOut = () => {
                     alt="Compass Center logo."
                     width={100}
                     height={91}
+                    style={{ height: "auto", width: "auto" }}
+                    priority
                 />
                 <h1 className={styles.loadingTitle}>Signing out...</h1>
                 <div className={styles.loadingSpinner}></div>

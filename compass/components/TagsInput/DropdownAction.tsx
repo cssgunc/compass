@@ -1,11 +1,21 @@
 import { EllipsisHorizontalIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-export const DropdownAction = ({ tag, handleDeleteTag, handleEditTag }) => {
+interface DropdownActionProps {
+    tag: string;
+    handleDeleteTag: (tag: string) => void;
+    handleEditTag: (oldTag: string, newTag: string) => void;
+}
+
+export const DropdownAction = ({
+    tag,
+    handleDeleteTag,
+    handleEditTag,
+}: DropdownActionProps) => {
     const [isVisible, setVisible] = useState(false);
     const [inputValue, setInputValue] = useState(tag);
 
-    const editTagOption = (e) => {
+    const editTagOption = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             handleEditTag(tag, inputValue);
             setVisible(false);

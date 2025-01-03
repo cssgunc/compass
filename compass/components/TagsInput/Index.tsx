@@ -6,51 +6,53 @@ import { CreateNewTagAction } from "./CreateNewTagAction";
 
 interface TagsInputProps {
     presetOptions: string[];
-    presetValue: string | string[];
+    presetValue: string[];
     setPresetOptions: Dispatch<SetStateAction<string[]>>;
-    getTagColor(tag: string): string;
 }
 
 const TagsInput: React.FC<TagsInputProps> = ({
     presetValue,
     presetOptions,
     setPresetOptions,
-    getTagColor,
 }) => {
     const [inputValue, setInputValue] = useState("");
     const [cellSelected, setCellSelected] = useState(false);
+
+    // TODO: Add tags to the database and remove the presetValue and lowercasing
     const [tags, setTags] = useState<Set<string>>(
-        typeof presetValue === "string"
-            ? new Set([presetValue])
-            : new Set(presetValue)
+        new Set(presetValue.map((tag) => tag.toLowerCase()))
     );
-    const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
+    const [options, setOptions] = useState<Set<string>>(
+        new Set(presetOptions.map((option) => option.toLowerCase()))
+    );
+    const [filteredOptions, setFilteredOptions] = useState<Set<string>>(
+        new Set(presetOptions)
+    );
     const dropdown = useRef<HTMLDivElement>(null);
 
     const handleClick = () => {
         if (!cellSelected) {
             setCellSelected(true);
-            // Add event listener only after setting cellSelected to true
             setTimeout(() => {
                 window.addEventListener("click", handleOutsideClick);
             }, 100);
         }
     };
 
-    // TODO: Fix MouseEvent type and remove the as Node as that is completely wrong
     const handleOutsideClick = (event: MouseEvent) => {
+        console.log(dropdown.current);
         if (
             dropdown.current &&
             !dropdown.current.contains(event.target as Node)
         ) {
+            console.log("outside");
             setCellSelected(false);
-            // Remove event listener after handling outside click
             window.removeEventListener("click", handleOutsideClick);
         }
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setOptions(() => {
+        setFilteredOptions(() => {
             const newOptions = presetOptions.filter((item) =>
                 item.includes(e.target.value.toLowerCase())
             );
@@ -61,39 +63,45 @@ const TagsInput: React.FC<TagsInputProps> = ({
 
     const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && inputValue.trim()) {
-            // setPresetOptions((prevPreset) => {
-            //   const uniqueSet = new Set(presetOptions);
-            //   uniqueSet.add(inputValue);
-            //   return Array.from(uniqueSet);
-            // });
-            setTags((prevTags) => new Set(prevTags).add(inputValue));
-            setOptions((prevOptions) => new Set(prevOptions).add(inputValue));
-            setInputValue("");
+            addTag(e);
         }
     };
 
+    const addTag = (e?: React.KeyboardEvent<HTMLInputElement>) => {
+        e?.stopPropagation();
+
+        setOptions(new Set(Array.from(options).concat(inputValue)));
+        setTags(new Set(Array.from(tags).concat(inputValue)));
+        setFilteredOptions(new Set(Array.from(options).concat(inputValue)));
+        setInputValue("");
+    };
+
     const handleSelectTag = (tagToAdd: string) => {
+        console.log(tagToAdd);
+        console.log(tags);
+
         if (!tags.has(tagToAdd)) {
-            // Corrected syntax for checking if a Set contains an item
-            setTags((prevTags) => new Set(prevTags).add(tagToAdd));
+            setTags(new Set(Array.from(tags).concat(tagToAdd)));
         }
     };
 
     const handleDeleteTag = (tagToDelete: string) => {
-        setTags((prevTags) => {
-            const updatedTags = new Set(prevTags);
-            updatedTags.delete(tagToDelete);
-            return updatedTags;
-        });
+        setTags(new Set(Array.from(tags).filter((tag) => tag !== tagToDelete)));
     };
 
     const handleDeleteTagOption = (tagToDelete: string) => {
-        // setPresetOptions(presetOptions.filter(tag => tag !== tagToDelete));
-        setOptions((prevOptions) => {
-            const updatedOptions = new Set(prevOptions);
-            updatedOptions.delete(tagToDelete);
-            return updatedOptions;
-        });
+        setOptions(
+            new Set(
+                Array.from(options).filter((option) => option !== tagToDelete)
+            )
+        );
+
+        setFilteredOptions(
+            new Set(
+                Array.from(options).filter((option) => option !== tagToDelete)
+            )
+        );
+
         if (tags.has(tagToDelete)) {
             handleDeleteTag(tagToDelete);
         }
@@ -101,23 +109,20 @@ const TagsInput: React.FC<TagsInputProps> = ({
 
     const handleEditTag = (oldTag: string, newTag: string) => {
         if (oldTag !== newTag) {
-            setTags((prevTags) => {
-                const tagsArray = Array.from(prevTags);
-                const oldTagIndex = tagsArray.indexOf(oldTag);
-                if (oldTagIndex !== -1) {
-                    tagsArray.splice(oldTagIndex, 1, newTag);
-                }
-                return new Set(tagsArray);
-            });
-
-            setOptions((prevOptions) => {
-                const optionsArray = Array.from(prevOptions);
-                const oldTagIndex = optionsArray.indexOf(oldTag);
-                if (oldTagIndex !== -1) {
-                    optionsArray.splice(oldTagIndex, 1, newTag);
-                }
-                return new Set(optionsArray);
-            });
+            setTags(
+                new Set(
+                    Array.from(tags)
+                        .filter((tag) => tag !== oldTag)
+                        .concat(newTag)
+                )
+            );
+            setOptions(
+                new Set(
+                    Array.from(options)
+                        .filter((option) => option !== oldTag)
+                        .concat(newTag)
+                )
+            );
         }
     };
 
@@ -157,10 +162,13 @@ const TagsInput: React.FC<TagsInputProps> = ({
                                     handleDeleteTag={handleDeleteTagOption}
                                     handleEditTag={handleEditTag}
                                     handleAdd={handleSelectTag}
-                                    tags={options}
+                                    tags={filteredOptions}
                                 />
                                 {inputValue.length > 0 && (
-                                    <CreateNewTagAction input={inputValue} />
+                                    <CreateNewTagAction
+                                        input={inputValue}
+                                        addTag={addTag}
+                                    />
                                 )}
                             </div>
                         </div>
