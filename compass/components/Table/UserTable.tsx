@@ -2,14 +2,19 @@ import {
     ArrowDownCircleIcon,
     AtSymbolIcon,
     Bars2Icon,
+    EnvelopeIcon,
+    ListBulletIcon,
+    UserIcon,
 } from "@heroicons/react/24/solid";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import TagsInput from "@/components/TagsInput/Index";
 import User from "@/utils/models/User";
+import { Details } from "../Drawer/Drawer";
+import { Tag } from "../TagsInput/Tag";
 
 type UserTableProps = {
     data: User[];
@@ -24,46 +29,83 @@ type UserTableProps = {
 export default function UserTable({ data, setData }: UserTableProps) {
     const columnHelper = createColumnHelper<User>();
 
-    // Set up tag handling
-    const roleProps = useTagsHandler([
-        "administrator",
+    const [rolePresets, setRolePresets] = useState([
+        "admin",
         "volunteer",
         "employee",
     ]);
 
-    const programProps = useTagsHandler(["community", "domestic", "economic"]);
+    const [programPresets, setProgramPresets] = useState([
+        "domestic",
+        "community",
+        "economic",
+    ]);
+
+    const userDetails: Details[] = [
+        {
+            key: "username",
+            label: "username",
+            inputType: "text",
+            icon: <UserIcon className="h-4 w-4" />,
+        },
+        {
+            key: "role",
+            label: "role",
+            inputType: "select-one",
+            icon: <ListBulletIcon className="h-4 w-4" />,
+            presetOptionsValues: rolePresets,
+            presetOptionsSetter: setRolePresets,
+        },
+        {
+            key: "email",
+            label: "email",
+            inputType: "email",
+            icon: <EnvelopeIcon className="h-4 w-4" />,
+        },
+        {
+            key: "program",
+            label: "program",
+            inputType: "select-multiple",
+            icon: <ListBulletIcon className="h-4 w-4" />,
+            presetOptionsValues: programPresets,
+            presetOptionsSetter: setProgramPresets,
+        },
+    ];
 
     // Define Tanstack columns
     const columns: ColumnDef<User, any>[] = [
         columnHelper.accessor("username", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Username
+                    <UserIcon className="inline align-top h-4" /> Username
                 </>
             ),
             cell: (info) => (
                 <RowOpenAction
                     title={info.getValue()}
+                    titleKey="username"
                     rowData={info.row.original}
                     setData={setData}
+                    details={userDetails}
                 />
             ),
         }),
         columnHelper.accessor("role", {
             header: () => (
                 <>
-                    <ArrowDownCircleIcon className="inline align-top h-4" />{" "}
-                    Role
+                    <ListBulletIcon className="inline align-top h-4" /> Role
                 </>
             ),
             cell: (info) => (
-                <TagsInput presetValue={info.getValue()} {...roleProps} />
+                <div className="flex ml-2 flex-wrap gap-2 items-center">
+                    <Tag>{info.getValue()}</Tag>
+                </div>
             ),
         }),
         columnHelper.accessor("email", {
             header: () => (
                 <>
-                    <AtSymbolIcon className="inline align-top h-4" /> Email
+                    <EnvelopeIcon className="inline align-top h-4" /> Email
                 </>
             ),
             cell: (info) => (
@@ -75,12 +117,15 @@ export default function UserTable({ data, setData }: UserTableProps) {
         columnHelper.accessor("program", {
             header: () => (
                 <>
-                    <ArrowDownCircleIcon className="inline align-top h-4" />{" "}
-                    Program
+                    <ListBulletIcon className="inline align-top h-4" /> Program
                 </>
             ),
             cell: (info) => (
-                <TagsInput presetValue={info.getValue()} {...programProps} />
+                <div className="flex ml-2 flex-wrap gap-2 items-center">
+                    {info.getValue().map((tag: string, index: number) => {
+                        return <Tag key={index}>{tag}</Tag>;
+                    })}
+                </div>
             ),
         }),
     ];

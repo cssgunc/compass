@@ -14,61 +14,56 @@ import {
 } from "@heroicons/react/24/outline";
 import TagsInput from "../TagsInput/Index";
 
-type DrawerProps = {
-    title: string;
-    children: ReactNode;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    type?: "button" | "submit" | "reset"; // specify possible values for type
-    disabled?: boolean;
-    editableContent?: any;
-    onSave?: (content: any) => void;
-    rowContent?: any;
-    setData: Dispatch<SetStateAction<any>>;
-};
+type InputType =
+    | "text"
+    | "email"
+    | "textarea"
+    | "select-one"
+    | "select-multiple";
 
-interface EditContent {
-    content: string;
-    isEditing: boolean;
+export interface Details {
+    key: string;
+    label: string;
+    inputType: InputType;
+    icon: ReactNode;
+    presetOptionsValues?: string[];
+    presetOptionsSetter?: Dispatch<SetStateAction<string[]>>;
 }
 
+type DrawerProps = {
+    titleKey: string;
+    details: Details[];
+    rowContent?: any;
+    setRowContent?: Dispatch<SetStateAction<any>>;
+};
+
 const Drawer: FunctionComponent<DrawerProps> = ({
-    title,
-    children,
-    onSave,
-    editableContent,
+    titleKey,
+    details,
     rowContent,
-    setData,
-}) => {
+    setRowContent,
+}: DrawerProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isFull, setIsFull] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
     const [tempRowContent, setTempRowContent] = useState(rowContent);
 
-    const onRowUpdate = (updatedRow: any) => {
-        setData((prevData: any) =>
-            prevData.map((row: any) =>
-                row.id === updatedRow.id ? updatedRow : row
-            )
-        );
-    };
+    const onRowUpdate = (updatedRow: any) => {};
 
-    const handleTempRowContentChange = (e) => {
+    const handleTempRowContentChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         const { name, value } = e.target;
-        console.log(name);
-        console.log(value);
-        setTempRowContent((prevContent) => ({
-            ...prevContent,
+        setTempRowContent((prev: any) => ({
+            ...prev,
             [name]: value,
         }));
     };
 
-    const handleEnterPress = (e) => {
+    const handleEnterPress = (
+        e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         if (e.key === "Enter") {
-            e.preventDefault();
-            // Update the rowContent with the temporaryRowContent
-            if (onRowUpdate) {
-                onRowUpdate(tempRowContent);
-            }
         }
     };
 
@@ -99,34 +94,6 @@ const Drawer: FunctionComponent<DrawerProps> = ({
         <OutlineStarIcon className="h-5 w-5" />
     );
 
-    const [presetOptions, setPresetOptions] = useState([
-        "administrator",
-        "volunteer",
-        "employee",
-    ]);
-    const [rolePresetOptions, setRolePresetOptions] = useState([
-        "domestic",
-        "community",
-        "economic",
-    ]);
-    const [tagColors, setTagColors] = useState(new Map());
-
-    const getTagColor = (tag: string) => {
-        if (!tagColors.has(tag)) {
-            const colors = [
-                "bg-cyan-100",
-                "bg-blue-100",
-                "bg-green-100",
-                "bg-yellow-100",
-                "bg-purple-100",
-            ];
-            const randomColor =
-                colors[Math.floor(Math.random() * colors.length)];
-            setTagColors(new Map(tagColors).set(tag, randomColor));
-        }
-        return tagColors.get(tag);
-    };
-
     return (
         <div>
             <button
@@ -144,7 +111,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                             <UserIcon />
                         </span>
                         <h2 className="text-lg text-gray-800 font-semibold">
-                            {rowContent.username}
+                            {rowContent[titleKey]}
                         </h2>
                     </div>
                     <div>
@@ -169,71 +136,116 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                     </div>
                 </div>
                 <div className="p-4">
-                    <table className="p-4">
-                        <tbody className="items-center">
-                            <tr className="w-full text-xs items-center flex flex-row justify-between">
-                                <td className="flex flex-row space-x-2 text-gray-500 items-center">
-                                    <UserIcon className="h-4 w-4" />
-                                    <span className="w-32">Username</span>
-                                </td>
-                                <td className="w-3/4 p-2 pl-0">
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        value={tempRowContent.username}
-                                        onChange={handleTempRowContentChange}
-                                        onKeyDown={handleEnterPress}
-                                        className="ml-2 w-full p-1 focus:outline-gray-200  hover:bg-gray-50"
-                                    />
-                                </td>
-                            </tr>
-                            <tr className="w-full text-xs items-center flex flex-row justify-between">
-                                <td className="flex flex-row space-x-2 text-gray-500 items-center">
-                                    <ListBulletIcon className="h-4 w-4" />
-                                </td>
-                                <td className="w-32">Role</td>
-                                <td className="w-3/4 hover:bg-gray-50">
-                                    <TagsInput
-                                        presetValue={tempRowContent.role}
-                                        presetOptions={presetOptions}
-                                        setPresetOptions={setPresetOptions}
-                                        getTagColor={getTagColor}
-                                    />
-                                </td>
-                            </tr>
-                            <tr className="w-full text-xs items-center flex flex-row justify-between">
-                                <td className="flex flex-row space-x-2 text-gray-500 items-center">
-                                    <EnvelopeIcon className="h-4 w-4" />
-                                </td>
-                                <td className="w-32">Email</td>
-                                <td className="w-3/4 p-2 pl-0">
-                                    <input
-                                        type="text"
-                                        name="email"
-                                        value={tempRowContent.email}
-                                        onChange={handleTempRowContentChange}
-                                        onKeyDown={handleEnterPress}
-                                        className="ml-2 w-80 p-1 font-normal hover:text-gray-400 focus:outline-gray-200  hover:bg-gray-50 underline text-gray-500"
-                                    />
-                                </td>
-                            </tr>
-                            <tr className="w-full text-xs items-center flex flex-row justify-between">
-                                <td className="flex flex-row space-x-2 text-gray-500 items-center">
-                                    <ListBulletIcon className="h-4 w-4" />
-                                </td>
-                                <td className="w-32">Type of Program</td>
-                                <td className="w-3/4 hover:bg-gray-50">
-                                    {/* {rowContent.program} */}
-                                    <TagsInput
-                                        presetValue={tempRowContent.program}
-                                        presetOptions={rolePresetOptions}
-                                        setPresetOptions={setRolePresetOptions}
-                                        getTagColor={getTagColor}
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div className="flex flex-col space-y-3">
+                        {details.map((detail, index) => {
+                            const value = tempRowContent[detail.key];
+                            let valueToRender = <></>;
+
+                            switch (detail.inputType) {
+                                case "select-one":
+                                case "select-multiple":
+                                    valueToRender = (
+                                        <div className="flex-1">
+                                            <div className="hover:bg-gray-50 rounded-md px-2 py-1">
+                                                <TagsInput
+                                                    presetValue={
+                                                        typeof value ===
+                                                        "string"
+                                                            ? [value]
+                                                            : value
+                                                    }
+                                                    presetOptions={
+                                                        detail.presetOptionsValues ||
+                                                        []
+                                                    }
+                                                    setPresetOptions={
+                                                        detail.presetOptionsSetter ||
+                                                        (() => {})
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                    break;
+                                case "textarea":
+                                    valueToRender = (
+                                        <div className="flex-1">
+                                            <div className="hover:bg-gray-50 rounded-md px-2 py-1">
+                                                <textarea
+                                                    name={detail.key}
+                                                    value={value}
+                                                    onChange={
+                                                        handleTempRowContentChange
+                                                    }
+                                                    onKeyDown={handleEnterPress}
+                                                    rows={4}
+                                                    onInput={(e) => {
+                                                        const target =
+                                                            e.target as HTMLTextAreaElement;
+                                                        target.style.height =
+                                                            "auto";
+                                                        target.style.height =
+                                                            target.scrollHeight +
+                                                            "px";
+                                                    }}
+                                                    className="w-full p-2 focus:outline-none border border-gray-200 rounded-md resize-none font-normal bg-transparent"
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                    break;
+                                case "text":
+                                    valueToRender = (
+                                        <div className="flex-1">
+                                            <div className="hover:bg-gray-50 rounded-md px-2 py-1">
+                                                <input
+                                                    type={detail.inputType}
+                                                    name={detail.key}
+                                                    value={value}
+                                                    onChange={
+                                                        handleTempRowContentChange
+                                                    }
+                                                    onKeyDown={handleEnterPress}
+                                                    className="w-full p-1 focus:outline-gray-200 bg-transparent"
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                    break;
+                                case "email":
+                                    valueToRender = (
+                                        <div className="flex-1">
+                                            <div className="hover:bg-gray-50 rounded-md px-2 py-1">
+                                                <input
+                                                    type={detail.inputType}
+                                                    name={detail.key}
+                                                    value={value}
+                                                    onChange={
+                                                        handleTempRowContentChange
+                                                    }
+                                                    onKeyDown={handleEnterPress}
+                                                    className="w-full p-1 font-normal hover:text-gray-400 focus:outline-gray-200 underline text-gray-500 bg-transparent"
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                    break;
+                            }
+
+                            return (
+                                <div
+                                    key={index}
+                                    className="flex items-center text-xs gap-3"
+                                >
+                                    <div className="flex items-center text-gray-500">
+                                        {detail.icon}
+                                    </div>
+                                    <div className="w-32">{detail.label}</div>
+                                    {valueToRender}
+                                </div>
+                            );
+                        })}
+                    </div>
                     <br />
                 </div>
             </div>

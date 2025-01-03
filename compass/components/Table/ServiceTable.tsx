@@ -1,11 +1,17 @@
-import { Bars2Icon } from "@heroicons/react/24/solid";
-import { Dispatch, SetStateAction } from "react";
-import useTagsHandler from "@/components/TagsInput/TagsHandler";
+import {
+    Bars2Icon,
+    CheckCircleIcon,
+    DocumentTextIcon,
+    ListBulletIcon,
+    UserIcon,
+} from "@heroicons/react/24/solid";
+import { Dispatch, SetStateAction, useState } from "react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
-import TagsInput from "@/components/TagsInput/Index";
 import Service from "@/utils/models/Service";
+import { Details } from "../Drawer/Drawer";
+import { Tag } from "../TagsInput/Tag";
 
 type ServiceTableProps = {
     data: Service[];
@@ -20,11 +26,13 @@ type ServiceTableProps = {
 export default function ServiceTable({ data, setData }: ServiceTableProps) {
     const columnHelper = createColumnHelper<Service>();
 
-    // Set up tag handling
-    const programProps = useTagsHandler(["community", "domestic", "economic"]);
+    const [programPresets, setProgramPresets] = useState([
+        "domestic",
+        "community",
+        "economic",
+    ]);
 
-    // TODO: Dynamically or statically get full list of preset requirement tag options
-    const requirementProps = useTagsHandler([
+    const [requirementPresets, setRequirementPresets] = useState([
         "anonymous",
         "confidential",
         "referral required",
@@ -34,67 +42,111 @@ export default function ServiceTable({ data, setData }: ServiceTableProps) {
         "initial assessment",
     ]);
 
+    const serviceDetails: Details[] = [
+        {
+            key: "name",
+            label: "name",
+            inputType: "text",
+            icon: <UserIcon className="inline align-top h-4" />,
+        },
+        {
+            key: "status",
+            label: "status",
+            inputType: "text",
+            icon: <CheckCircleIcon className="inline align-top h-4" />,
+        },
+        {
+            key: "program",
+            label: "program",
+            inputType: "select-one",
+            icon: <ListBulletIcon className="inline align-top h-4" />,
+            presetOptionsValues: programPresets,
+            presetOptionsSetter: setProgramPresets,
+        },
+        {
+            key: "requirements",
+            label: "requirements",
+            inputType: "select-multiple",
+            icon: <ListBulletIcon className="inline align-top h-4" />,
+            presetOptionsValues: requirementPresets,
+            presetOptionsSetter: setRequirementPresets,
+        },
+        {
+            key: "summary",
+            label: "summary",
+            inputType: "textarea",
+            icon: <DocumentTextIcon className="inline align-top h-4" />,
+        },
+    ];
+
     // Define Tanstack columns
     const columns: ColumnDef<Service, any>[] = [
         columnHelper.accessor("name", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Name
+                    <UserIcon className="inline align-top h-4" /> Name
                 </>
             ),
             cell: (info) => (
                 <RowOpenAction
                     title={info.getValue()}
+                    titleKey="name"
                     rowData={info.row.original}
                     setData={setData}
+                    details={serviceDetails}
                 />
             ),
         }),
         columnHelper.accessor("status", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Status
+                    <CheckCircleIcon className="inline align-top h-4" /> Status
                 </>
             ),
             cell: (info) => (
-                <span className="ml-2 text-gray-500">{info.getValue()}</span>
+                <span className="text-gray-500 px-2">{info.getValue()}</span>
             ),
         }),
         columnHelper.accessor("program", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Program
+                    <ListBulletIcon className="inline align-top h-4" /> Program
                 </>
             ),
             cell: (info) => (
-                <TagsInput presetValue={info.getValue()} {...programProps} />
+                <div className="flex flex-wrap gap-2 items-center px-2">
+                    <Tag>{info.getValue()}</Tag>
+                </div>
             ),
         }),
         columnHelper.accessor("requirements", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Requirements
+                    <ListBulletIcon className="inline align-top h-4" />{" "}
+                    Requirements
                 </>
             ),
             cell: (info) => (
-                // TODO: Setup different tag handler for requirements
-                <TagsInput
-                    presetValue={
-                        info.getValue()[0] !== "" ? info.getValue() : ["N/A"]
-                    }
-                    {...requirementProps}
-                />
+                <div className="flex flex-wrap gap-2 items-center px-2">
+                    {info.getValue().map((tag: string, index: number) => {
+                        return <Tag key={index}>{tag}</Tag>;
+                    })}
+                </div>
             ),
         }),
-
         columnHelper.accessor("summary", {
             header: () => (
                 <>
-                    <Bars2Icon className="inline align-top h-4" /> Summary
+                    <DocumentTextIcon className="inline align-top h-4" />{" "}
+                    Summary
                 </>
             ),
             cell: (info) => (
-                <span className="ml-2 text-gray-500">{info.getValue()}</span>
+                <div className="flex items-start gap-2 px-2 py-1">
+                    <span className="text-gray-500 max-h-8 overflow-y-auto">
+                        {info.getValue()}
+                    </span>
+                </div>
             ),
         }),
     ];
