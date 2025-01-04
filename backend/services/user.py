@@ -61,22 +61,21 @@ class UserService:
 
         """
         try:
-            if (user.id != None):
+            if user.id != None:
                 user = self.get_user_by_id(user.id)
+            else:
+                user_entity = UserEntity.from_model(user)
+                # add new user to table
+                self._session.add(user_entity)
+                self._session.commit()
         except:
-            # if does not exist, create new object
-            user_entity = UserEntity.from_model(user)
+            raise Exception(f"Failed to create user")
 
-            # add new user to table
-            self._session.add(user_entity)
-            self._session.commit()
-        finally:
-            # return added object
-            return user
-        
-    def delete(self, user: User) -> None:   
+        return user
+
+    def delete(self, user: User) -> None:
         """
-        Delete a user 
+        Delete a user
 
         Args: the user to delete
 
@@ -86,25 +85,23 @@ class UserService:
 
         if obj is None:
             raise Exception(f"No matching user found")
-        
+
         self._session.delete(obj)
         self._session.commit()
 
-
-
-    def update(self, user: User) -> User: 
+    def update(self, user: User) -> User:
         """
         Updates a user
 
         Args: User to be updated
 
         Returns: The updated User
-        """   
+        """
         obj = self._session.get(UserEntity, user.id)
 
         if obj is None:
             raise Exception(f"No matching user found")
-        
+
         obj.username = user.username
         obj.role = user.role
         obj.email = user.email
@@ -115,5 +112,3 @@ class UserService:
         self._session.commit()
 
         return obj.to_model()
-
-

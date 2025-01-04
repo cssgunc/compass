@@ -38,8 +38,8 @@ class UserEntity(EntityBase):
     program: Mapped[list[ProgramTypeEnum]] = mapped_column(
         ARRAY(Enum(ProgramTypeEnum)), nullable=False
     )
-    experience: Mapped[int] = mapped_column(Integer, nullable=False)
-    group: Mapped[str] = mapped_column(String(50))
+    experience: Mapped[int] = mapped_column(Integer, nullable=True)
+    group: Mapped[str] = mapped_column(String(50), nullable=True)
     uuid: Mapped[str] = mapped_column(String, nullable=True)
 
     @classmethod
