@@ -8,12 +8,14 @@ interface TagsInputProps {
     presetOptions: string[];
     presetValue: string[];
     setPresetOptions: Dispatch<SetStateAction<string[]>>;
+    onTagsChange?: (tags: Set<string>) => void;
 }
 
 const TagsInput: React.FC<TagsInputProps> = ({
     presetValue,
     presetOptions,
     setPresetOptions,
+    onTagsChange,
 }) => {
     const [inputValue, setInputValue] = useState("");
     const [cellSelected, setCellSelected] = useState(false);
@@ -70,23 +72,28 @@ const TagsInput: React.FC<TagsInputProps> = ({
     const addTag = (e?: React.KeyboardEvent<HTMLInputElement>) => {
         e?.stopPropagation();
 
+        const newTags = new Set(Array.from(tags).concat(inputValue));
         setOptions(new Set(Array.from(options).concat(inputValue)));
-        setTags(new Set(Array.from(tags).concat(inputValue)));
+        setTags(newTags);
         setFilteredOptions(new Set(Array.from(options).concat(inputValue)));
         setInputValue("");
+        onTagsChange?.(newTags);
     };
 
     const handleSelectTag = (tagToAdd: string) => {
-        console.log(tagToAdd);
-        console.log(tags);
-
         if (!tags.has(tagToAdd)) {
-            setTags(new Set(Array.from(tags).concat(tagToAdd)));
+            const newTags = new Set(Array.from(tags).concat(tagToAdd));
+            setTags(newTags);
+            onTagsChange?.(newTags);
         }
     };
 
     const handleDeleteTag = (tagToDelete: string) => {
-        setTags(new Set(Array.from(tags).filter((tag) => tag !== tagToDelete)));
+        const newTags = new Set(
+            Array.from(tags).filter((tag) => tag !== tagToDelete)
+        );
+        setTags(newTags);
+        onTagsChange?.(newTags);
     };
 
     const handleDeleteTagOption = (tagToDelete: string) => {

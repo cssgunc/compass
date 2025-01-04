@@ -29,6 +29,25 @@ type TableProps<T extends DataPoint> = {
     details: Details[];
 };
 
+/** Validates that all required fields in a new item have values */
+const validateNewItem = (newItem: any, details: Details[]): boolean => {
+    const hasEmptyFields = details.some((detail) => {
+        const value = newItem[detail.key];
+        return (
+            value === undefined ||
+            value === null ||
+            value === "" ||
+            (Array.isArray(value) && value.length === 0)
+        );
+    });
+
+    if (hasEmptyFields) {
+        alert("Please fill in all fields before creating a new item");
+        return false;
+    }
+    return true;
+};
+
 /** Fuzzy search function */
 const fuzzyFilter = (
     row: Row<any>,
@@ -60,39 +79,39 @@ export default function Table<T extends DataPoint>({
 }: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
 
-    /** Sorting function based on visibility */
-    const visibilitySort = (a: T, b: T) =>
-        a.visible === b.visible ? 0 : a.visible ? -1 : 1;
+    // /** Sorting function based on visibility */
+    // const visibilitySort = (a: T, b: T) =>
+    //     a.visible === b.visible ? 0 : a.visible ? -1 : 1;
 
-    // Sort data on load
-    useEffect(() => {
-        setData((prevData) => prevData.sort(visibilitySort));
-    }, [setData]);
+    // // Sort data on load
+    // useEffect(() => {
+    //     setData((prevData) => prevData.sort(visibilitySort));
+    // }, [setData]);
 
-    // Data manipulation methods
-    // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
-    const deleteData = (dataId: number) => {
-        console.log(data);
-        setData((currentData) =>
-            currentData.filter((data) => data.id !== dataId)
-        );
-    };
+    // // Data manipulation methods
+    // // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
+    // const deleteData = (dataId: number) => {
+    //     console.log(data);
+    //     setData((currentData) =>
+    //         currentData.filter((data) => data.id !== dataId)
+    //     );
+    // };
 
-    const hideData = (dataId: number) => {
-        console.log(`Toggling visibility for data with ID: ${dataId}`);
-        setData((currentData) => {
-            const newData = currentData
-                .map((data) =>
-                    data.id === dataId
-                        ? { ...data, visible: !data.visible }
-                        : data
-                )
-                .sort(visibilitySort);
+    // const hideData = (dataId: number) => {
+    //     console.log(`Toggling visibility for data with ID: ${dataId}`);
+    //     setData((currentData) => {
+    //         const newData = currentData
+    //             .map((data) =>
+    //                 data.id === dataId
+    //                     ? { ...data, visible: !data.visible }
+    //                     : data
+    //             )
+    //             .sort(visibilitySort);
 
-            console.log(newData);
-            return newData;
-        });
-    };
+    //         console.log(newData);
+    //         return newData;
+    //     });
+    // };
 
     const addData = () => {
         setData([...data]);
@@ -104,8 +123,10 @@ export default function Table<T extends DataPoint>({
             id: "options",
             cell: (props) => (
                 <RowOptionMenu
-                    onDelete={() => deleteData(props.row.original.id)}
-                    onHide={() => hideData(props.row.original.id)}
+                    onDelete={() => {}}
+                    onHide={() => {}}
+                    // onDelete={() => deleteData(props.row.original.id)}
+                    // onHide={() => hideData(props.row.original.id)}
                 />
             ),
         })
@@ -217,7 +238,15 @@ export default function Table<T extends DataPoint>({
                         >
                             <CreateDrawer
                                 details={details}
-                                onCreate={(newItem) => {}}
+                                onCreate={(newItem) => {
+                                    if (!validateNewItem(newItem, details)) {
+                                        return false;
+                                    }
+
+                                    newItem.visible = true;
+                                    setData((prev) => [...prev, newItem]);
+                                    return true;
+                                }}
                             />
                         </td>
                     </tr>

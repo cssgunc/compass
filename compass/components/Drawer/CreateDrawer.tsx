@@ -10,7 +10,7 @@ import { Details } from "./Drawer";
 
 type CreateDrawerProps = {
     details: Details[];
-    onCreate: (newItem: any) => void;
+    onCreate: (newItem: any) => boolean;
 };
 
 const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
@@ -31,10 +31,20 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
         }));
     };
 
+    const initializeSelectField = (key: string) => {
+        if (!newItemContent[key]) {
+            setNewItemContent((prev: any) => ({
+                ...prev,
+                [key]: [],
+            }));
+        }
+    };
+
     const handleCreate = () => {
-        onCreate(newItemContent);
-        setNewItemContent({});
-        setIsOpen(false);
+        if (onCreate(newItemContent)) {
+            setNewItemContent({});
+            setIsOpen(false);
+        }
     };
 
     const toggleDrawer = () => {
@@ -93,6 +103,7 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
                             switch (detail.inputType) {
                                 case "select-one":
                                 case "select-multiple":
+                                    initializeSelectField(detail.key);
                                     inputField = (
                                         <TagsInput
                                             presetValue={[]}
@@ -103,6 +114,17 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
                                                 detail.presetOptionsSetter ||
                                                 (() => {})
                                             }
+                                            onTagsChange={(
+                                                tags: Set<string>
+                                            ) => {
+                                                setNewItemContent(
+                                                    (prev: any) => ({
+                                                        ...prev,
+                                                        [detail.key]:
+                                                            Array.from(tags),
+                                                    })
+                                                );
+                                            }}
                                         />
                                     );
                                     break;
