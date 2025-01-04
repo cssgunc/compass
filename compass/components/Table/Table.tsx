@@ -19,11 +19,33 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { RowOptionMenu } from "./RowOptionMenu";
 import DataPoint from "@/utils/models/DataPoint";
+import CreateDrawer from "../Drawer/CreateDrawer";
+import { Details } from "../Drawer/Drawer";
 
 type TableProps<T extends DataPoint> = {
     data: T[];
     setData: Dispatch<SetStateAction<T[]>>;
     columns: ColumnDef<T, any>[];
+    details: Details[];
+};
+
+/** Validates that all required fields in a new item have values */
+const validateNewItem = (newItem: any, details: Details[]): boolean => {
+    const hasEmptyFields = details.some((detail) => {
+        const value = newItem[detail.key];
+        return (
+            value === undefined ||
+            value === null ||
+            value === "" ||
+            (Array.isArray(value) && value.length === 0)
+        );
+    });
+
+    if (hasEmptyFields) {
+        alert("Please fill in all fields before creating a new item");
+        return false;
+    }
+    return true;
 };
 
 /** Fuzzy search function */
@@ -53,42 +75,43 @@ export default function Table<T extends DataPoint>({
     data,
     setData,
     columns,
+    details,
 }: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
 
-    /** Sorting function based on visibility */
-    const visibilitySort = (a: T, b: T) =>
-        a.visible === b.visible ? 0 : a.visible ? -1 : 1;
+    // /** Sorting function based on visibility */
+    // const visibilitySort = (a: T, b: T) =>
+    //     a.visible === b.visible ? 0 : a.visible ? -1 : 1;
 
-    // Sort data on load
-    useEffect(() => {
-        setData((prevData) => prevData.sort(visibilitySort));
-    }, [setData]);
+    // // Sort data on load
+    // useEffect(() => {
+    //     setData((prevData) => prevData.sort(visibilitySort));
+    // }, [setData]);
 
-    // Data manipulation methods
-    // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
-    const deleteData = (dataId: number) => {
-        console.log(data);
-        setData((currentData) =>
-            currentData.filter((data) => data.id !== dataId)
-        );
-    };
+    // // Data manipulation methods
+    // // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
+    // const deleteData = (dataId: number) => {
+    //     console.log(data);
+    //     setData((currentData) =>
+    //         currentData.filter((data) => data.id !== dataId)
+    //     );
+    // };
 
-    const hideData = (dataId: number) => {
-        console.log(`Toggling visibility for data with ID: ${dataId}`);
-        setData((currentData) => {
-            const newData = currentData
-                .map((data) =>
-                    data.id === dataId
-                        ? { ...data, visible: !data.visible }
-                        : data
-                )
-                .sort(visibilitySort);
+    // const hideData = (dataId: number) => {
+    //     console.log(`Toggling visibility for data with ID: ${dataId}`);
+    //     setData((currentData) => {
+    //         const newData = currentData
+    //             .map((data) =>
+    //                 data.id === dataId
+    //                     ? { ...data, visible: !data.visible }
+    //                     : data
+    //             )
+    //             .sort(visibilitySort);
 
-            console.log(newData);
-            return newData;
-        });
-    };
+    //         console.log(newData);
+    //         return newData;
+    //     });
+    // };
 
     const addData = () => {
         setData([...data]);
@@ -100,8 +123,10 @@ export default function Table<T extends DataPoint>({
             id: "options",
             cell: (props) => (
                 <RowOptionMenu
-                    onDelete={() => deleteData(props.row.original.id)}
-                    onHide={() => hideData(props.row.original.id)}
+                    onDelete={() => {}}
+                    onHide={() => {}}
+                    // onDelete={() => deleteData(props.row.original.id)}
+                    // onHide={() => hideData(props.row.original.id)}
                 />
             ),
         })
@@ -208,14 +233,21 @@ export default function Table<T extends DataPoint>({
                 <tfoot>
                     <tr>
                         <td
-                            className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50"
+                            className="p-3 border-y border-gray-200"
                             colSpan={100}
-                            onClick={addData}
                         >
-                            <span className="flex ml-1 text-gray-500">
-                                <PlusIcon className="inline h-4 mr-1" />
-                                New
-                            </span>
+                            <CreateDrawer
+                                details={details}
+                                onCreate={(newItem) => {
+                                    if (!validateNewItem(newItem, details)) {
+                                        return false;
+                                    }
+
+                                    newItem.visible = true;
+                                    setData((prev) => [...prev, newItem]);
+                                    return true;
+                                }}
+                            />
                         </td>
                     </tr>
                 </tfoot>

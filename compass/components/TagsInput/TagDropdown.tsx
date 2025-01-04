@@ -16,21 +16,27 @@ export const TagDropdown = ({
 }: TagDropdownProps) => {
     return (
         <div className="z-50 flex flex-col space-y-2 mt-2">
-            {Array.from(tags).map((tag, index) => (
-                <div
-                    key={index}
-                    className="items-center rounded-md p-1 flex flex-row justify-between hover:bg-gray-100"
-                >
-                    <button onClick={() => handleAdd(tag)}>
-                        <Tag>{tag}</Tag>
-                    </button>
-                    <DropdownAction
-                        handleDeleteTag={handleDeleteTag}
-                        handleEditTag={handleEditTag}
-                        tag={tag}
-                    />
+            {Array.from(tags).length > 0 ? (
+                Array.from(tags).map((tag, index) => (
+                    <div
+                        key={index}
+                        className="items-center rounded-md p-1 flex flex-row justify-between hover:bg-gray-100"
+                    >
+                        <button onClick={() => handleAdd(tag)}>
+                            <Tag>{tag}</Tag>
+                        </button>
+                        <DropdownAction
+                            handleDeleteTag={handleDeleteTag}
+                            handleEditTag={handleEditTag}
+                            tag={tag}
+                        />
+                    </div>
+                ))
+            ) : (
+                <div className="text-gray-500 text-sm p-1">
+                    No options available. Type to create new ones.
                 </div>
-            ))}
+            )}
         </div>
     );
 };
