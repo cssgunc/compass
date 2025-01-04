@@ -106,7 +106,11 @@ export default function ResourceTable({ data, setData }: ResourceTableProps) {
             ),
             cell: (info) => (
                 <div className="flex flex-wrap gap-2 items-center px-2">
-                    <Tag>{info.getValue()}</Tag>
+                    <Tag>
+                        {info.getValue().length != 0
+                            ? info.getValue()
+                            : "no program"}
+                    </Tag>
                 </div>
             ),
         }),

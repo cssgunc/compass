@@ -97,8 +97,12 @@ export default function UserTable({ data, setData }: UserTableProps) {
                 </>
             ),
             cell: (info) => (
-                <div className="flex ml-2 flex-wrap gap-2 items-center">
-                    <Tag>{info.getValue()}</Tag>
+                <div className="flex flex-wrap gap-2 items-center px-2">
+                    <Tag>
+                        {info.getValue().length != 0
+                            ? info.getValue()
+                            : "no role"}
+                    </Tag>
                 </div>
             ),
         }),
@@ -122,9 +126,13 @@ export default function UserTable({ data, setData }: UserTableProps) {
             ),
             cell: (info) => (
                 <div className="flex ml-2 flex-wrap gap-2 items-center">
-                    {info.getValue().map((tag: string, index: number) => {
-                        return <Tag key={index}>{tag}</Tag>;
-                    })}
+                    {info.getValue().length > 0 ? (
+                        info.getValue().map((tag: string, index: number) => {
+                            return <Tag key={index}>{tag}</Tag>;
+                        })
+                    ) : (
+                        <Tag>no programs</Tag>
+                    )}
                 </div>
             ),
         }),

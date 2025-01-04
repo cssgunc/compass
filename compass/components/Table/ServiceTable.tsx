@@ -115,7 +115,11 @@ export default function ServiceTable({ data, setData }: ServiceTableProps) {
             ),
             cell: (info) => (
                 <div className="flex flex-wrap gap-2 items-center px-2">
-                    <Tag>{info.getValue()}</Tag>
+                    <Tag>
+                        {info.getValue().length != 0
+                            ? info.getValue()
+                            : "no program"}
+                    </Tag>
                 </div>
             ),
         }),
@@ -128,9 +132,13 @@ export default function ServiceTable({ data, setData }: ServiceTableProps) {
             ),
             cell: (info) => (
                 <div className="flex flex-wrap gap-2 items-center px-2">
-                    {info.getValue().map((tag: string, index: number) => {
-                        return <Tag key={index}>{tag}</Tag>;
-                    })}
+                    {info.getValue().length > 0 ? (
+                        info.getValue().map((tag: string, index: number) => {
+                            return <Tag key={index}>{tag}</Tag>;
+                        })
+                    ) : (
+                        <Tag>no requirements</Tag>
+                    )}
                 </div>
             ),
         }),
