@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
     const [users, setUsers] = useState<User[]>([]);
+    const [uuid, setUuid] = useState<string>("");
 
     useEffect(() => {
         async function getUser() {
@@ -22,8 +23,10 @@ export default function Page() {
                 return;
             }
 
+            setUuid(data.user.id);
+
             const userListData = await fetch(
-                `${process.env.NEXT_PUBLIC_HOST}/api/user/all?uuid=${data.user.id}`
+                `/api/user/all?uuid=${data.user.id}`
             );
 
             const users: User[] = await userListData.json();
@@ -38,7 +41,8 @@ export default function Page() {
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
             <PageLayout title="Users" icon={<UsersIcon />}>
-                <UserTable data={users} setData={setUsers} />
+                {/* TODO: REPLACE UUID WITH HTTP BEARER TOKEN */}
+                <UserTable data={users} setData={setUsers} uuid={uuid} />
             </PageLayout>
         </div>
     );

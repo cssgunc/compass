@@ -19,6 +19,7 @@ import { Tag } from "../TagsInput/Tag";
 type UserTableProps = {
     data: User[];
     setData: Dispatch<SetStateAction<User[]>>;
+    uuid: string;
 };
 
 /**
@@ -26,7 +27,7 @@ type UserTableProps = {
  * @param props.data Stateful list of users to be displayed by the table
  * @param props.setData State setter for the list of users
  */
-export default function UserTable({ data, setData }: UserTableProps) {
+export default function UserTable({ data, setData, uuid }: UserTableProps) {
     const columnHelper = createColumnHelper<User>();
 
     const [rolePresets, setRolePresets] = useState([
@@ -144,6 +145,7 @@ export default function UserTable({ data, setData }: UserTableProps) {
             setData={setData}
             columns={columns}
             details={userDetails}
+            createEndpoint={`/api/user/create?uuid=${uuid}`}
         />
     );
 }

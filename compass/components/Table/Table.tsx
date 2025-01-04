@@ -27,6 +27,7 @@ type TableProps<T extends DataPoint> = {
     setData: Dispatch<SetStateAction<T[]>>;
     columns: ColumnDef<T, any>[];
     details: Details[];
+    createEndpoint: string;
 };
 
 /** Validates that all required fields in a new item have values */
@@ -76,8 +77,21 @@ export default function Table<T extends DataPoint>({
     setData,
     columns,
     details,
+    createEndpoint,
 }: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
+
+    const createRow = async (newItem: any) => {
+        const response = await fetch(createEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newItem),
+        });
+
+        return response;
+    };
 
     // /** Sorting function based on visibility */
     // const visibilitySort = (a: T, b: T) =>
@@ -224,8 +238,16 @@ export default function Table<T extends DataPoint>({
                                         return false;
                                     }
 
-                                    newItem.visible = true;
-                                    setData((prev) => [...prev, newItem]);
+                                    createRow(newItem).then((response) => {
+                                        if (response.ok) {
+                                            newItem.visible = true;
+                                            setData((prev) => [
+                                                ...prev,
+                                                newItem,
+                                            ]);
+                                        }
+                                    });
+
                                     return true;
                                 }}
                             />
