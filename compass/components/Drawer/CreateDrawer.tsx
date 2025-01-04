@@ -20,11 +20,14 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
     const [isOpen, setIsOpen] = useState(false);
     const [isFull, setIsFull] = useState(false);
     const [newItemContent, setNewItemContent] = useState<any>({});
+    const [renderKey, setRenderKey] = useState(0);
 
     const handleContentChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
+        console.log(newItemContent);
+        console.log(Object.keys(newItemContent).length);
         setNewItemContent((prev: any) => ({
             ...prev,
             [name]: value,
@@ -51,6 +54,9 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
         setIsOpen(!isOpen);
         if (isFull) {
             setIsFull(!isFull);
+        }
+        if (!isOpen) {
+            setRenderKey((prev) => prev + 1);
         }
     };
 
@@ -106,6 +112,7 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
                                     initializeSelectField(detail.key);
                                     inputField = (
                                         <TagsInput
+                                            key={`${detail.key}-${renderKey}`}
                                             presetValue={[]}
                                             presetOptions={
                                                 detail.presetOptionsValues || []
