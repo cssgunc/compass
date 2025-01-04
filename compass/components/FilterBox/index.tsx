@@ -33,7 +33,7 @@ export const FilterBox = () => {
             >
                 <span>{tag}</span>
                 <span
-                    className="ml-2 cursor-pointer"
+                    className="cursor-pointer"
                     onClick={() => handleTagChange(tag)}
                 >
                     &times;

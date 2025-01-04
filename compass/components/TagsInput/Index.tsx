@@ -9,6 +9,7 @@ interface TagsInputProps {
     presetValue: string[];
     setPresetOptions: Dispatch<SetStateAction<string[]>>;
     onTagsChange?: (tags: Set<string>) => void;
+    singleValue?: boolean;
 }
 
 const TagsInput: React.FC<TagsInputProps> = ({
@@ -16,6 +17,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
     presetOptions,
     setPresetOptions,
     onTagsChange,
+    singleValue = false,
 }) => {
     const [inputValue, setInputValue] = useState("");
     const [cellSelected, setCellSelected] = useState(false);
@@ -65,6 +67,10 @@ const TagsInput: React.FC<TagsInputProps> = ({
 
     const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && inputValue.trim()) {
+            if (singleValue && tags.size >= 1) {
+                // Don't add new tag if we're in single value mode and already have a tag
+                return;
+            }
             addTag(e);
         }
     };
@@ -81,7 +87,11 @@ const TagsInput: React.FC<TagsInputProps> = ({
     };
 
     const handleSelectTag = (tagToAdd: string) => {
-        if (!tags.has(tagToAdd)) {
+        if (singleValue) {
+            const newTags = new Set([tagToAdd]);
+            setTags(newTags);
+            onTagsChange?.(newTags);
+        } else if (!tags.has(tagToAdd)) {
             const newTags = new Set(Array.from(tags).concat(tagToAdd));
             setTags(newTags);
             onTagsChange?.(newTags);
@@ -151,31 +161,45 @@ const TagsInput: React.FC<TagsInputProps> = ({
                                     active
                                     tags={tags}
                                 />
-                                <input
-                                    type="text"
-                                    value={inputValue}
-                                    placeholder="Search for an option..."
-                                    onChange={handleInputChange}
-                                    onKeyDown={handleAddTag}
-                                    className="focus:outline-none bg-transparent"
-                                    autoFocus
-                                />
+                                {(!singleValue || tags.size === 0) && (
+                                    <input
+                                        type="text"
+                                        value={inputValue}
+                                        placeholder={
+                                            singleValue && tags.size > 0
+                                                ? ""
+                                                : "Search for an option..."
+                                        }
+                                        onChange={handleInputChange}
+                                        onKeyDown={handleAddTag}
+                                        className="focus:outline-none bg-transparent"
+                                        autoFocus
+                                    />
+                                )}
                             </div>
                             <div className="flex rounded-b-md bg-white flex-col border-t border-gray-100 text-2xs font-medium text-gray-500 p-2">
                                 <p className="capitalize">
-                                    Select an option or create one
+                                    {singleValue && tags.size > 0
+                                        ? "Only one option can be selected"
+                                        : "Select an option or create one"}
                                 </p>
-                                <TagDropdown
-                                    handleDeleteTag={handleDeleteTagOption}
-                                    handleEditTag={handleEditTag}
-                                    handleAdd={handleSelectTag}
-                                    tags={filteredOptions}
-                                />
-                                {inputValue.length > 0 && (
-                                    <CreateNewTagAction
-                                        input={inputValue}
-                                        addTag={addTag}
-                                    />
+                                {(!singleValue || tags.size === 0) && (
+                                    <>
+                                        <TagDropdown
+                                            handleDeleteTag={
+                                                handleDeleteTagOption
+                                            }
+                                            handleEditTag={handleEditTag}
+                                            handleAdd={handleSelectTag}
+                                            tags={filteredOptions}
+                                        />
+                                        {inputValue.length > 0 && (
+                                            <CreateNewTagAction
+                                                input={inputValue}
+                                                addTag={addTag}
+                                            />
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </div>
