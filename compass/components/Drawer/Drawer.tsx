@@ -48,12 +48,14 @@ const Drawer: FunctionComponent<DrawerProps> = ({
     const [isFavorite, setIsFavorite] = useState(false);
     const [tempRowContent, setTempRowContent] = useState(rowContent);
 
-    const onRowUpdate = (updatedRow: any) => {};
-
-    const handleTempRowContentChange = (
+    const handleTempRowContentChangeHTML = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
+        handleTempRowContentChange(name, value);
+    };
+
+    const handleTempRowContentChange = (name: string, value: any) => {
         setTempRowContent((prev: any) => ({
             ...prev,
             [name]: value,
@@ -68,10 +70,22 @@ const Drawer: FunctionComponent<DrawerProps> = ({
     };
 
     const toggleDrawer = () => {
+        if (setRowContent && isOpen) {
+            setRowContent((prev: any) => {
+                return prev.map((row: any) => {
+                    if (row.id === tempRowContent.id) {
+                        return tempRowContent;
+                    }
+                    return row;
+                });
+            });
+        }
+
         setIsOpen(!isOpen);
         if (isFull) {
             setIsFull(!isFull);
         }
+        console.log("Send API request to update row content");
     };
 
     const toggleDrawerFullScreen = () => setIsFull(!isFull);
@@ -143,16 +157,15 @@ const Drawer: FunctionComponent<DrawerProps> = ({
 
                             switch (detail.inputType) {
                                 case "select-one":
-                                case "select-multiple":
                                     valueToRender = (
                                         <div className="flex-1">
-                                            <div className="hover:bg-gray-50 rounded-md px-2 py-1">
+                                            <div className="rounded-md px-2 py-1">
                                                 <TagsInput
                                                     presetValue={
                                                         typeof value ===
                                                         "string"
                                                             ? [value]
-                                                            : value
+                                                            : value || []
                                                     }
                                                     presetOptions={
                                                         detail.presetOptionsValues ||
@@ -162,6 +175,51 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                         detail.presetOptionsSetter ||
                                                         (() => {})
                                                     }
+                                                    singleValue={true}
+                                                    onTagsChange={(
+                                                        tags: Set<string>
+                                                    ) => {
+                                                        const tagsArray =
+                                                            Array.from(tags);
+                                                        handleTempRowContentChange(
+                                                            detail.key,
+                                                            tagsArray.length > 0
+                                                                ? tagsArray[0]
+                                                                : null
+                                                        );
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                    break;
+                                case "select-multiple":
+                                    valueToRender = (
+                                        <div className="flex-1">
+                                            <div className="rounded-md px-2 py-1">
+                                                <TagsInput
+                                                    presetValue={
+                                                        typeof value ===
+                                                        "string"
+                                                            ? [value]
+                                                            : value || []
+                                                    }
+                                                    presetOptions={
+                                                        detail.presetOptionsValues ||
+                                                        []
+                                                    }
+                                                    setPresetOptions={
+                                                        detail.presetOptionsSetter ||
+                                                        (() => {})
+                                                    }
+                                                    onTagsChange={(
+                                                        tags: Set<string>
+                                                    ) => {
+                                                        handleTempRowContentChange(
+                                                            detail.key,
+                                                            Array.from(tags)
+                                                        );
+                                                    }}
                                                 />
                                             </div>
                                         </div>
@@ -175,7 +233,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                     name={detail.key}
                                                     value={value}
                                                     onChange={
-                                                        handleTempRowContentChange
+                                                        handleTempRowContentChangeHTML
                                                     }
                                                     onKeyDown={handleEnterPress}
                                                     rows={4}
@@ -203,7 +261,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                     name={detail.key}
                                                     value={value}
                                                     onChange={
-                                                        handleTempRowContentChange
+                                                        handleTempRowContentChangeHTML
                                                     }
                                                     onKeyDown={handleEnterPress}
                                                     className="w-full p-1 focus:outline-gray-200 bg-transparent"
@@ -221,7 +279,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                     name={detail.key}
                                                     value={value}
                                                     onChange={
-                                                        handleTempRowContentChange
+                                                        handleTempRowContentChangeHTML
                                                     }
                                                     onKeyDown={handleEnterPress}
                                                     className="w-full p-1 font-normal hover:text-gray-400 focus:outline-gray-200 underline text-gray-500 bg-transparent"

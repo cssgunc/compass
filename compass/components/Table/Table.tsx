@@ -113,10 +113,6 @@ export default function Table<T extends DataPoint>({
     //     });
     // };
 
-    const addData = () => {
-        setData([...data]);
-    };
-
     // Add data manipulation options to the first column
     columns.unshift(
         columnHelper.display({
@@ -139,11 +135,6 @@ export default function Table<T extends DataPoint>({
         setQuery(String(target.value));
     };
 
-    const handleCellChange = (e: ChangeEvent, key: Key) => {
-        const target = e.target as HTMLInputElement;
-        console.log(key);
-    };
-
     // TODO: Filtering
 
     // TODO: Sorting
@@ -162,16 +153,6 @@ export default function Table<T extends DataPoint>({
         globalFilterFn: fuzzyFilter,
         getCoreRowModel: getCoreRowModel(),
     });
-
-    const handleRowData = (row: any) => {
-        const rowData: any = {};
-        row.cells.forEach((cell: any) => {
-            rowData[cell.column.id] = cell.value;
-        });
-        // Use rowData object containing data from all columns for the current row
-        console.log(rowData);
-        return rowData;
-    };
 
     return (
         <div className="flex flex-col">

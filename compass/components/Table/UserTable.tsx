@@ -99,7 +99,7 @@ export default function UserTable({ data, setData }: UserTableProps) {
             cell: (info) => (
                 <div className="flex flex-wrap gap-2 items-center px-2">
                     <Tag>
-                        {info.getValue().length != 0
+                        {info.getValue() && info.getValue().length != 0
                             ? info.getValue()
                             : "no role"}
                     </Tag>

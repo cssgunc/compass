@@ -108,12 +108,45 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
 
                             switch (detail.inputType) {
                                 case "select-one":
-                                case "select-multiple":
                                     initializeSelectField(detail.key);
                                     inputField = (
                                         <TagsInput
                                             key={`${detail.key}-${renderKey}`}
                                             presetValue={[]}
+                                            presetOptions={
+                                                detail.presetOptionsValues || []
+                                            }
+                                            setPresetOptions={
+                                                detail.presetOptionsSetter ||
+                                                (() => {})
+                                            }
+                                            singleValue={true}
+                                            onTagsChange={(
+                                                tags: Set<string>
+                                            ) => {
+                                                setNewItemContent(
+                                                    (prev: any) => ({
+                                                        ...prev,
+                                                        [detail.key]:
+                                                            tags.size > 0
+                                                                ? Array.from(
+                                                                      tags
+                                                                  )[0]
+                                                                : null,
+                                                    })
+                                                );
+                                            }}
+                                        />
+                                    );
+                                    break;
+                                case "select-multiple":
+                                    initializeSelectField(detail.key);
+                                    inputField = (
+                                        <TagsInput
+                                            key={`${detail.key}-${renderKey}`}
+                                            presetValue={
+                                                newItemContent[detail.key] || []
+                                            }
                                             presetOptions={
                                                 detail.presetOptionsValues || []
                                             }
