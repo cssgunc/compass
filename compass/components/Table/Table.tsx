@@ -19,11 +19,14 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { RowOptionMenu } from "./RowOptionMenu";
 import DataPoint from "@/utils/models/DataPoint";
+import CreateDrawer from "../Drawer/CreateDrawer";
+import { Details } from "../Drawer/Drawer";
 
 type TableProps<T extends DataPoint> = {
     data: T[];
     setData: Dispatch<SetStateAction<T[]>>;
     columns: ColumnDef<T, any>[];
+    details: Details[];
 };
 
 /** Fuzzy search function */
@@ -53,6 +56,7 @@ export default function Table<T extends DataPoint>({
     data,
     setData,
     columns,
+    details,
 }: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
 
@@ -208,14 +212,13 @@ export default function Table<T extends DataPoint>({
                 <tfoot>
                     <tr>
                         <td
-                            className="p-3 border-y border-gray-200 text-gray-600 hover:bg-gray-50"
+                            className="p-3 border-y border-gray-200"
                             colSpan={100}
-                            onClick={addData}
                         >
-                            <span className="flex ml-1 text-gray-500">
-                                <PlusIcon className="inline h-4 mr-1" />
-                                New
-                            </span>
+                            <CreateDrawer
+                                details={details}
+                                onCreate={(newItem) => {}}
+                            />
                         </td>
                     </tr>
                 </tfoot>

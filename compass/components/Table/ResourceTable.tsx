@@ -127,5 +127,12 @@ export default function ResourceTable({ data, setData }: ResourceTableProps) {
         }),
     ];
 
-    return <Table data={data} setData={setData} columns={columns} />;
+    return (
+        <Table
+            data={data}
+            setData={setData}
+            columns={columns}
+            details={resourceDetails}
+        />
+    );
 }

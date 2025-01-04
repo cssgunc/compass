@@ -130,5 +130,12 @@ export default function UserTable({ data, setData }: UserTableProps) {
         }),
     ];
 
-    return <Table<User> data={data} setData={setData} columns={columns} />;
+    return (
+        <Table<User>
+            data={data}
+            setData={setData}
+            columns={columns}
+            details={userDetails}
+        />
+    );
 }

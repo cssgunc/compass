@@ -151,5 +151,12 @@ export default function ServiceTable({ data, setData }: ServiceTableProps) {
         }),
     ];
 
-    return <Table data={data} setData={setData} columns={columns} />;
+    return (
+        <Table
+            data={data}
+            setData={setData}
+            columns={columns}
+            details={serviceDetails}
+        />
+    );
 }
