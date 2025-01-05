@@ -18,6 +18,7 @@ import { Tag } from "../TagsInput/Tag";
 type ResourceTableProps = {
     data: Resource[];
     setData: Dispatch<SetStateAction<Resource[]>>;
+    uuid: string;
 };
 
 /**
@@ -25,13 +26,17 @@ type ResourceTableProps = {
  * @param props.data Stateful list of resources to be displayed by the table
  * @param props.setData State setter for the list of resources
  */
-export default function ResourceTable({ data, setData }: ResourceTableProps) {
+export default function ResourceTable({
+    data,
+    setData,
+    uuid,
+}: ResourceTableProps) {
     const columnHelper = createColumnHelper<Resource>();
 
     const [programPresets, setProgramPresets] = useState([
-        "domestic",
-        "community",
-        "economic",
+        "DOMESTIC",
+        "COMMUNITY",
+        "ECONOMIC",
     ]);
 
     const resourceDetails: Details[] = [
@@ -137,6 +142,7 @@ export default function ResourceTable({ data, setData }: ResourceTableProps) {
             setData={setData}
             columns={columns}
             details={resourceDetails}
+            createEndpoint={`/api/resource/create?uuid=${uuid}`}
         />
     );
 }

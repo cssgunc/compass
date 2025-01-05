@@ -79,13 +79,14 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                     return row;
                 });
             });
+
+            console.log("Send API request to update row content");
         }
 
         setIsOpen(!isOpen);
         if (isFull) {
             setIsFull(!isFull);
         }
-        console.log("Send API request to update row content");
     };
 
     const toggleDrawerFullScreen = () => setIsFull(!isFull);

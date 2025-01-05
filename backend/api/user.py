@@ -16,8 +16,8 @@ openapi_tags = {
 # TODO: Enable authorization by passing user uuid to API
 # TODO: Create custom exceptions
 @api.get("/all", response_model=List[User], tags=["Users"])
-def get_all(user_id: str, user_svc: UserService = Depends()):
-    subject = user_svc.get_user_by_uuid(user_id)
+def get_all(uuid: str, user_svc: UserService = Depends()):
+    subject = user_svc.get_user_by_uuid(uuid)
 
     if subject.role != UserTypeEnum.ADMIN:
         raise Exception(f"Insufficient permissions for user {subject.uuid}")
@@ -28,3 +28,12 @@ def get_all(user_id: str, user_svc: UserService = Depends()):
 @api.get("/{user_id}", response_model=User, tags=["Users"])
 def get_by_uuid(user_id: str, user_svc: UserService = Depends()):
     return user_svc.get_user_by_uuid(user_id)
+
+
+@api.post("/", response_model=User, tags=["Users"])
+def create_user(uuid: str, user: User, user_svc: UserService = Depends()):
+    subject = user_svc.get_user_by_uuid(uuid)
+    if subject.role != UserTypeEnum.ADMIN:
+        raise Exception(f"Insufficient permissions for user {subject.uuid}")
+
+    return user_svc.create(user)

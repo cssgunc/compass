@@ -16,6 +16,7 @@ import { Tag } from "../TagsInput/Tag";
 type ServiceTableProps = {
     data: Service[];
     setData: Dispatch<SetStateAction<Service[]>>;
+    uuid: string;
 };
 
 /**
@@ -23,23 +24,27 @@ type ServiceTableProps = {
  * @param props.data Stateful list of services to be displayed by the table
  * @param props.setData State setter for the list of services
  */
-export default function ServiceTable({ data, setData }: ServiceTableProps) {
+export default function ServiceTable({
+    data,
+    setData,
+    uuid,
+}: ServiceTableProps) {
     const columnHelper = createColumnHelper<Service>();
 
     const [programPresets, setProgramPresets] = useState([
-        "domestic",
-        "community",
-        "economic",
+        "DOMESTIC",
+        "COMMUNITY",
+        "ECONOMIC",
     ]);
 
     const [requirementPresets, setRequirementPresets] = useState([
-        "anonymous",
-        "confidential",
-        "referral required",
-        "safety assessment",
-        "intake required",
-        "income eligibility",
-        "initial assessment",
+        "ANONYMOUS",
+        "CONFIDENTIAL",
+        "REFERRAL REQUIRED",
+        "SAFETY ASSESSMENT",
+        "INTAKE REQUIRED",
+        "INCOME ELIGIBILITY",
+        "INITIAL ASSESSMENT",
     ]);
 
     const serviceDetails: Details[] = [
@@ -165,6 +170,7 @@ export default function ServiceTable({ data, setData }: ServiceTableProps) {
             setData={setData}
             columns={columns}
             details={serviceDetails}
+            createEndpoint={`/api/service/create?uuid=${uuid}`}
         />
     );
 }

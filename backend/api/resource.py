@@ -19,7 +19,10 @@ openapi_tags = {
 # TODO: Create custom exceptions
 @api.post("", response_model=Resource, tags=["Resource"])
 def create(
-    uuid: str, resource: Resource, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
+    uuid: str,
+    resource: Resource,
+    user_svc: UserService = Depends(),
+    resource_svc: ResourceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     return resource_svc.create(subject, resource)
@@ -27,14 +30,20 @@ def create(
 
 @api.get("", response_model=List[Resource], tags=["Resource"])
 def get_all(
-    uuid: str, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
+    uuid: str,
+    user_svc: UserService = Depends(),
+    resource_svc: ResourceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     return resource_svc.get_resource_by_user(subject)
 
+
 @api.get("/{name}", response_model=Resource, tags=["Resource"])
 def get_by_name(
-    name:str, uuid:str, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
+    name: str,
+    uuid: str,
+    user_svc: UserService = Depends(),
+    resource_svc: ResourceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     return resource_svc.get_resource_by_name(name, subject)
@@ -42,7 +51,10 @@ def get_by_name(
 
 @api.put("", response_model=Resource, tags=["Resource"])
 def update(
-    uuid: str, resource: Resource, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
+    uuid: str,
+    resource: Resource,
+    user_svc: UserService = Depends(),
+    resource_svc: ResourceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     return resource_svc.update(subject, resource)
@@ -50,7 +62,10 @@ def update(
 
 @api.delete("", response_model=None, tags=["Resource"])
 def delete(
-    uuid: str, resource: Resource, user_svc: UserService = Depends(), resource_svc: ResourceService = Depends()
+    uuid: str,
+    resource: Resource,
+    user_svc: UserService = Depends(),
+    resource_svc: ResourceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     resource_svc.delete(subject, resource)

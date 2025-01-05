@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const uuid = searchParams.get("uuid");
 
-    const data = await fetch(`${apiEndpoint}?user_id=${uuid}`);
+    const data = await fetch(`${apiEndpoint}?uuid=${uuid}`);
 
     const userData: User[] = await data.json();
     // TODO: Remove make every user visible

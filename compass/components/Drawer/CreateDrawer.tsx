@@ -26,8 +26,6 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
-        console.log(newItemContent);
-        console.log(Object.keys(newItemContent).length);
         setNewItemContent((prev: any) => ({
             ...prev,
             [name]: value,
@@ -45,6 +43,7 @@ const CreateDrawer: FunctionComponent<CreateDrawerProps> = ({
 
     const handleCreate = () => {
         if (onCreate(newItemContent)) {
+            console.log("newItemContent", newItemContent);
             setNewItemContent({});
             setIsOpen(false);
         }
