@@ -28,6 +28,7 @@ type TableProps<T extends DataPoint> = {
     columns: ColumnDef<T, any>[];
     details: Details[];
     createEndpoint: string;
+    isAdmin?: boolean;
 };
 
 /** Validates that all required fields in a new item have values */
@@ -78,6 +79,7 @@ export default function Table<T extends DataPoint>({
     columns,
     details,
     createEndpoint,
+    isAdmin = false,
 }: TableProps<T>) {
     const columnHelper = createColumnHelper<T>();
 
@@ -226,33 +228,37 @@ export default function Table<T extends DataPoint>({
                     })}
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td
-                            className="p-3 border-y border-gray-200"
-                            colSpan={100}
-                        >
-                            <CreateDrawer
-                                details={details}
-                                onCreate={(newItem) => {
-                                    if (!validateNewItem(newItem, details)) {
-                                        return false;
-                                    }
-
-                                    createRow(newItem).then((response) => {
-                                        if (response.ok) {
-                                            newItem.visible = true;
-                                            setData((prev) => [
-                                                ...prev,
-                                                newItem,
-                                            ]);
+                    {isAdmin && ( // Only show create drawer for admins
+                        <tr>
+                            <td
+                                className="p-3 border-y border-gray-200"
+                                colSpan={100}
+                            >
+                                <CreateDrawer
+                                    details={details}
+                                    onCreate={(newItem) => {
+                                        if (
+                                            !validateNewItem(newItem, details)
+                                        ) {
+                                            return false;
                                         }
-                                    });
 
-                                    return true;
-                                }}
-                            />
-                        </td>
-                    </tr>
+                                        createRow(newItem).then((response) => {
+                                            if (response.ok) {
+                                                newItem.visible = true;
+                                                setData((prev) => [
+                                                    ...prev,
+                                                    newItem,
+                                                ]);
+                                            }
+                                        });
+
+                                        return true;
+                                    }}
+                                />
+                            </td>
+                        </tr>
+                    )}
                 </tfoot>
             </table>
         </div>

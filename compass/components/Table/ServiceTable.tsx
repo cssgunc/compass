@@ -12,11 +12,12 @@ import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import Service from "@/utils/models/Service";
 import { Details } from "../Drawer/Drawer";
 import { Tag } from "../TagsInput/Tag";
+import User from "@/utils/models/User";
 
 type ServiceTableProps = {
     data: Service[];
     setData: Dispatch<SetStateAction<Service[]>>;
-    uuid: string;
+    user?: User;
 };
 
 /**
@@ -27,7 +28,7 @@ type ServiceTableProps = {
 export default function ServiceTable({
     data,
     setData,
-    uuid,
+    user,
 }: ServiceTableProps) {
     const columnHelper = createColumnHelper<Service>();
 
@@ -170,7 +171,8 @@ export default function ServiceTable({
             setData={setData}
             columns={columns}
             details={serviceDetails}
-            createEndpoint={`/api/service/create?uuid=${uuid}`}
+            createEndpoint={`/api/service/create?uuid=${user?.uuid}`}
+            isAdmin={user?.role === "ADMIN"}
         />
     );
 }

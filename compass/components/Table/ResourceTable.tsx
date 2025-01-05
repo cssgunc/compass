@@ -6,19 +6,17 @@ import {
     UserIcon,
 } from "@heroicons/react/24/solid";
 import { Dispatch, SetStateAction, useState } from "react";
-import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import Table from "@/components/Table/Table";
-import TagsInput from "@/components/TagsInput/Index";
 import Resource from "@/utils/models/Resource";
 import { Details } from "../Drawer/Drawer";
 import { Tag } from "../TagsInput/Tag";
-
+import User from "@/utils/models/User";
 type ResourceTableProps = {
     data: Resource[];
     setData: Dispatch<SetStateAction<Resource[]>>;
-    uuid: string;
+    user?: User;
 };
 
 /**
@@ -29,7 +27,7 @@ type ResourceTableProps = {
 export default function ResourceTable({
     data,
     setData,
-    uuid,
+    user,
 }: ResourceTableProps) {
     const columnHelper = createColumnHelper<Resource>();
 
@@ -82,6 +80,7 @@ export default function ResourceTable({
                     rowData={info.row.original}
                     setData={setData}
                     details={resourceDetails}
+                    isAdmin={user?.role === "ADMIN"}
                 />
             ),
         }),
@@ -142,7 +141,8 @@ export default function ResourceTable({
             setData={setData}
             columns={columns}
             details={resourceDetails}
-            createEndpoint={`/api/resource/create?uuid=${uuid}`}
+            createEndpoint={`/api/resource/create?uuid=${user?.uuid}`}
+            isAdmin={user?.role === "ADMIN"}
         />
     );
 }

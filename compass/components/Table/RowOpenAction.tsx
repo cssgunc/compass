@@ -13,6 +13,7 @@ type RowOpenActionProps<T extends DataPoint> = {
     rowData: T;
     setData: Dispatch<SetStateAction<T[]>>;
     details: Details[];
+    isAdmin?: boolean;
 };
 
 export function RowOpenAction<T extends DataPoint>({
@@ -21,6 +22,7 @@ export function RowOpenAction<T extends DataPoint>({
     rowData,
     setData,
     details,
+    isAdmin,
 }: RowOpenActionProps<T>) {
     return (
         <div className="font-semibold group flex flex-row items-center justify-between pr-2">
@@ -31,6 +33,7 @@ export function RowOpenAction<T extends DataPoint>({
                     rowContent={rowData}
                     details={details}
                     setRowContent={setData}
+                    isAdmin={isAdmin}
                 />
             </span>
         </div>
