@@ -14,8 +14,12 @@ const Loading = () => {
                     style={{ height: "auto", width: "auto" }}
                     priority
                 />
-                <h1 className={styles.loadingTitle}>Loading...</h1>
-                <div className={styles.loadingSpinner}></div>
+                <h1 className="text-2xl font-semibold text-gray-700 mt-4 mb-6">
+                    Loading...
+                </h1>
+                <div className="flex justify-center">
+                    <div className="animate-spin rounded-full h-24 w-24 border-b-2 border-gray-700"></div>
+                </div>
             </div>
         </div>
     );

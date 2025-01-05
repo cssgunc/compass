@@ -10,7 +10,6 @@ import {
 } from "@heroicons/react/24/solid";
 import { SidebarItem } from "./SidebarItem";
 import { UserProfile } from "../resource/UserProfile";
-import LoadingIcon from "./LoadingIcon";
 
 interface SidebarProps {
     setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -67,7 +66,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                 {/* Loading indicator*/}
                 {isLoading && (
                     <div className="fixed top-2 left-2">
-                        <LoadingIcon />
+                        <div className="flex justify-center items-center">
+                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-700" />
+                        </div>
                     </div>
                 )}
 

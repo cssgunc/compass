@@ -1,18 +1,14 @@
 import { Dispatch, FunctionComponent, ReactNode, SetStateAction } from "react";
 import React, { useState } from "react";
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/solid";
-import {
-    StarIcon as SolidStarIcon,
-    EnvelopeIcon,
-    UserIcon,
-} from "@heroicons/react/24/solid";
+import { StarIcon as SolidStarIcon, UserIcon } from "@heroicons/react/24/solid";
 import {
     ArrowsPointingOutIcon,
     ArrowsPointingInIcon,
     StarIcon as OutlineStarIcon,
-    ListBulletIcon,
 } from "@heroicons/react/24/outline";
 import TagsInput from "../TagsInput/Index";
+import { Tag } from "../TagsInput/Tag";
 
 type InputType =
     | "text"
@@ -35,6 +31,7 @@ type DrawerProps = {
     details: Details[];
     rowContent?: any;
     setRowContent?: Dispatch<SetStateAction<any>>;
+    isAdmin?: boolean;
 };
 
 const Drawer: FunctionComponent<DrawerProps> = ({
@@ -42,6 +39,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
     details,
     rowContent,
     setRowContent,
+    isAdmin,
 }: DrawerProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isFull, setIsFull] = useState(false);
@@ -161,35 +159,48 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                     valueToRender = (
                                         <div className="flex-1">
                                             <div className="rounded-md px-2 py-1">
-                                                <TagsInput
-                                                    presetValue={
-                                                        typeof value ===
-                                                        "string"
-                                                            ? [value]
-                                                            : value || []
-                                                    }
-                                                    presetOptions={
-                                                        detail.presetOptionsValues ||
-                                                        []
-                                                    }
-                                                    setPresetOptions={
-                                                        detail.presetOptionsSetter ||
-                                                        (() => {})
-                                                    }
-                                                    singleValue={true}
-                                                    onTagsChange={(
-                                                        tags: Set<string>
-                                                    ) => {
-                                                        const tagsArray =
-                                                            Array.from(tags);
-                                                        handleTempRowContentChange(
-                                                            detail.key,
-                                                            tagsArray.length > 0
-                                                                ? tagsArray[0]
-                                                                : null
-                                                        );
-                                                    }}
-                                                />
+                                                {isAdmin ? (
+                                                    <TagsInput
+                                                        presetValue={
+                                                            typeof value ===
+                                                            "string"
+                                                                ? [value]
+                                                                : value || []
+                                                        }
+                                                        presetOptions={
+                                                            detail.presetOptionsValues ||
+                                                            []
+                                                        }
+                                                        setPresetOptions={
+                                                            detail.presetOptionsSetter ||
+                                                            (() => {})
+                                                        }
+                                                        singleValue={true}
+                                                        onTagsChange={(
+                                                            tags: Set<string>
+                                                        ) => {
+                                                            const tagsArray =
+                                                                Array.from(
+                                                                    tags
+                                                                );
+                                                            handleTempRowContentChange(
+                                                                detail.key,
+                                                                tagsArray.length >
+                                                                    0
+                                                                    ? tagsArray[0]
+                                                                    : null
+                                                            );
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <div className="flex">
+                                                        <Tag>
+                                                            {value
+                                                                ? value
+                                                                : "no value"}
+                                                        </Tag>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     );
@@ -198,30 +209,56 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                     valueToRender = (
                                         <div className="flex-1">
                                             <div className="rounded-md px-2 py-1">
-                                                <TagsInput
-                                                    presetValue={
-                                                        typeof value ===
-                                                        "string"
-                                                            ? [value]
-                                                            : value || []
-                                                    }
-                                                    presetOptions={
-                                                        detail.presetOptionsValues ||
-                                                        []
-                                                    }
-                                                    setPresetOptions={
-                                                        detail.presetOptionsSetter ||
-                                                        (() => {})
-                                                    }
-                                                    onTagsChange={(
-                                                        tags: Set<string>
-                                                    ) => {
-                                                        handleTempRowContentChange(
-                                                            detail.key,
-                                                            Array.from(tags)
-                                                        );
-                                                    }}
-                                                />
+                                                {isAdmin ? (
+                                                    <TagsInput
+                                                        presetValue={
+                                                            typeof value ===
+                                                            "string"
+                                                                ? [value]
+                                                                : value || []
+                                                        }
+                                                        presetOptions={
+                                                            detail.presetOptionsValues ||
+                                                            []
+                                                        }
+                                                        setPresetOptions={
+                                                            detail.presetOptionsSetter ||
+                                                            (() => {})
+                                                        }
+                                                        onTagsChange={(
+                                                            tags: Set<string>
+                                                        ) => {
+                                                            handleTempRowContentChange(
+                                                                detail.key,
+                                                                Array.from(tags)
+                                                            );
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {value &&
+                                                        value.length > 0 ? (
+                                                            value.map(
+                                                                (
+                                                                    tag: string,
+                                                                    index: number
+                                                                ) => (
+                                                                    <Tag
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                    >
+                                                                        {tag}
+                                                                    </Tag>
+                                                                )
+                                                            )
+                                                        ) : (
+                                                            <Tag>
+                                                                no requirements
+                                                            </Tag>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     );
@@ -238,6 +275,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                     }
                                                     onKeyDown={handleEnterPress}
                                                     rows={4}
+                                                    disabled={!isAdmin}
                                                     onInput={(e) => {
                                                         const target =
                                                             e.target as HTMLTextAreaElement;
@@ -261,6 +299,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                     type={detail.inputType}
                                                     name={detail.key}
                                                     value={value}
+                                                    disabled={!isAdmin}
                                                     onChange={
                                                         handleTempRowContentChangeHTML
                                                     }
@@ -283,6 +322,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                         handleTempRowContentChangeHTML
                                                     }
                                                     onKeyDown={handleEnterPress}
+                                                    disabled={!isAdmin}
                                                     className="w-full p-1 font-normal hover:text-gray-400 focus:outline-gray-200 underline text-gray-500 bg-transparent"
                                                 />
                                             </div>

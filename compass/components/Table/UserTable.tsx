@@ -1,17 +1,12 @@
 import {
-    ArrowDownCircleIcon,
-    AtSymbolIcon,
-    Bars2Icon,
     EnvelopeIcon,
     ListBulletIcon,
     UserIcon,
 } from "@heroicons/react/24/solid";
 import { Dispatch, SetStateAction, useState } from "react";
-import useTagsHandler from "@/components/TagsInput/TagsHandler";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
-import TagsInput from "@/components/TagsInput/Index";
 import User from "@/utils/models/User";
 import { Details } from "../Drawer/Drawer";
 import { Tag } from "../TagsInput/Tag";
@@ -19,7 +14,7 @@ import { Tag } from "../TagsInput/Tag";
 type UserTableProps = {
     data: User[];
     setData: Dispatch<SetStateAction<User[]>>;
-    uuid: string;
+    user?: User;
 };
 
 /**
@@ -27,7 +22,7 @@ type UserTableProps = {
  * @param props.data Stateful list of users to be displayed by the table
  * @param props.setData State setter for the list of users
  */
-export default function UserTable({ data, setData, uuid }: UserTableProps) {
+export default function UserTable({ data, setData, user }: UserTableProps) {
     const columnHelper = createColumnHelper<User>();
 
     const [rolePresets, setRolePresets] = useState([
@@ -88,6 +83,7 @@ export default function UserTable({ data, setData, uuid }: UserTableProps) {
                     rowData={info.row.original}
                     setData={setData}
                     details={userDetails}
+                    isAdmin={user?.role === "ADMIN"}
                 />
             ),
         }),
@@ -145,7 +141,8 @@ export default function UserTable({ data, setData, uuid }: UserTableProps) {
             setData={setData}
             columns={columns}
             details={userDetails}
-            createEndpoint={`/api/user/create?uuid=${uuid}`}
+            createEndpoint={`/api/user/create?uuid=${user?.uuid}`}
+            isAdmin={user?.role === "ADMIN"}
         />
     );
 }

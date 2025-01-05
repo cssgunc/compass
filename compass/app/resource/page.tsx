@@ -4,34 +4,68 @@ import { PageLayout } from "@/components/PageLayout";
 import Resource from "@/utils/models/Resource";
 import ResourceTable from "@/components/Table/ResourceTable";
 import { createClient } from "@/utils/supabase/client";
-
 import { BookmarkIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import User from "@/utils/models/User";
 
 export default function Page() {
     const [resources, setResources] = useState<Resource[]>([]);
-    const [uuid, setUuid] = useState<string>("");
+    const [currUser, setCurrUser] = useState<User | undefined>(undefined);
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         async function getResources() {
-            const supabase = createClient();
+            try {
+                setIsLoading(true);
+                setError(null);
 
-            const { data, error } = await supabase.auth.getUser();
+                const supabase = createClient();
+                const { data: userData, error: authError } =
+                    await supabase.auth.getUser();
 
-            if (error) {
-                console.log("Accessed admin page but not logged in");
-                return;
+                if (authError) {
+                    throw new Error("Authentication failed. Please sign in.");
+                }
+
+                // Fetch resources and user data in parallel
+                const [resourceResponse, userResponse] = await Promise.all([
+                    fetch(`/api/resource/all?uuid=${userData.user.id}`),
+                    fetch(`/api/user?uuid=${userData.user.id}`),
+                ]);
+
+                // Check for HTTP errors
+                if (!resourceResponse.ok) {
+                    throw new Error(
+                        `Failed to fetch resources: ${resourceResponse.statusText}`
+                    );
+                }
+                if (!userResponse.ok) {
+                    throw new Error(
+                        `Failed to fetch user data: ${userResponse.statusText}`
+                    );
+                }
+
+                // Parse the responses
+                const [resourcesAPI, currUserData] = await Promise.all([
+                    resourceResponse.json(),
+                    userResponse.json(),
+                ]);
+
+                setResources(resourcesAPI);
+                setCurrUser(currUserData);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : "An unexpected error occurred"
+                );
+                setResources([]);
+                setCurrUser(undefined);
+            } finally {
+                setIsLoading(false);
             }
-
-            setUuid(data.user.id);
-
-            const userListData = await fetch(
-                `${process.env.NEXT_PUBLIC_HOST}/api/resource/all?uuid=${data.user.id}`
-            );
-
-            const resourcesAPI: Resource[] = await userListData.json();
-
-            setResources(resourcesAPI);
         }
 
         getResources();
@@ -39,13 +73,25 @@ export default function Page() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            {/* icon + title  */}
             <PageLayout title="Resources" icon={<BookmarkIcon />}>
-                <ResourceTable
-                    data={resources}
-                    setData={setResources}
-                    uuid={uuid}
-                />
+                {isLoading ? (
+                    <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin rounded-full h-24 w-24 border-b-2 border-purple-700" />
+                    </div>
+                ) : error ? (
+                    <div className="flex justify-center items-center h-64">
+                        <div className="text-red-500 text-center">
+                            <p className="text-lg font-semibold">Error</p>
+                            <p className="text-sm">{error}</p>
+                        </div>
+                    </div>
+                ) : (
+                    <ResourceTable
+                        data={resources}
+                        setData={setResources}
+                        user={currUser}
+                    />
+                )}
             </PageLayout>
         </div>
     );
