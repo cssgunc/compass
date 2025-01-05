@@ -23,12 +23,8 @@ const TagsInput: React.FC<TagsInputProps> = ({
     const [cellSelected, setCellSelected] = useState(false);
 
     // TODO: Add tags to the database and remove the presetValue and lowercasing
-    const [tags, setTags] = useState<Set<string>>(
-        new Set(presetValue.map((tag) => tag.toLowerCase()))
-    );
-    const [options, setOptions] = useState<Set<string>>(
-        new Set(presetOptions.map((option) => option.toLowerCase()))
-    );
+    const [tags, setTags] = useState<Set<string>>(new Set(presetValue));
+    const [options, setOptions] = useState<Set<string>>(new Set(presetOptions));
     const [filteredOptions, setFilteredOptions] = useState<Set<string>>(
         new Set(presetOptions)
     );
@@ -44,7 +40,6 @@ const TagsInput: React.FC<TagsInputProps> = ({
     };
 
     const handleOutsideClick = (event: MouseEvent) => {
-        console.log(dropdown.current);
         if (
             dropdown.current &&
             !dropdown.current.contains(event.target as Node)

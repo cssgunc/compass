@@ -30,7 +30,7 @@ def get_by_uuid(user_id: str, user_svc: UserService = Depends()):
     return user_svc.get_user_by_uuid(user_id)
 
 
-@api.post("/create", response_model=User, tags=["Users"])
+@api.post("/", response_model=User, tags=["Users"])
 def create_user(uuid: str, user: User, user_svc: UserService = Depends()):
     subject = user_svc.get_user_by_uuid(uuid)
     if subject.role != UserTypeEnum.ADMIN:

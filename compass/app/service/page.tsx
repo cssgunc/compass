@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
     const [services, setServices] = useState<Service[]>([]);
+    const [uuid, setUuid] = useState<string>("");
 
     useEffect(() => {
         async function getServices() {
@@ -21,6 +22,8 @@ export default function Page() {
                 console.log("Accessed admin page but not logged in");
                 return;
             }
+
+            setUuid(data.user.id);
 
             const serviceListData = await fetch(
                 `${process.env.NEXT_PUBLIC_HOST}/api/service/all?uuid=${data.user.id}`
@@ -37,7 +40,11 @@ export default function Page() {
         <div className="min-h-screen flex flex-col">
             {/* icon + title  */}
             <PageLayout title="Services" icon={<ClipboardIcon />}>
-                <ServiceTable data={services} setData={setServices} />
+                <ServiceTable
+                    data={services}
+                    setData={setServices}
+                    uuid={uuid}
+                />
             </PageLayout>
         </div>
     );

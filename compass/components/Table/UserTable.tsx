@@ -31,15 +31,15 @@ export default function UserTable({ data, setData, uuid }: UserTableProps) {
     const columnHelper = createColumnHelper<User>();
 
     const [rolePresets, setRolePresets] = useState([
-        "admin",
-        "volunteer",
-        "employee",
+        "ADMIN",
+        "VOLUNTEER",
+        "EMPLOYEE",
     ]);
 
     const [programPresets, setProgramPresets] = useState([
-        "domestic",
-        "community",
-        "economic",
+        "DOMESTIC",
+        "COMMUNITY",
+        "ECONOMIC",
     ]);
 
     const userDetails: Details[] = [

@@ -11,6 +11,7 @@ export const Tag = ({ children, handleDelete, active = false }: TagProps) => {
     return (
         <span
             className={`font-normal bg-purple-100 text-gray-800 flex flex-row p-1 px-2 rounded-lg`}
+            style={{ textTransform: "none" }}
         >
             {children}
             {active && handleDelete && (
