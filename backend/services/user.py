@@ -43,10 +43,10 @@ class UserService:
 
     def all(self) -> list[User]:
         """
-        Returns a list of all Users
+        Returns a list of all Users ordered by id
 
         """
-        query = select(UserEntity)
+        query = select(UserEntity).order_by(UserEntity.id)
         entities = self._session.scalars(query).all()
 
         return [entity.to_model() for entity in entities]
@@ -102,12 +102,12 @@ class UserService:
         if obj is None:
             raise Exception(f"No matching user found")
 
-        obj.username = user.username
-        obj.role = user.role
-        obj.email = user.email
-        obj.program = user.program
-        obj.experience = user.experience
-        obj.group = user.group
+        obj.username = user.username if user.username else obj.username
+        obj.role = user.role if user.role else obj.role
+        obj.email = user.email if user.email else obj.email
+        obj.program = user.program if user.program else obj.program
+        obj.experience = user.experience if user.experience else obj.experience
+        obj.group = user.group if user.group else obj.group
 
         self._session.commit()
 

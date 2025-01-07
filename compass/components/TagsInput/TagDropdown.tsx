@@ -15,7 +15,7 @@ export const TagDropdown = ({
     handleAdd,
 }: TagDropdownProps) => {
     return (
-        <div className="z-50 flex flex-col space-y-2 mt-2">
+        <div className="z-50 flex flex-col space-y-2 mt-2 max-h-60 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 pr-2">
             {Array.from(tags).length > 0 ? (
                 Array.from(tags).map((tag, index) => (
                     <div

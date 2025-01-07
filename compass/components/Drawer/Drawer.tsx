@@ -32,6 +32,7 @@ type DrawerProps = {
     rowContent?: any;
     setRowContent?: Dispatch<SetStateAction<any>>;
     isAdmin?: boolean;
+    updateRoute: string;
 };
 
 const Drawer: FunctionComponent<DrawerProps> = ({
@@ -40,6 +41,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
     rowContent,
     setRowContent,
     isAdmin,
+    updateRoute,
 }: DrawerProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isFull, setIsFull] = useState(false);
@@ -67,18 +69,39 @@ const Drawer: FunctionComponent<DrawerProps> = ({
         }
     };
 
+    const handleUpdate = async () => {
+        const response = await fetch(updateRoute, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(tempRowContent),
+        });
+
+        return response;
+    };
+
     const toggleDrawer = () => {
         if (setRowContent && isOpen) {
-            setRowContent((prev: any) => {
-                return prev.map((row: any) => {
-                    if (row.id === tempRowContent.id) {
-                        return tempRowContent;
-                    }
-                    return row;
-                });
-            });
+            // Check if any values have changed
+            const hasChanges = Object.keys(tempRowContent).some(
+                (key) => tempRowContent[key] !== rowContent[key]
+            );
 
-            console.log("Send API request to update row content");
+            if (hasChanges) {
+                handleUpdate().then((response) => {
+                    if (response.ok) {
+                        setRowContent((prev: any) => {
+                            return prev.map((row: any) => {
+                                if (row.id === tempRowContent.id) {
+                                    return tempRowContent;
+                                }
+                                return row;
+                            });
+                        });
+                    }
+                });
+            }
         }
 
         setIsOpen(!isOpen);

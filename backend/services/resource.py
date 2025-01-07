@@ -17,7 +17,7 @@ class ResourceService:
     def get_resource_by_user(self, subject: User) -> list[Resource]:
         """Resource method getting all of the resources that a user has access to based on role"""
         if subject.role != UserTypeEnum.VOLUNTEER:
-            query = select(ResourceEntity)
+            query = select(ResourceEntity).order_by(ResourceEntity.id)
             entities = self._session.scalars(query).all()
             return [resource.to_model() for resource in entities]
         else:
@@ -86,10 +86,10 @@ class ResourceService:
             raise ResourceNotFoundException(
                 f"No resource found with matching id: {resource.id}"
             )
-        entity.name = resource.name
-        entity.summary = resource.summary
-        entity.link = resource.link
-        entity.program = resource.program
+        entity.name = resource.name if resource.name else entity.name
+        entity.summary = resource.summary if resource.summary else entity.summary
+        entity.link = resource.link if resource.link else entity.link
+        entity.program = resource.program if resource.program else entity.program
         self._session.commit()
         return entity.to_model()
 

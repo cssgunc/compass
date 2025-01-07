@@ -22,14 +22,18 @@ class ServiceService:
     def get_service_by_user(self, subject: User) -> list[Service]:
         """Resource method getting all of the resources that a user has access to based on role"""
         if subject.role != UserTypeEnum.VOLUNTEER:
-            query = select(ServiceEntity)
+            query = select(ServiceEntity).order_by(ServiceEntity.id)
             entities = self._session.scalars(query).all()
             return [service.to_model() for service in entities]
         else:
             programs = subject.program
             services = []
             for program in programs:
-                entities = self._session.query(ServiceEntity).where(ServiceEntity.program == program).all()
+                entities = (
+                    self._session.query(ServiceEntity)
+                    .where(ServiceEntity.program == program)
+                    .all()
+                )
                 for entity in entities:
                     services.append(entity.to_model())
         return [service for service in services]
@@ -37,14 +41,14 @@ class ServiceService:
     def get_service_by_name(self, name: str, subject: User) -> Service:
         """Service method getting services by id."""
         query = select(ServiceEntity).where(
-            and_(
-                ServiceEntity.name == name, ServiceEntity.program.in_(subject.program)
-            )
+            and_(ServiceEntity.name == name, ServiceEntity.program.in_(subject.program))
         )
         entity = self._session.scalars(query).one_or_none()
 
         if entity is None:
-            raise ServiceNotFoundException(f"Service with name: {name} does not exist or program has not been assigned")
+            raise ServiceNotFoundException(
+                f"Service with name: {name} does not exist or program has not been assigned"
+            )
 
         return entity.to_model()
 
@@ -66,7 +70,7 @@ class ServiceService:
             raise ProgramNotAssignedException(
                 f"User is not {UserTypeEnum.ADMIN}, cannot update service"
             )
-        
+
         query = select(ServiceEntity).where(ServiceEntity.id == service.id)
         entity = self._session.scalars(query).one_or_none()
 
@@ -75,11 +79,13 @@ class ServiceService:
                 "The service you are searching for does not exist."
             )
 
-        entity.name = service.name
-        entity.status = service.status
-        entity.summary = service.summary
-        entity.requirements = service.requirements
-        entity.program = service.program
+        entity.name = service.name if service.name else entity.name
+        entity.status = service.status if service.status else entity.status
+        entity.summary = service.summary if service.summary else entity.summary
+        entity.requirements = (
+            service.requirements if service.requirements else entity.requirements
+        )
+        entity.program = service.program if service.program else entity.program
         self._session.commit()
 
         return entity.to_model()
@@ -88,7 +94,7 @@ class ServiceService:
         """Deletes a service from the table."""
         if subject.role != UserTypeEnum.ADMIN:
             raise ProgramNotAssignedException(f"User is not {UserTypeEnum.ADMIN}")
-        
+
         query = select(ServiceEntity).where(ServiceEntity.id == service.id)
         entity = self._session.scalars(query).one_or_none()
 
