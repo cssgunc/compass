@@ -93,7 +93,7 @@ class ResourceService:
         self._session.commit()
         return entity.to_model()
 
-    def delete(self, subject: User, resource: Resource) -> None:
+    def delete(self, subject: User, id: int) -> None:
         """
         Delete resource based on id that the user has access to
         Parameters:
@@ -106,14 +106,15 @@ class ResourceService:
             raise ProgramNotAssignedException(
                 f"User is not {UserTypeEnum.ADMIN}, cannot update service"
             )
-        query = select(ResourceEntity).where(ResourceEntity.id == resource.id)
+
+        query = select(ResourceEntity).where(ResourceEntity.id == id)
         entity = self._session.scalars(query).one_or_none()
         if entity is None:
-            raise ResourceNotFoundException(
-                f"No resource found with matching id: {resource.id}"
-            )
+            raise ResourceNotFoundException(f"No resource found with matching id: {id}")
         self._session.delete(entity)
         self._session.commit()
+
+        return {"message": "Resource deleted successfully"}
 
     def get_by_slug(self, user: User, search_string: str) -> list[Resource]:
         """

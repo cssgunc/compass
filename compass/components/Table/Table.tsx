@@ -28,6 +28,7 @@ type TableProps<T extends DataPoint> = {
     columns: ColumnDef<T, any>[];
     details: Details[];
     createEndpoint: string;
+    deleteEndpoint: string;
     isAdmin?: boolean;
 };
 
@@ -79,11 +80,23 @@ export default function Table<T extends DataPoint>({
     columns,
     details,
     createEndpoint,
+    deleteEndpoint,
     isAdmin = false,
 }: TableProps<T>) {
     console.log(data);
 
     const columnHelper = createColumnHelper<T>();
+
+    const deleteRow = async (id: number) => {
+        const response = await fetch(`${deleteEndpoint}&id=${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        return response.ok;
+    };
 
     const createRow = async (newItem: any) => {
         const response = await fetch(createEndpoint, {
@@ -144,7 +157,23 @@ export default function Table<T extends DataPoint>({
                 id: "options",
                 cell: (props) => (
                     <RowOptionMenu
-                        onDelete={() => console.log("delete")}
+                        onDelete={() => {
+                            deleteRow(props.row.original.id).then(
+                                (response) => {
+                                    if (response) {
+                                        setData((prev) =>
+                                            prev.filter(
+                                                (data) =>
+                                                    data.id !==
+                                                    props.row.original.id
+                                            )
+                                        );
+                                    } else {
+                                        alert("Failed to delete row!");
+                                    }
+                                }
+                            );
+                        }}
                         onHide={() => hideData(props.row.original.id)}
                         visible={props.row.original.visible}
                     />

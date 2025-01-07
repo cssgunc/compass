@@ -19,7 +19,10 @@ openapi_tags = {
 # TODO: Create custom exceptions
 @api.post("", response_model=Service, tags=["Service"])
 def create(
-    uuid: str, service: Service, user_svc: UserService = Depends(), service_svc: ServiceService = Depends()
+    uuid: str,
+    service: Service,
+    user_svc: UserService = Depends(),
+    service_svc: ServiceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     return service_svc.create(subject, service)
@@ -27,28 +30,42 @@ def create(
 
 @api.get("", response_model=List[Service], tags=["Service"])
 def get_all(
-    uuid: str, user_svc: UserService = Depends(), service_svc: ServiceService = Depends()
+    uuid: str,
+    user_svc: UserService = Depends(),
+    service_svc: ServiceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     return service_svc.get_service_by_user(subject)
 
+
 @api.get("/{name}", response_model=Service, tags=["Service"])
 def get_by_name(
-    name: str, uuid: str, user_svc: UserService = Depends(), service_svc: ServiceService = Depends()
+    name: str,
+    uuid: str,
+    user_svc: UserService = Depends(),
+    service_svc: ServiceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     return service_svc.get_service_by_name(name, subject)
 
+
 @api.put("", response_model=Service, tags=["Service"])
 def update(
-    uuid: str, service: Service, user_svc: UserService = Depends(), service_svc: ServiceService = Depends()
+    uuid: str,
+    service: Service,
+    user_svc: UserService = Depends(),
+    service_svc: ServiceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
     return service_svc.update(subject, service)
 
-@api.delete("", response_model=None, tags=["Service"])
+
+@api.delete("", response_model=dict, tags=["Service"])
 def delete(
-    uuid: str, service: Service, user_svc: UserService = Depends(), service_svc: ServiceService = Depends()
+    uuid: str,
+    id: int,
+    user_svc: UserService = Depends(),
+    service_svc: ServiceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
-    service_svc.delete(subject, service)
+    return service_svc.delete(subject, id)

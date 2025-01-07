@@ -12,7 +12,7 @@ import { useState, useEffect, useRef } from "react";
 import { RowOption } from "./RowOption";
 
 interface RowOptionMenuProps {
-    onDelete?: () => void;
+    onDelete: () => void;
     onHide: () => void;
     visible: boolean;
 }
@@ -25,6 +25,13 @@ export const RowOptionMenu = ({
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const handleDelete = () => {
+        if (window.confirm("Are you sure you want to delete this item?")) {
+            onDelete();
+            setMenuOpen(false);
+        }
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -60,18 +67,11 @@ export const RowOptionMenu = ({
                     (!menuOpen ? " invisible" : "")
                 }
             >
-                {onDelete && (
-                    <RowOption
-                        icon={TrashIcon}
-                        label="Delete"
-                        onClick={onDelete}
-                    />
-                )}
-                {/* <RowOption
-                    icon={ArrowUpRightIcon}
-                    label="Open"
-                    onClick={() => {}}
-                /> */}
+                <RowOption
+                    icon={TrashIcon}
+                    label="Delete"
+                    onClick={handleDelete}
+                />
                 <RowOption
                     icon={visible ? EyeSlashIcon : EyeIcon}
                     label={visible ? "Hide" : "Show"}

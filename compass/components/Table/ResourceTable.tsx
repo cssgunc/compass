@@ -143,6 +143,7 @@ export default function ResourceTable({
             columns={columns}
             details={resourceDetails}
             createEndpoint={`/api/resource/create?uuid=${user?.uuid}`}
+            deleteEndpoint={`/api/resource/delete?uuid=${user?.uuid}`}
             isAdmin={user?.role === "ADMIN"}
         />
     );

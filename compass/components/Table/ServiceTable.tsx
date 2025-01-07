@@ -195,6 +195,7 @@ export default function ServiceTable({
             columns={columns}
             details={serviceDetails}
             createEndpoint={`/api/service/create?uuid=${user?.uuid}`}
+            deleteEndpoint={`/api/service/delete?uuid=${user?.uuid}`}
             isAdmin={user?.role === "ADMIN"}
         />
     );
