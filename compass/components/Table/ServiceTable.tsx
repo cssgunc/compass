@@ -39,13 +39,34 @@ export default function ServiceTable({
     ]);
 
     const [requirementPresets, setRequirementPresets] = useState([
-        "ANONYMOUS",
-        "CONFIDENTIAL",
-        "REFERRAL REQUIRED",
-        "SAFETY ASSESSMENT",
-        "INTAKE REQUIRED",
-        "INCOME ELIGIBILITY",
-        "INITIAL ASSESSMENT",
+        "Anonymous",
+        "Confidential",
+        "Referral required",
+        "Safety assessment",
+        "Intake required",
+        "Income eligibility",
+        "Initial assessment",
+        "Insurance accepted",
+        "Open to parents",
+        "18+",
+        "Application required",
+        "Proof of income",
+        "Background check",
+        "Enrollment required",
+        "Registration required",
+        "Parental consent",
+        "Age-appropriate",
+        "Collaborative",
+        "Open to the public",
+        "Registration preferred",
+        "Legal case",
+        "Scheduling required",
+        "Limited availability",
+        "Eligibility assessment",
+        "Pre-registration required",
+        "Commitment to attend",
+        "Training required",
+        "Based on individual needs",
     ]);
 
     const serviceDetails: Details[] = [
@@ -100,6 +121,8 @@ export default function ServiceTable({
                     rowData={info.row.original}
                     setData={setData}
                     details={serviceDetails}
+                    updateRoute={`/api/service/update?uuid=${user?.uuid}`}
+                    isAdmin={user?.role === "ADMIN"}
                 />
             ),
         }),
@@ -137,7 +160,7 @@ export default function ServiceTable({
                 </>
             ),
             cell: (info) => (
-                <div className="flex flex-wrap gap-2 items-center px-2">
+                <div className="flex flex-wrap gap-2 items-center p-2">
                     {info.getValue().length > 0 ? (
                         info.getValue().map((tag: string, index: number) => {
                             return <Tag key={index}>{tag}</Tag>;

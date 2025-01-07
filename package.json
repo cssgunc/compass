@@ -1,21 +1,22 @@
 {
   "devDependencies": {
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.2"
+    "lint-staged": "^15.2.2",
+    "tailwind-scrollbar": "^4.0.0-beta.0"
   },
-    "scripts": {
-      "precommit": "lint-staged"
-    },
-    "lint-staged": {
-      "*.ts": [
-        "cd compass",
-        "prettier --write",
-        "git add"
-      ],
-      "*.tsx": [
-        "cd compass",
-        "prettier --write",
-        "git add"
-      ]
-    }
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "cd compass",
+      "prettier --write",
+      "git add"
+    ],
+    "*.tsx": [
+      "cd compass",
+      "prettier --write",
+      "git add"
+    ]
+  }
 }

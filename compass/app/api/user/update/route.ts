@@ -1,36 +1,36 @@
 import { NextResponse } from "next/server";
-import Resource from "@/utils/models/Resource";
+import User from "@/utils/models/User";
 
 export async function POST(request: Request) {
-    const apiEndpoint = `${process.env.NEXT_PUBLIC_API_HOST}/api/resource`;
+    const apiEndpoint = `${process.env.NEXT_PUBLIC_API_HOST}/api/user`;
 
     try {
-        const resourceData = await request.json();
+        const userData = await request.json();
 
-        console.log("RESOURCE DATA", JSON.stringify(resourceData));
+        console.log("USER DATA", JSON.stringify(userData));
 
         const { searchParams } = new URL(request.url);
         const uuid = searchParams.get("uuid");
 
         // Send the POST request to the backend
         const response = await fetch(`${apiEndpoint}?uuid=${uuid}`, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(resourceData),
+            body: JSON.stringify(userData),
         });
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const createdResource: Resource = await response.json();
-        return NextResponse.json(createdResource, { status: response.status });
+        const createdUser: User = await response.json();
+        return NextResponse.json(createdUser, { status: response.status });
     } catch (error) {
-        console.error("Error creating resource:", error);
+        console.error("Error creating user:", error);
         return NextResponse.json(
-            { error: "Failed to create resource" },
+            { error: "Failed to create user" },
             { status: 500 }
         );
     }

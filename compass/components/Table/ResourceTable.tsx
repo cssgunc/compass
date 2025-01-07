@@ -81,6 +81,7 @@ export default function ResourceTable({
                     setData={setData}
                     details={resourceDetails}
                     isAdmin={user?.role === "ADMIN"}
+                    updateRoute={`/api/resource/update?uuid=${user?.uuid}`}
                 />
             ),
         }),

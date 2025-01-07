@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import Resource from "@/utils/models/Resource";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     const apiEndpoint = `${process.env.NEXT_PUBLIC_API_HOST}/api/resource`;
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
         // Send the POST request to the backend
         const response = await fetch(`${apiEndpoint}?uuid=${uuid}`, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -25,12 +25,12 @@ export async function POST(request: Request) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const createdResource: Resource = await response.json();
-        return NextResponse.json(createdResource, { status: response.status });
+        const resource: Resource = await response.json();
+        return NextResponse.json(resource, { status: response.status });
     } catch (error) {
-        console.error("Error creating resource:", error);
+        console.error("Error creating user:", error);
         return NextResponse.json(
-            { error: "Failed to create resource" },
+            { error: "Failed to update resource" },
             { status: 500 }
         );
     }

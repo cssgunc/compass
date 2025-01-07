@@ -81,6 +81,8 @@ export default function Table<T extends DataPoint>({
     createEndpoint,
     isAdmin = false,
 }: TableProps<T>) {
+    console.log(data);
+
     const columnHelper = createColumnHelper<T>();
 
     const createRow = async (newItem: any) => {
