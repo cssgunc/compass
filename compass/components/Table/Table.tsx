@@ -97,9 +97,9 @@ export default function Table<T extends DataPoint>({
         return response;
     };
 
-    // /** Sorting function based on visibility */
-    // const visibilitySort = (a: T, b: T) =>
-    //     a.visible === b.visible ? 0 : a.visible ? -1 : 1;
+    /** Sorting function based on visibility */
+    const visibilitySort = (a: T, b: T) =>
+        a.visible === b.visible ? 0 : a.visible ? -1 : 1;
 
     // // Sort data on load
     // useEffect(() => {
@@ -115,36 +115,43 @@ export default function Table<T extends DataPoint>({
     //     );
     // };
 
-    // const hideData = (dataId: number) => {
-    //     console.log(`Toggling visibility for data with ID: ${dataId}`);
-    //     setData((currentData) => {
-    //         const newData = currentData
-    //             .map((data) =>
-    //                 data.id === dataId
-    //                     ? { ...data, visible: !data.visible }
-    //                     : data
-    //             )
-    //             .sort(visibilitySort);
+    const hideData = (dataId: number) => {
+        console.log(`Toggling visibility for data with ID: ${dataId}`);
+        setData((currentData) => {
+            const newData = currentData
+                .map((data) =>
+                    data.id === dataId
+                        ? { ...data, visible: !data.visible }
+                        : data
+                )
+                .sort((a, b) => {
+                    // First sort by visibility
+                    const visibilityResult = visibilitySort(a, b);
+                    if (visibilityResult !== 0) return visibilityResult;
+                    // Then sort by id
+                    return a.id - b.id;
+                });
 
-    //         console.log(newData);
-    //         return newData;
-    //     });
-    // };
+            console.log(newData);
+            return newData;
+        });
+    };
 
     // Add data manipulation options to the first column
-    columns.unshift(
-        columnHelper.display({
-            id: "options",
-            cell: (props) => (
-                <RowOptionMenu
-                    onDelete={() => {}}
-                    onHide={() => {}}
-                    // onDelete={() => deleteData(props.row.original.id)}
-                    // onHide={() => hideData(props.row.original.id)}
-                />
-            ),
-        })
-    );
+    if (isAdmin) {
+        columns.unshift(
+            columnHelper.display({
+                id: "options",
+                cell: (props) => (
+                    <RowOptionMenu
+                        onDelete={() => console.log("delete")}
+                        onHide={() => hideData(props.row.original.id)}
+                        visible={props.row.original.visible}
+                    />
+                ),
+            })
+        );
+    }
 
     // Searching
     const [query, setQuery] = useState("");
@@ -186,7 +193,12 @@ export default function Table<T extends DataPoint>({
                                     scope="col"
                                     className={
                                         "p-2 border-gray-200 border-y font-medium " +
-                                        (1 < i && i < columns.length - 1
+                                        ((!isAdmin &&
+                                            0 < i &&
+                                            i < columns.length - 1) ||
+                                        (isAdmin &&
+                                            1 < i &&
+                                            i < columns.length - 1)
                                             ? "border-x"
                                             : "")
                                     }
@@ -215,9 +227,11 @@ export default function Table<T extends DataPoint>({
                                 {row.getVisibleCells().map((cell, i) => (
                                     <td
                                         key={cell.id}
-                                        className={
-                                            "[&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"
-                                        }
+                                        className={`relative first:text-left first:px-0 last:border-none ${
+                                            isAdmin
+                                                ? "[&:nth-child(n+3)]"
+                                                : "[&:nth-child(n+2)]"
+                                        }:border-x`}
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,
