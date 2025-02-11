@@ -76,6 +76,7 @@ NEXT_PUBLIC_HOST=http://localhost:3000
 Open a new terminal and run this script in sequence to setup the dependencies and database
 
 ```
+chmod +x ./start.sh
 ./start.sh
 ```
 
