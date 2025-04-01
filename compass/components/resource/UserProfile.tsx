@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { signOut } from "@/app/auth/actions";
+import Link from "next/link";
 
 interface UserProfileProps {
     name: string;
@@ -24,6 +25,12 @@ export const UserProfile = ({ name, email, setLoading }: UserProfileProps) => {
                 </span>
                 <span className="text-xs text-gray-500">{email}</span>
             </div>
+            <Link
+                href="/profile/edit"
+                className="text-purple-600 font-semibold text-xs hover:underline mt-1"
+            >
+                Edit profile
+            </Link>
             <button
                 onClick={(event) => handleClick(event, setLoading)}
                 className="text-red-600 font-semibold text-xs hover:underline mt-1"
