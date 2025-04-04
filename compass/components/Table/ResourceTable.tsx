@@ -118,6 +118,9 @@ export default function ResourceTable({
                     </Tag>
                 </div>
             ),
+            meta: {
+                filterVariant: "select",
+            }
         }),
         columnHelper.accessor("summary", {
             header: () => (

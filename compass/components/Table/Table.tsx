@@ -5,17 +5,13 @@ import {
     getCoreRowModel,
     flexRender,
     createColumnHelper,
+    getFilteredRowModel,
+    ColumnFiltersState,
+    getSortedRowModel,
+    SortingState,
 } from "@tanstack/react-table";
-import {
-    ChangeEvent,
-    useState,
-    useEffect,
-    Key,
-    Dispatch,
-    SetStateAction,
-} from "react";
+import { ChangeEvent, useState, Dispatch, SetStateAction } from "react";
 import { TableAction } from "./TableAction";
-import { PlusIcon } from "@heroicons/react/24/solid";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { RowOptionMenu } from "./RowOptionMenu";
 import DataPoint from "@/utils/models/DataPoint";
@@ -81,7 +77,8 @@ export default function Table<T extends DataPoint>({
     createEndpoint,
     isAdmin = false,
 }: TableProps<T>) {
-    console.log(data);
+    const [filters, setFilters] = useState<ColumnFiltersState>([]);
+    const [sorting, setSorting] = useState<SortingState>([]);
 
     const columnHelper = createColumnHelper<T>();
 
@@ -166,10 +163,16 @@ export default function Table<T extends DataPoint>({
         },
         state: {
             globalFilter: query,
+            columnFilters: filters,
+            sorting,
         },
         onGlobalFilterChange: setQuery,
         globalFilterFn: fuzzyFilter,
         getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        onColumnFiltersChange: setFilters,
+        onSortingChange: setSorting,
     });
 
     return (
@@ -185,12 +188,24 @@ export default function Table<T extends DataPoint>({
                                 <th
                                     scope="col"
                                     className={
-                                        "p-2 border-gray-200 border-y font-medium " +
+                                        "p-2 border-gray-200 border-y font-medium cursor-pointer select-none" +
                                         (1 < i && i < columns.length - 1
                                             ? "border-x"
                                             : "")
                                     }
                                     key={header.id}
+                                    onClick={header.column.getToggleSortingHandler()}
+                                    title={
+                                        header.column.getCanSort()
+                                            ? header.column.getNextSortingOrder() ===
+                                              "asc"
+                                                ? "Sort ascending"
+                                                : header.column.getNextSortingOrder() ===
+                                                  "desc"
+                                                ? "Sort descending"
+                                                : "Clear sort"
+                                            : undefined
+                                    }
                                 >
                                     {header.isPlaceholder
                                         ? null
@@ -198,6 +213,14 @@ export default function Table<T extends DataPoint>({
                                               header.column.columnDef.header,
                                               header.getContext()
                                           )}
+                                    {{
+                                        asc: "🔼",
+                                        desc: "🔽",
+                                    }[header.column.getIsSorted() as string] ??
+                                        null}
+                                    {header.column.getCanFilter() && (
+                                        <Filter column={header.column} />
+                                    )}
                                 </th>
                             ))}
                         </tr>
@@ -263,6 +286,22 @@ export default function Table<T extends DataPoint>({
                     )}
                 </tfoot>
             </table>
+        </div>
+    );
+}
+
+function Filter({ column }: { column: any }) {
+    return (
+        <div>
+            <input
+                type="text"
+                value={(column.getFilterValue() ?? "") as string}
+                onChange={(e) => {
+                    column.setFilterValue(e.target.value);
+                }}
+                placeholder="Search..."
+                className="border border-gray-300 rounded p-1"
+            />
         </div>
     );
 }

@@ -1,7 +1,7 @@
 // TableAction.tsx
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { ChangeEventHandler, FunctionComponent, useRef, useState } from "react";
-import { FilterBox } from "../FilterBox";
+import { FilterBox } from "../FilterBox/FilterBox";
 
 type TableActionProps = {
     query: string;
