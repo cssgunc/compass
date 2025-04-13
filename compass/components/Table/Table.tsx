@@ -11,12 +11,13 @@ import {
     SortingState,
 } from "@tanstack/react-table";
 import { ChangeEvent, useState, Dispatch, SetStateAction } from "react";
-import { TableAction } from "./TableAction";
-import { rankItem } from "@tanstack/match-sorter-utils";
-import { RowOptionMenu } from "./RowOptionMenu";
+import { TableSearch } from "@/components/Table/TableSearch";
+import { RowOptionMenu } from "@/components/Table/RowOptionMenu";
+import { ColumnHeader } from "@/components/Table/ColumnHeader";
+import CreateDrawer from "@/components/Drawer/CreateDrawer";
+import { Details } from "@/components/Drawer/Drawer";
 import DataPoint from "@/utils/models/DataPoint";
-import CreateDrawer from "../Drawer/CreateDrawer";
-import { Details } from "../Drawer/Drawer";
+import { rankItem } from "@tanstack/match-sorter-utils";
 
 type TableProps<T extends DataPoint> = {
     data: T[];
@@ -150,10 +151,6 @@ export default function Table<T extends DataPoint>({
         setQuery(String(target.value));
     };
 
-    // TODO: Filtering
-
-    // TODO: Sorting
-
     // Define Tanstack table
     const table = useReactTable({
         columns,
@@ -178,50 +175,14 @@ export default function Table<T extends DataPoint>({
     return (
         <div className="flex flex-col">
             <div className="flex flex-row justify-end">
-                <TableAction query={query} handleChange={handleSearchChange} />
+                <TableSearch query={query} handleChange={handleSearchChange} />
             </div>
             <table className="w-full text-xs text-left rtl:text-right">
                 <thead className="text-xs text-gray-500 capitalize">
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header, i) => (
-                                <th
-                                    scope="col"
-                                    className={
-                                        "p-2 border-gray-200 border-y font-medium cursor-pointer select-none" +
-                                        (1 < i && i < columns.length - 1
-                                            ? "border-x"
-                                            : "")
-                                    }
-                                    key={header.id}
-                                    onClick={header.column.getToggleSortingHandler()}
-                                    title={
-                                        header.column.getCanSort()
-                                            ? header.column.getNextSortingOrder() ===
-                                              "asc"
-                                                ? "Sort ascending"
-                                                : header.column.getNextSortingOrder() ===
-                                                  "desc"
-                                                ? "Sort descending"
-                                                : "Clear sort"
-                                            : undefined
-                                    }
-                                >
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                              header.column.columnDef.header,
-                                              header.getContext()
-                                          )}
-                                    {{
-                                        asc: "🔼",
-                                        desc: "🔽",
-                                    }[header.column.getIsSorted() as string] ??
-                                        null}
-                                    {header.column.getCanFilter() && (
-                                        <Filter column={header.column} />
-                                    )}
-                                </th>
+                                <ColumnHeader header={header} key={header.id} />
                             ))}
                         </tr>
                     ))}
@@ -286,22 +247,6 @@ export default function Table<T extends DataPoint>({
                     )}
                 </tfoot>
             </table>
-        </div>
-    );
-}
-
-function Filter({ column }: { column: any }) {
-    return (
-        <div>
-            <input
-                type="text"
-                value={(column.getFilterValue() ?? "") as string}
-                onChange={(e) => {
-                    column.setFilterValue(e.target.value);
-                }}
-                placeholder="Search..."
-                className="border border-gray-300 rounded p-1"
-            />
         </div>
     );
 }
