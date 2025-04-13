@@ -107,7 +107,7 @@ export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
                 {column.getCanFilter() && dropdownType === "menu" && (
                     <div
                         ref={menuRef}
-                        className="absolute -top-2 left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10"
+                        className="absolute flex flex-col justify-center items-center -top-2 left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10"
                     >
                         <button
                             className="flex items-center w-full text-left px-4 py-2 text-xs hover:bg-gray-100"
@@ -135,6 +135,7 @@ export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
                             <span>Sort Descending</span>
                             {sortDirection === "desc" && <DropdownCheckIcon />}
                         </button>
+                        <hr className="w-40" />
                         <button
                             className="flex items-center w-full text-left px-4 py-2 text-xs hover:bg-gray-100"
                             onClick={() => {
