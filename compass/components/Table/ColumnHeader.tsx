@@ -29,9 +29,7 @@ export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
     );
 
     const isFiltered =
-        column.getFilterValue() !== undefined &&
-        column.getFilterValue() !== null &&
-        column.getFilterValue() !== "";
+        column.getFilterValue() != null && column.getFilterValue() !== "";
 
     const headerRef = useRef<HTMLTableCellElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -92,12 +90,16 @@ export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
                                 header.getContext()
                             )}
                             {/* Choose the icon based on sort direction */}
-                            {{
-                                asc: <ArrowUpIcon className="w-3 h-3 ml-1" />,
-                                desc: (
-                                    <ArrowDownIcon className="w-3 h-3 ml-1" />
-                                ),
-                            }[column.getIsSorted() as string] ?? null}
+                            {
+                                {
+                                    asc: (
+                                        <ArrowUpIcon className="w-3 h-3 ml-1" />
+                                    ),
+                                    desc: (
+                                        <ArrowDownIcon className="w-3 h-3 ml-1" />
+                                    ),
+                                }[column.getIsSorted() as "asc" | "desc"]
+                            }
                         </div>
                     </div>
                 )}
@@ -137,26 +139,23 @@ export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
                         </button>
                         <hr className="w-40" />
                         <button
-                            className="flex items-center w-full text-left px-4 py-2 text-xs hover:bg-gray-100"
+                            className={`flex items-center w-full text-left px-4 py-2 text-xs hover:bg-gray-100 ${
+                                isFiltered ? "text-red-400" : ""
+                            }`}
                             onClick={() => {
                                 column.getCanFilter() &&
                                     column.setFilterValue("");
                                 setDropdownType(isFiltered ? null : "filter");
                             }}
                         >
+                            <FunnelIcon className="w-4 h-4 mr-2" />
                             {isFiltered ? (
                                 <>
-                                    <FunnelIcon className="`w-4 h-4 mr-2 text-red-400" />
-                                    <span className="text-red-400">
-                                        Clear Filter
-                                    </span>
-                                    <XMarkIcon className="w-4 h-4 ml-auto text-red-400" />
+                                    <span>Clear Filter</span>
+                                    <XMarkIcon className="w-4 h-4 ml-auto" />
                                 </>
                             ) : (
-                                <>
-                                    <FunnelIcon className="w-4 h-4 mr-2" />
-                                    <span>Add Filter</span>
-                                </>
+                                <span>Add Filter</span>
                             )}
                         </button>
                     </div>
@@ -177,7 +176,7 @@ export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
                                 onChange={(e) => {
                                     column.setFilterValue(e.target.value);
                                 }}
-                                placeholder="Filter..."
+                                placeholder="Type a value…"
                                 className="border border-gray-300 rounded p-1"
                             />
                         </div>
