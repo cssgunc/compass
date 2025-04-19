@@ -83,7 +83,7 @@ export default function Table<T extends DataPoint>({
     deleteEndpoint,
     isAdmin = false,
 }: TableProps<T>) {
-    console.log(data);
+    const offset = isAdmin ? 1 : 0;
 
     const columnHelper = createColumnHelper<T>();
 
@@ -222,12 +222,7 @@ export default function Table<T extends DataPoint>({
                                     scope="col"
                                     className={
                                         "p-2 border-gray-200 border-y font-medium " +
-                                        ((!isAdmin &&
-                                            0 < i &&
-                                            i < columns.length - 1) ||
-                                        (isAdmin &&
-                                            1 < i &&
-                                            i < columns.length - 1)
+                                        (0 + offset < i && i < columns.length - 1
                                             ? "border-x"
                                             : "")
                                     }
@@ -236,9 +231,9 @@ export default function Table<T extends DataPoint>({
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
-                                              header.column.columnDef.header,
-                                              header.getContext()
-                                          )}
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
                                 </th>
                             ))}
                         </tr>
@@ -248,19 +243,16 @@ export default function Table<T extends DataPoint>({
                     {table.getRowModel().rows.map((row) => {
                         // Individual row
                         const isDataVisible = row.original.visible;
-                        const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${
-                            !isDataVisible ? "bg-gray-200 text-gray-500" : ""
-                        }`;
+                        const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isDataVisible ? "bg-gray-200 text-gray-500" : ""
+                            }`;
                         return (
                             <tr className={rowClassNames} key={row.id}>
                                 {row.getVisibleCells().map((cell, i) => (
                                     <td
                                         key={cell.id}
-                                        className={`relative first:text-left first:px-0 last:border-none ${
-                                            isAdmin
-                                                ? "[&:nth-child(n+3)]"
-                                                : "[&:nth-child(n+2)]"
-                                        }:border-x`}
+                                        className={
+                                            `[&:nth-child(n+${2 + offset})]:border-x relative first:text-left first:px-0 last:border-none`
+                                        }
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,
@@ -291,10 +283,13 @@ export default function Table<T extends DataPoint>({
                                         createRow(newItem).then((response) => {
                                             if (response.ok) {
                                                 newItem.visible = true;
-                                                setData((prev) => [
-                                                    ...prev,
-                                                    newItem,
-                                                ]);
+                                                response.json().then((data) => {
+                                                    newItem.id = data.id;
+                                                    setData((prev) => [
+                                                        ...prev,
+                                                        newItem,
+                                                    ]);
+                                                });
                                             }
                                         });
 
