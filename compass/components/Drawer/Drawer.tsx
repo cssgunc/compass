@@ -1,4 +1,4 @@
-import { Dispatch, FunctionComponent, ReactNode, SetStateAction } from "react";
+import { Dispatch, FunctionComponent, ReactNode, SetStateAction, useEffect, useRef } from "react";
 import React, { useState } from "react";
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/solid";
 import { StarIcon as SolidStarIcon, UserIcon } from "@heroicons/react/24/solid";
@@ -47,6 +47,47 @@ const Drawer: FunctionComponent<DrawerProps> = ({
     const [isFull, setIsFull] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
     const [tempRowContent, setTempRowContent] = useState(rowContent);
+    const drawerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (drawerRef.current && !drawerRef.current.contains(event.target as Node)) {
+                if (setRowContent && isOpen) {
+                    // Check if any values have changed
+                    const hasChanges = Object.keys(tempRowContent).some(
+                        (key) => tempRowContent[key] !== rowContent[key]
+                    );
+
+                    if (hasChanges) {
+                        handleUpdate().then((response) => {
+                            if (response.ok) {
+                                setRowContent((prev: any) => {
+                                    return prev.map((row: any) => {
+                                        if (row.id === tempRowContent.id) {
+                                            return tempRowContent;
+                                        }
+                                        return row;
+                                    });
+                                });
+                            }
+                        });
+                    }
+                }
+                setIsOpen(false);
+                if (isFull) {
+                    setIsFull(false);
+                }
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen, tempRowContent, rowContent]);
 
     const handleTempRowContentChangeHTML = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -114,9 +155,8 @@ const Drawer: FunctionComponent<DrawerProps> = ({
 
     const toggleFavorite = () => setIsFavorite(!isFavorite);
 
-    const drawerClassName = `fixed top-0 right-0 w-1/2 h-full bg-white transform ease-in-out duration-300 z-20 ${
-        isOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
-    } ${isFull ? "w-full" : "w-1/2"}`;
+    const drawerClassName = `fixed top-0 right-0 w-1/2 h-full bg-white transform ease-in-out duration-300 z-20 ${isOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
+        } ${isFull ? "w-full" : "w-1/2"}`;
 
     const iconComponent = isFull ? (
         <ArrowsPointingInIcon className="h-5 w-5" />
@@ -140,7 +180,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
             >
                 Open
             </button>
-            <div className={drawerClassName}>
+            <div ref={drawerRef} className={drawerClassName}>
                 <div className="flex items-center justify-between p-4">
                     <div className="flex flex-row items-center justify-between space-x-2">
                         <span className="h-5 text-purple-200 w-5">
@@ -186,7 +226,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                     <TagsInput
                                                         presetValue={
                                                             typeof value ===
-                                                            "string"
+                                                                "string"
                                                                 ? [value]
                                                                 : value || []
                                                         }
@@ -196,7 +236,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                         }
                                                         setPresetOptions={
                                                             detail.presetOptionsSetter ||
-                                                            (() => {})
+                                                            (() => { })
                                                         }
                                                         singleValue={true}
                                                         onTagsChange={(
@@ -236,7 +276,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                     <TagsInput
                                                         presetValue={
                                                             typeof value ===
-                                                            "string"
+                                                                "string"
                                                                 ? [value]
                                                                 : value || []
                                                         }
@@ -246,7 +286,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                         }
                                                         setPresetOptions={
                                                             detail.presetOptionsSetter ||
-                                                            (() => {})
+                                                            (() => { })
                                                         }
                                                         onTagsChange={(
                                                             tags: Set<string>
@@ -260,7 +300,7 @@ const Drawer: FunctionComponent<DrawerProps> = ({
                                                 ) : (
                                                     <div className="flex flex-wrap gap-2">
                                                         {value &&
-                                                        value.length > 0 ? (
+                                                            value.length > 0 ? (
                                                             value.map(
                                                                 (
                                                                     tag: string,
