@@ -27,7 +27,7 @@ export function RowOpenAction<T extends DataPoint>({
     updateRoute,
 }: RowOpenActionProps<T>) {
     return (
-        <div className="font-semibold group flex flex-row items-center justify-between pr-2">
+        <div className="font-semibold group flex flex-row items-center justify-between px-2">
             {title}
             <span>
                 <Drawer

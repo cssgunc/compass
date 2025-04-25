@@ -60,12 +60,12 @@ def update(
     return resource_svc.update(subject, resource)
 
 
-@api.delete("", response_model=None, tags=["Resource"])
+@api.delete("", response_model=dict, tags=["Resource"])
 def delete(
     uuid: str,
-    resource: Resource,
+    id: int,
     user_svc: UserService = Depends(),
     resource_svc: ResourceService = Depends(),
 ):
     subject = user_svc.get_user_by_uuid(uuid)
-    resource_svc.delete(subject, resource)
+    return resource_svc.delete(subject, id)

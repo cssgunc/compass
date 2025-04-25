@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from ..services import UserService
 from ..models.user_model import User, UserTypeEnum
 
@@ -46,3 +46,14 @@ def update_user(uuid: str, user: User, user_svc: UserService = Depends()):
         raise Exception(f"Insufficient permissions for user {subject.uuid}")
 
     return user_svc.update(user)
+
+
+@api.delete("/", response_model=dict, tags=["Users"])
+def delete_user(uuid: str, id: int, user_svc: UserService = Depends()):
+    subject = user_svc.get_user_by_uuid(uuid)
+
+    try:
+        user_svc.delete_by_id(id, subject)
+        return {"message": "User deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

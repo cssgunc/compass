@@ -28,6 +28,7 @@ type TableProps<T extends DataPoint> = {
     columns: ColumnDef<T, any>[];
     details: Details[];
     createEndpoint: string;
+    deleteEndpoint: string;
     isAdmin?: boolean;
 };
 
@@ -79,11 +80,23 @@ export default function Table<T extends DataPoint>({
     columns,
     details,
     createEndpoint,
+    deleteEndpoint,
     isAdmin = false,
 }: TableProps<T>) {
-    console.log(data);
+    const offset = isAdmin ? 1 : 0;
 
     const columnHelper = createColumnHelper<T>();
+
+    const deleteRow = async (id: number) => {
+        const response = await fetch(`${deleteEndpoint}&id=${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        return response.ok;
+    };
 
     const createRow = async (newItem: any) => {
         const response = await fetch(createEndpoint, {
@@ -97,9 +110,9 @@ export default function Table<T extends DataPoint>({
         return response;
     };
 
-    // /** Sorting function based on visibility */
-    // const visibilitySort = (a: T, b: T) =>
-    //     a.visible === b.visible ? 0 : a.visible ? -1 : 1;
+    /** Sorting function based on visibility */
+    const visibilitySort = (a: T, b: T) =>
+        a.visible === b.visible ? 0 : a.visible ? -1 : 1;
 
     // // Sort data on load
     // useEffect(() => {
@@ -115,36 +128,59 @@ export default function Table<T extends DataPoint>({
     //     );
     // };
 
-    // const hideData = (dataId: number) => {
-    //     console.log(`Toggling visibility for data with ID: ${dataId}`);
-    //     setData((currentData) => {
-    //         const newData = currentData
-    //             .map((data) =>
-    //                 data.id === dataId
-    //                     ? { ...data, visible: !data.visible }
-    //                     : data
-    //             )
-    //             .sort(visibilitySort);
+    const hideData = (dataId: number) => {
+        console.log(`Toggling visibility for data with ID: ${dataId}`);
+        setData((currentData) => {
+            const newData = currentData
+                .map((data) =>
+                    data.id === dataId
+                        ? { ...data, visible: !data.visible }
+                        : data
+                )
+                .sort((a, b) => {
+                    // First sort by visibility
+                    const visibilityResult = visibilitySort(a, b);
+                    if (visibilityResult !== 0) return visibilityResult;
+                    // Then sort by id
+                    return a.id - b.id;
+                });
 
-    //         console.log(newData);
-    //         return newData;
-    //     });
-    // };
+            console.log(newData);
+            return newData;
+        });
+    };
 
     // Add data manipulation options to the first column
-    columns.unshift(
-        columnHelper.display({
-            id: "options",
-            cell: (props) => (
-                <RowOptionMenu
-                    onDelete={() => {}}
-                    onHide={() => {}}
-                    // onDelete={() => deleteData(props.row.original.id)}
-                    // onHide={() => hideData(props.row.original.id)}
-                />
-            ),
-        })
-    );
+    if (isAdmin) {
+        columns.unshift(
+            columnHelper.display({
+                id: "options",
+                cell: (props) => (
+                    <RowOptionMenu
+                        onDelete={() => {
+                            deleteRow(props.row.original.id).then(
+                                (response) => {
+                                    if (response) {
+                                        setData((prev) =>
+                                            prev.filter(
+                                                (data) =>
+                                                    data.id !==
+                                                    props.row.original.id
+                                            )
+                                        );
+                                    } else {
+                                        alert("Failed to delete row!");
+                                    }
+                                }
+                            );
+                        }}
+                        onHide={() => hideData(props.row.original.id)}
+                        visible={props.row.original.visible}
+                    />
+                ),
+            })
+        );
+    }
 
     // Searching
     const [query, setQuery] = useState("");
@@ -186,7 +222,7 @@ export default function Table<T extends DataPoint>({
                                     scope="col"
                                     className={
                                         "p-2 border-gray-200 border-y font-medium " +
-                                        (1 < i && i < columns.length - 1
+                                        (0 + offset < i && i < columns.length - 1
                                             ? "border-x"
                                             : "")
                                     }
@@ -195,9 +231,9 @@ export default function Table<T extends DataPoint>({
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
-                                              header.column.columnDef.header,
-                                              header.getContext()
-                                          )}
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
                                 </th>
                             ))}
                         </tr>
@@ -207,16 +243,15 @@ export default function Table<T extends DataPoint>({
                     {table.getRowModel().rows.map((row) => {
                         // Individual row
                         const isDataVisible = row.original.visible;
-                        const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${
-                            !isDataVisible ? "bg-gray-200 text-gray-500" : ""
-                        }`;
+                        const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isDataVisible ? "bg-gray-200 text-gray-500" : ""
+                            }`;
                         return (
                             <tr className={rowClassNames} key={row.id}>
                                 {row.getVisibleCells().map((cell, i) => (
                                     <td
                                         key={cell.id}
                                         className={
-                                            "[&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"
+                                            `[&:nth-child(n+${2 + offset})]:border-x relative first:text-left first:px-0 last:border-none`
                                         }
                                     >
                                         {flexRender(
@@ -248,10 +283,13 @@ export default function Table<T extends DataPoint>({
                                         createRow(newItem).then((response) => {
                                             if (response.ok) {
                                                 newItem.visible = true;
-                                                setData((prev) => [
-                                                    ...prev,
-                                                    newItem,
-                                                ]);
+                                                response.json().then((data) => {
+                                                    newItem.id = data.id;
+                                                    setData((prev) => [
+                                                        ...prev,
+                                                        newItem,
+                                                    ]);
+                                                });
                                             }
                                         });
 
