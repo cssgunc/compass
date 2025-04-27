@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from ..entities.user_entity import UserEntity
 from ..models.user_model import User
 from sqlalchemy import select
+from ..models.enum_for_models import UserTypeEnum
 
 
 class UserService:
@@ -86,6 +87,22 @@ class UserService:
         if obj is None:
             raise Exception(f"No matching user found")
 
+        self._session.delete(obj)
+        self._session.commit()
+
+    def delete_by_id(self, id: int, user: User) -> None:
+        """
+        Delete a user by id
+
+        Args: the id of the user to delete
+
+        Returns: none
+        """
+
+        if user.role != UserTypeEnum.ADMIN:
+            raise Exception(f"Insufficient permissions for user {user.uuid}")
+
+        obj = self._session.get(UserEntity, id)
         self._session.delete(obj)
         self._session.commit()
 

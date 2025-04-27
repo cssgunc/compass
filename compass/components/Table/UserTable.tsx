@@ -155,6 +155,7 @@ export default function UserTable({ data, setData, user }: UserTableProps) {
             setFilterFn={setFilterFn}
             details={userDetails}
             createEndpoint={`/api/user/create?uuid=${user?.uuid}`}
+            deleteEndpoint={`/api/user/delete?uuid=${user?.uuid}`}
             isAdmin={user?.role === "ADMIN"}
         />
     );

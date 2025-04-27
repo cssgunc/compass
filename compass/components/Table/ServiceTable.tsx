@@ -212,6 +212,7 @@ export default function ServiceTable({
             setFilterFn={setFilterFn}
             details={serviceDetails}
             createEndpoint={`/api/service/create?uuid=${user?.uuid}`}
+            deleteEndpoint={`/api/service/delete?uuid=${user?.uuid}`}
             isAdmin={user?.role === "ADMIN"}
         />
     );

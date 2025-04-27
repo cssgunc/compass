@@ -90,12 +90,12 @@ class ServiceService:
 
         return entity.to_model()
 
-    def delete(self, subject: User, service: Service) -> None:
+    def delete(self, subject: User, id: int) -> None:
         """Deletes a service from the table."""
         if subject.role != UserTypeEnum.ADMIN:
             raise ProgramNotAssignedException(f"User is not {UserTypeEnum.ADMIN}")
 
-        query = select(ServiceEntity).where(ServiceEntity.id == service.id)
+        query = select(ServiceEntity).where(ServiceEntity.id == id)
         entity = self._session.scalars(query).one_or_none()
 
         if entity is None:
@@ -105,3 +105,5 @@ class ServiceService:
 
         self._session.delete(entity)
         self._session.commit()
+
+        return {"message": "Service deleted successfully"}
