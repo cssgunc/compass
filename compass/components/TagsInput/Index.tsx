@@ -3,6 +3,7 @@ import "tailwindcss/tailwind.css";
 import { TagsArray } from "./TagsArray";
 import { TagDropdown } from "./TagDropdown";
 import { CreateNewTagAction } from "./CreateNewTagAction";
+import { FilterFn } from "../Table/FilterDropdown";
 
 interface TagsInputProps {
     presetOptions: string[];
@@ -10,6 +11,8 @@ interface TagsInputProps {
     setPresetOptions: Dispatch<SetStateAction<string[]>>;
     onTagsChange?: (tags: Set<string>) => void;
     singleValue?: boolean;
+    cellSelectedPreset?: boolean;
+    filterState?: [FilterFn | null, Dispatch<SetStateAction<FilterFn | null>>];
 }
 
 const TagsInput: React.FC<TagsInputProps> = ({
@@ -18,9 +21,11 @@ const TagsInput: React.FC<TagsInputProps> = ({
     setPresetOptions,
     onTagsChange,
     singleValue = false,
+    cellSelectedPreset = false,
+    filterState,
 }) => {
     const [inputValue, setInputValue] = useState("");
-    const [cellSelected, setCellSelected] = useState(false);
+    const [cellSelected, setCellSelected] = useState(cellSelectedPreset);
 
     // TODO: Add tags to the database and remove the presetValue and lowercasing
     const [tags, setTags] = useState<Set<string>>(new Set(presetValue));
@@ -138,19 +143,42 @@ const TagsInput: React.FC<TagsInputProps> = ({
         }
     };
 
+    const FilterSelect = () => {
+        const [filter, setFilter] = filterState ?? [null, null];
+        return (
+            filter != null &&
+            setFilter != null && (
+                    <select
+                        value={filter}
+                        onChange={(e) => {
+                            setFilter(e.target.value as FilterFn);
+                        }}
+                        className="cursor-pointer bg-inherit rounded py-0 px-1"
+                    >
+                        <option value="arrIncludesSome">Includes</option>
+                        <option value="arrIncludesAll">Includes All</option>
+                    </select>
+            )
+        );
+    };
+
     return (
         <div className="cursor-pointer" onClick={handleClick}>
             {!cellSelected ? (
-                <TagsArray
-                    active={true}
-                    handleDelete={handleDeleteTag}
-                    tags={tags}
-                />
+                <>
+                    <FilterSelect />
+                    <TagsArray
+                        active={true}
+                        handleDelete={handleDeleteTag}
+                        tags={tags}
+                    />
+                </>
             ) : (
                 <div ref={dropdown}>
                     <div className="absolute w-64 z-50 ml-1 mt-5">
                         <div className="rounded-md border border-gray-200 shadow">
-                            <div className="flex flex-wrap rounded-t-md items-center gap-2 bg-gray-50 p-2">
+                            <div className="flex flex-col flex-wrap rounded-t-md items-start justify-center gap-2 bg-gray-50 p-2">
+                                <FilterSelect />
                                 <TagsArray
                                     handleDelete={handleDeleteTag}
                                     active

@@ -5,27 +5,26 @@ import {
     getCoreRowModel,
     flexRender,
     createColumnHelper,
+    getFilteredRowModel,
+    ColumnFiltersState,
+    getSortedRowModel,
+    SortingState,
 } from "@tanstack/react-table";
-import {
-    ChangeEvent,
-    useState,
-    useEffect,
-    Key,
-    Dispatch,
-    SetStateAction,
-} from "react";
-import { TableAction } from "./TableAction";
-import { PlusIcon } from "@heroicons/react/24/solid";
-import { rankItem } from "@tanstack/match-sorter-utils";
-import { RowOptionMenu } from "./RowOptionMenu";
+import { ChangeEvent, useState, Dispatch, SetStateAction } from "react";
+import { TableSearch } from "@/components/Table/TableSearch";
+import { RowOptionMenu } from "@/components/Table/RowOptionMenu";
+import { ColumnHeader } from "@/components/Table/ColumnHeader";
+import CreateDrawer from "@/components/Drawer/CreateDrawer";
+import { Details } from "@/components/Drawer/Drawer";
 import DataPoint from "@/utils/models/DataPoint";
-import CreateDrawer from "../Drawer/CreateDrawer";
-import { Details } from "../Drawer/Drawer";
+import { rankItem } from "@tanstack/match-sorter-utils";
+import { FilterFn } from "./FilterDropdown";
 
 type TableProps<T extends DataPoint> = {
     data: T[];
     setData: Dispatch<SetStateAction<T[]>>;
     columns: ColumnDef<T, any>[];
+    setFilterFn?: (field: string, filterFn: FilterFn) => void;
     details: Details[];
     createEndpoint: string;
     deleteEndpoint: string;
@@ -73,16 +72,21 @@ const fuzzyFilter = (
  * @param props.data Stateful list of data to be held in the table
  * @param props.setData State setter for the list of data
  * @param props.columns Column definitions made with Tanstack columnHelper
+ * @param props.setFilterFn This optional state setter should change the filter funciton of the provided column if possible.
+ * It should be included if the column has multiple filter options.
  */
 export default function Table<T extends DataPoint>({
     data,
     setData,
     columns,
+    setFilterFn,
     details,
     createEndpoint,
     deleteEndpoint,
     isAdmin = false,
 }: TableProps<T>) {
+    const [filters, setFilters] = useState<ColumnFiltersState>([]);
+    const [sorting, setSorting] = useState<SortingState>([]);
     const offset = isAdmin ? 1 : 0;
 
     const columnHelper = createColumnHelper<T>();
@@ -113,20 +117,6 @@ export default function Table<T extends DataPoint>({
     /** Sorting function based on visibility */
     const visibilitySort = (a: T, b: T) =>
         a.visible === b.visible ? 0 : a.visible ? -1 : 1;
-
-    // // Sort data on load
-    // useEffect(() => {
-    //     setData((prevData) => prevData.sort(visibilitySort));
-    // }, [setData]);
-
-    // // Data manipulation methods
-    // // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
-    // const deleteData = (dataId: number) => {
-    //     console.log(data);
-    //     setData((currentData) =>
-    //         currentData.filter((data) => data.id !== dataId)
-    //     );
-    // };
 
     const hideData = (dataId: number) => {
         console.log(`Toggling visibility for data with ID: ${dataId}`);
@@ -189,10 +179,6 @@ export default function Table<T extends DataPoint>({
         setQuery(String(target.value));
     };
 
-    // TODO: Filtering
-
-    // TODO: Sorting
-
     // Define Tanstack table
     const table = useReactTable({
         columns,
@@ -202,39 +188,41 @@ export default function Table<T extends DataPoint>({
         },
         state: {
             globalFilter: query,
+            columnFilters: filters,
+            sorting,
         },
         onGlobalFilterChange: setQuery,
         globalFilterFn: fuzzyFilter,
         getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        onColumnFiltersChange: setFilters,
+        onSortingChange: setSorting,
     });
 
     return (
         <div className="flex flex-col">
             <div className="flex flex-row justify-end">
-                <TableAction query={query} handleChange={handleSearchChange} />
+                <TableSearch query={query} handleChange={handleSearchChange} />
             </div>
             <table className="w-full text-xs text-left rtl:text-right">
                 <thead className="text-xs text-gray-500 capitalize">
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header, i) => (
-                                <th
-                                    scope="col"
+                                <ColumnHeader
+                                    header={header}
+                                    details={details.find(
+                                        (d) => d.key === header.column.id
+                                    )}
+                                    setFilterFn={setFilterFn}
                                     className={
-                                        "p-2 border-gray-200 border-y font-medium " +
-                                        (0 + offset < i && i < columns.length - 1
+                                        offset < i && i < columns.length - 1
                                             ? "border-x"
-                                            : "")
+                                            : ""
                                     }
                                     key={header.id}
-                                >
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                </th>
+                                />
                             ))}
                         </tr>
                     ))}
@@ -243,16 +231,21 @@ export default function Table<T extends DataPoint>({
                     {table.getRowModel().rows.map((row) => {
                         // Individual row
                         const isDataVisible = row.original.visible;
-                        const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${!isDataVisible ? "bg-gray-200 text-gray-500" : ""
-                            }`;
+                        const rowClassNames = `text-gray-800 border-y lowercase hover:bg-gray-50 ${
+                            !isDataVisible ? "bg-gray-200 text-gray-500" : ""
+                        }`;
                         return (
                             <tr className={rowClassNames} key={row.id}>
                                 {row.getVisibleCells().map((cell, i) => (
                                     <td
                                         key={cell.id}
-                                        className={
-                                            `[&:nth-child(n+${2 + offset})]:border-x relative first:text-left first:px-0 last:border-none`
-                                        }
+                                        className={`[&:nth-child(n+${
+                                            2 + offset
+                                        })]:border-x px-2 relative first:text-left first:px-0 last:border-none ${
+                                            cell.column.getIsFiltered()
+                                                ? "bg-purple-50"
+                                                : ""
+                                        }`}
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,

@@ -15,6 +15,7 @@
         "@supabase/supabase-js": "^2.42.3",
         "@tanstack/match-sorter-utils": "^8.15.1",
         "@tanstack/react-table": "^8.15.0",
+        "@tanstack/table-core": "^8.21.3",
         "bufferutil": "^4.0.8",
         "next": "^13.5.8",
         "react": "^18",

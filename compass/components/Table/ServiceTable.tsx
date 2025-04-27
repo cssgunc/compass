@@ -1,5 +1,4 @@
 import {
-    Bars2Icon,
     CheckCircleIcon,
     DocumentTextIcon,
     ListBulletIcon,
@@ -13,6 +12,7 @@ import Service from "@/utils/models/Service";
 import { Details } from "../Drawer/Drawer";
 import { Tag } from "../TagsInput/Tag";
 import User from "@/utils/models/User";
+import { FilterFn } from "./FilterDropdown";
 
 type ServiceTableProps = {
     data: Service[];
@@ -31,6 +31,8 @@ export default function ServiceTable({
     user,
 }: ServiceTableProps) {
     const columnHelper = createColumnHelper<Service>();
+    const [requirementsFilterFn, setRequirementsFilterFn] =
+        useState<FilterFn>("arrIncludesSome");
 
     const [programPresets, setProgramPresets] = useState([
         "DOMESTIC",
@@ -151,6 +153,14 @@ export default function ServiceTable({
                     </Tag>
                 </div>
             ),
+            // Filter by if the value is in the tags array
+            filterFn: (row, columnId, filterValue) => {
+                const rowValue = row.getValue(columnId);
+                if (Array.isArray(filterValue)) {
+                    return filterValue.includes(rowValue);
+                }
+                return true;
+            },
         }),
         columnHelper.accessor("requirements", {
             header: () => (
@@ -170,6 +180,7 @@ export default function ServiceTable({
                     )}
                 </div>
             ),
+            filterFn: requirementsFilterFn,
         }),
         columnHelper.accessor("summary", {
             header: () => (
@@ -188,11 +199,18 @@ export default function ServiceTable({
         }),
     ];
 
+    const setFilterFn = (field: string, filterFn: FilterFn) => {
+        if (field === "requirements") {
+            setRequirementsFilterFn(filterFn);
+        }
+    };
+
     return (
         <Table
             data={data}
             setData={setData}
             columns={columns}
+            setFilterFn={setFilterFn}
             details={serviceDetails}
             createEndpoint={`/api/service/create?uuid=${user?.uuid}`}
             deleteEndpoint={`/api/service/delete?uuid=${user?.uuid}`}
