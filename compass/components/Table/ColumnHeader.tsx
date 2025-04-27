@@ -14,6 +14,7 @@ import DataPoint from "@/utils/models/DataPoint";
 interface ColumnHeaderProps<T extends DataPoint> {
     header: Header<T, any>;
     details: Details | undefined;
+    hasHorizontalBorders: boolean;
     setFilterFn?: (field: string, filterFn: FilterFn) => void;
 }
 
@@ -30,6 +31,7 @@ function DropdownCheckIcon({ className }: { className?: string }) {
 export function ColumnHeader<T extends DataPoint>({
     header,
     details,
+    hasHorizontalBorders,
     setFilterFn,
 }: ColumnHeaderProps<T>) {
     const { column } = header;
@@ -90,7 +92,7 @@ export function ColumnHeader<T extends DataPoint>({
             scope="col"
             className={`border-gray-200 border-y font-medium ${
                 isFiltered ? "bg-purple-50" : ""
-            }`}
+            } ${hasHorizontalBorders ? "border-x" : ""}`}
             ref={headerRef}
         >
             <div>

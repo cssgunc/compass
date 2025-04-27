@@ -251,7 +251,7 @@ export default function Table<T extends DataPoint>({
                                         key={cell.id}
                                         className={`[&:nth-child(n+${
                                             2 + offset
-                                        })]:border-x pl-2 relative first:text-left first:px-0 last:border-none ${
+                                        })]:border-x px-2 relative first:text-left first:px-0 last:border-none ${
                                             cell.column.getIsFiltered()
                                                 ? "bg-purple-50"
                                                 : ""
