@@ -10,7 +10,12 @@ import {
     getSortedRowModel,
     SortingState,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState, Dispatch, SetStateAction } from "react";
+import {
+    ChangeEvent,
+    useState,
+    Dispatch,
+    SetStateAction,
+} from "react";
 import { TableSearch } from "@/components/Table/TableSearch";
 import { RowOptionMenu } from "@/components/Table/RowOptionMenu";
 import { ColumnHeader } from "@/components/Table/ColumnHeader";
@@ -18,11 +23,13 @@ import CreateDrawer from "@/components/Drawer/CreateDrawer";
 import { Details } from "@/components/Drawer/Drawer";
 import DataPoint from "@/utils/models/DataPoint";
 import { rankItem } from "@tanstack/match-sorter-utils";
+import { FilterFn } from "./FilterDropdown";
 
 type TableProps<T extends DataPoint> = {
     data: T[];
     setData: Dispatch<SetStateAction<T[]>>;
     columns: ColumnDef<T, any>[];
+    setFilterFn?: (field: string, filterFn: FilterFn) => void;
     details: Details[];
     createEndpoint: string;
     isAdmin?: boolean;
@@ -74,6 +81,7 @@ export default function Table<T extends DataPoint>({
     data,
     setData,
     columns,
+    setFilterFn,
     details,
     createEndpoint,
     isAdmin = false,
@@ -182,7 +190,14 @@ export default function Table<T extends DataPoint>({
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header, i) => (
-                                <ColumnHeader header={header} key={header.id} />
+                                <ColumnHeader
+                                    header={header}
+                                    details={details.find(
+                                        (d) => d.key === header.column.id
+                                    )}
+                                    setFilterFn={setFilterFn}
+                                    key={header.id}
+                                />
                             ))}
                         </tr>
                     ))}
@@ -199,9 +214,11 @@ export default function Table<T extends DataPoint>({
                                 {row.getVisibleCells().map((cell, i) => (
                                     <td
                                         key={cell.id}
-                                        className={
-                                            "[&:nth-child(n+3)]:border-x relative first:text-left first:px-0 last:border-none"
-                                        }
+                                        className={`[&:nth-child(n+3)]:border-x pl-2 relative first:text-left first:px-0 last:border-none ${
+                                            cell.column.getIsFiltered()
+                                                ? "bg-purple-50"
+                                                : ""
+                                        }`}
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,

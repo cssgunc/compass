@@ -7,6 +7,15 @@ import {
     FunnelIcon,
     XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { Details } from "../Drawer/Drawer";
+import FilterDropdown, { FilterFn } from "./FilterDropdown";
+import DataPoint from "@/utils/models/DataPoint";
+
+interface ColumnHeaderProps<T extends DataPoint> {
+    header: Header<T, any>;
+    details: Details | undefined;
+    setFilterFn?: (field: string, filterFn: FilterFn) => void;
+}
 
 function DropdownCheckIcon({ className }: { className?: string }) {
     return (
@@ -18,7 +27,11 @@ function DropdownCheckIcon({ className }: { className?: string }) {
  * Component for rendering the header of a table column,
  * as well as the dropdown menu for sorting and filtering.
  */
-export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
+export function ColumnHeader<T extends DataPoint>({
+    header,
+    details,
+    setFilterFn,
+}: ColumnHeaderProps<T>) {
     const { column } = header;
 
     const [dropdownType, setDropdownType] = useState<"menu" | "filter" | null>(
@@ -68,23 +81,33 @@ export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
         }
     }, [sortDirection, column]);
 
+    if (!details) {
+        return <div className="border-gray-200 border-y" />;
+    }
+
     return (
         <th
             scope="col"
-            className="border-gray-200 border-y font-medium"
+            className={`border-gray-200 border-y font-medium ${
+                isFiltered ? "bg-purple-50" : ""
+            }`}
             ref={headerRef}
         >
             <div>
                 {header.isPlaceholder ? null : (
                     <div
-                        className="flex p-2 h-auto items-center justify-between px-2 relative cursor-pointer hover:bg-gray-200/50"
+                        className={`flex p-2 h-auto items-center justify-between px-2 relative cursor-pointer hover:bg-gray-200/50`}
                         onClick={() =>
                             setDropdownType((prev) =>
                                 prev === null ? "menu" : null
                             )
                         }
                     >
-                        <div className="flex items-center">
+                        <div
+                            className={`flex items-center ${
+                                isFiltered ? "" : ""
+                            }`}
+                        >
                             {flexRender(
                                 column.columnDef.header,
                                 header.getContext()
@@ -166,20 +189,11 @@ export function ColumnHeader<T>({ header }: { header: Header<T, unknown> }) {
                         ref={filterRef}
                         className="absolute -top-2 left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10"
                     >
-                        <div className="flex flex-col px-4 py-2">
-                            <span>Contains</span>
-                            <input
-                                type="text"
-                                value={
-                                    (column.getFilterValue() ?? "") as string
-                                }
-                                onChange={(e) => {
-                                    column.setFilterValue(e.target.value);
-                                }}
-                                placeholder="Type a value…"
-                                className="border border-gray-300 rounded p-1"
-                            />
-                        </div>
+                        <FilterDropdown
+                            column={column}
+                            details={details}
+                            setFilterFn={setFilterFn}
+                        />
                     </div>
                 )}
             </div>

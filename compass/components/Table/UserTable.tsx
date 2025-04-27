@@ -10,6 +10,7 @@ import { RowOpenAction } from "@/components/Table/RowOpenAction";
 import User from "@/utils/models/User";
 import { Details } from "../Drawer/Drawer";
 import { Tag } from "../TagsInput/Tag";
+import { FilterFn } from "./FilterDropdown";
 
 type UserTableProps = {
     data: User[];
@@ -24,6 +25,8 @@ type UserTableProps = {
  */
 export default function UserTable({ data, setData, user }: UserTableProps) {
     const columnHelper = createColumnHelper<User>();
+    const [programFilterFn, setProgramFilterFn] =
+        useState<FilterFn>("arrIncludesSome");
 
     const [rolePresets, setRolePresets] = useState([
         "ADMIN",
@@ -103,6 +106,7 @@ export default function UserTable({ data, setData, user }: UserTableProps) {
                     </Tag>
                 </div>
             ),
+            filterFn: "arrIncludesSome",
         }),
         columnHelper.accessor("email", {
             header: () => (
@@ -133,14 +137,22 @@ export default function UserTable({ data, setData, user }: UserTableProps) {
                     )}
                 </div>
             ),
+            filterFn: programFilterFn,
         }),
     ];
 
+    const setFilterFn = (field: string, filterFn: FilterFn) => {
+        if (field === "program") {
+            setProgramFilterFn(filterFn);
+        }
+    };
+
     return (
-        <Table<User>
+        <Table
             data={data}
             setData={setData}
             columns={columns}
+            setFilterFn={setFilterFn}
             details={userDetails}
             createEndpoint={`/api/user/create?uuid=${user?.uuid}`}
             isAdmin={user?.role === "ADMIN"}

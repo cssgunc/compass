@@ -1,11 +1,10 @@
 import {
-    Bars2Icon,
     CheckCircleIcon,
     DocumentTextIcon,
     ListBulletIcon,
     UserIcon,
 } from "@heroicons/react/24/solid";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
@@ -13,6 +12,7 @@ import Service from "@/utils/models/Service";
 import { Details } from "../Drawer/Drawer";
 import { Tag } from "../TagsInput/Tag";
 import User from "@/utils/models/User";
+import { FilterFn } from "./FilterDropdown";
 
 type ServiceTableProps = {
     data: Service[];
@@ -31,6 +31,8 @@ export default function ServiceTable({
     user,
 }: ServiceTableProps) {
     const columnHelper = createColumnHelper<Service>();
+    const [requirementsFilterFn, setRequirementsFilterFn] =
+        useState<FilterFn>("arrIncludesSome");
 
     const [programPresets, setProgramPresets] = useState([
         "DOMESTIC",
@@ -151,6 +153,13 @@ export default function ServiceTable({
                     </Tag>
                 </div>
             ),
+            filterFn: (row, columnId, filterValue) => {
+                const rowValue = row.getValue(columnId);
+                if (Array.isArray(filterValue)) {
+                    return filterValue.includes(rowValue);
+                }
+                return true;
+            },
         }),
         columnHelper.accessor("requirements", {
             header: () => (
@@ -170,6 +179,7 @@ export default function ServiceTable({
                     )}
                 </div>
             ),
+            filterFn: requirementsFilterFn,
         }),
         columnHelper.accessor("summary", {
             header: () => (
@@ -188,11 +198,18 @@ export default function ServiceTable({
         }),
     ];
 
+    const setFilterFn = (field: string, filterFn: FilterFn) => {
+        if (field === "requirements") {
+            setRequirementsFilterFn(filterFn);
+        }
+    };
+
     return (
         <Table
             data={data}
             setData={setData}
             columns={columns}
+            setFilterFn={setFilterFn}
             details={serviceDetails}
             createEndpoint={`/api/service/create?uuid=${user?.uuid}`}
             isAdmin={user?.role === "ADMIN"}
