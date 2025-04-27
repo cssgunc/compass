@@ -14,8 +14,8 @@ import DataPoint from "@/utils/models/DataPoint";
 interface ColumnHeaderProps<T extends DataPoint> {
     header: Header<T, any>;
     details: Details | undefined;
-    hasHorizontalBorders: boolean;
     setFilterFn?: (field: string, filterFn: FilterFn) => void;
+    className?: string;
 }
 
 function DropdownCheckIcon({ className }: { className?: string }) {
@@ -27,12 +27,16 @@ function DropdownCheckIcon({ className }: { className?: string }) {
 /**
  * Component for rendering the header of a table column,
  * as well as the dropdown menu for sorting and filtering.
+ * @param props.header The header object from TanStack Table.
+ * @param props.details The details object containing metadata about the column.
+ * @param props.setFilterFn Include this state setter if the column has multiple filter options.
+ * @param props.className Optional additional class names for styling.
  */
 export function ColumnHeader<T extends DataPoint>({
     header,
     details,
-    hasHorizontalBorders,
     setFilterFn,
+    className
 }: ColumnHeaderProps<T>) {
     const { column } = header;
 
@@ -46,7 +50,6 @@ export function ColumnHeader<T extends DataPoint>({
     const isFiltered =
         column.getFilterValue() != null && column.getFilterValue() !== "";
 
-    const headerRef = useRef<HTMLTableCellElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const filterRef = useRef<HTMLDivElement>(null);
 
@@ -92,8 +95,7 @@ export function ColumnHeader<T extends DataPoint>({
             scope="col"
             className={`border-gray-200 border-y font-medium ${
                 isFiltered ? "bg-purple-50" : ""
-            } ${hasHorizontalBorders ? "border-x" : ""}`}
-            ref={headerRef}
+            } ${className ?? ""}`}
         >
             <div>
                 {header.isPlaceholder ? null : (

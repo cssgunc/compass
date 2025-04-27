@@ -4,7 +4,7 @@ import {
     ListBulletIcon,
     UserIcon,
 } from "@heroicons/react/24/solid";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table/Table";
 import { RowOpenAction } from "@/components/Table/RowOpenAction";
@@ -153,6 +153,7 @@ export default function ServiceTable({
                     </Tag>
                 </div>
             ),
+            // Filter by if the value is in the tags array
             filterFn: (row, columnId, filterValue) => {
                 const rowValue = row.getValue(columnId);
                 if (Array.isArray(filterValue)) {

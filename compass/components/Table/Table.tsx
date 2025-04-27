@@ -72,6 +72,8 @@ const fuzzyFilter = (
  * @param props.data Stateful list of data to be held in the table
  * @param props.setData State setter for the list of data
  * @param props.columns Column definitions made with Tanstack columnHelper
+ * @param props.setFilterFn This optional state setter should change the filter funciton of the provided column if possible.
+ * It should be included if the column has multiple filter options.
  */
 export default function Table<T extends DataPoint>({
     data,
@@ -115,20 +117,6 @@ export default function Table<T extends DataPoint>({
     /** Sorting function based on visibility */
     const visibilitySort = (a: T, b: T) =>
         a.visible === b.visible ? 0 : a.visible ? -1 : 1;
-
-    // // Sort data on load
-    // useEffect(() => {
-    //     setData((prevData) => prevData.sort(visibilitySort));
-    // }, [setData]);
-
-    // // Data manipulation methods
-    // // TODO: Connect data manipulation methods to the database (deleteData, hideData, addData)
-    // const deleteData = (dataId: number) => {
-    //     console.log(data);
-    //     setData((currentData) =>
-    //         currentData.filter((data) => data.id !== dataId)
-    //     );
-    // };
 
     const hideData = (dataId: number) => {
         console.log(`Toggling visibility for data with ID: ${dataId}`);
@@ -228,8 +216,10 @@ export default function Table<T extends DataPoint>({
                                         (d) => d.key === header.column.id
                                     )}
                                     setFilterFn={setFilterFn}
-                                    hasHorizontalBorders={
+                                    className={
                                         offset < i && i < columns.length - 1
+                                            ? "border-x"
+                                            : ""
                                     }
                                     key={header.id}
                                 />

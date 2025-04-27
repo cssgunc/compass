@@ -36,7 +36,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
     const dropdown = useRef<HTMLDivElement>(null);
 
     const handleClick = () => {
-        if (!cellSelectedPreset) {
+        if (!cellSelected) {
             setCellSelected(true);
             setTimeout(() => {
                 window.addEventListener("click", handleOutsideClick);
@@ -164,7 +164,7 @@ const TagsInput: React.FC<TagsInputProps> = ({
 
     return (
         <div className="cursor-pointer" onClick={handleClick}>
-            {!cellSelectedPreset ? (
+            {!cellSelected ? (
                 <>
                     <FilterSelect />
                     <TagsArray

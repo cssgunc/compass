@@ -12,6 +12,12 @@ interface FilterDropdownProps<T extends DataPoint> {
     setFilterFn?: (field: string, filterFn: FilterFn) => void;
 }
 
+/**
+ * Component for rendering a dropdown menu when adding a filter to a column.
+ * @param props.details The details object containing metadata about the column.
+ * @param props.column The column object from TanStack Table.
+ * @param props.setFilterFn Include this state setter if the column has multiple filter options.
+ */
 export default function FilterDropdown<T extends DataPoint>({
     details,
     column,
@@ -26,10 +32,11 @@ export default function FilterDropdown<T extends DataPoint>({
     const [filter] = filterState;
     const { inputType, presetOptionsValues, presetOptionsSetter } = details;
 
+    // Update the column filter function when the state changes
     useEffect(() => {
         if (filter && setFilterFn) {
             setFilterFn(details.key, filter);
-            column.setFilterValue((prev: any) => prev);
+            column.setFilterValue((prev: any) => prev); // Trigger a re-render based on new filter value
         }
     }, [details.key, filter, setFilterFn, column]);
 
