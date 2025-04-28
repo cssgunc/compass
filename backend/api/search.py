@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from ..services import SearchService
-from ..models.resource_model import Resource
-from ..models.service_model import Service
+from backend.services.search import SearchResult
 
+from ..services import SearchService
 
 api = APIRouter(prefix="/api/search")
 
@@ -12,7 +11,7 @@ openapi_tags = {
     "description": "Search through all resources and services for a string.",
 }
 
-@api.post("", tags=["Search"])
-def search(query: str, search_svc: SearchService = Depends()) -> list[Resource | Service]:
+@api.get("", tags=["Search"])
+def search(query: str, search_svc: SearchService = Depends()) -> list[SearchResult]:
     return search_svc.search(query)
   
