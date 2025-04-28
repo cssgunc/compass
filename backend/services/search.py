@@ -25,8 +25,8 @@ from backend.entities.service_entity import ServiceEntity
 
 
 class SearchResult(BaseModel):
-    type: Literal["resource", "service", "user"]
-    data: Resource | Service | User
+    type: Literal["resource", "service"]
+    data: Resource | Service
 
 
 class SearchService:
@@ -39,7 +39,6 @@ class SearchService:
         entities = (
             ResourceEntity,
             ServiceEntity,
-            UserEntity,
         )
 
         for entity in entities:
