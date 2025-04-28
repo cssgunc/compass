@@ -2,9 +2,6 @@ from typing import Literal
 from fastapi import Depends
 from pydantic import BaseModel
 
-from backend.entities.user_entity import UserEntity
-from backend.models.user_model import User
-
 from ..database import db_session
 from sqlalchemy.orm import Session
 from sqlalchemy import (
