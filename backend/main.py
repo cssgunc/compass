@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.gzip import GZipMiddleware
 
 
-from .api import user, health, service, resource, tag
+from .api import user, health, service, resource, tag, search
 
 description = """
 Welcome to the **COMPASS** RESTful Application Programming Interface.
@@ -24,7 +24,7 @@ app = FastAPI(
 
 app.add_middleware(GZipMiddleware)
 
-feature_apis = [user, health, service, resource, tag]
+feature_apis = [user, health, service, resource, tag, search]
 
 for feature_api in feature_apis:
     app.include_router(feature_api.api)
